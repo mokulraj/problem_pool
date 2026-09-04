@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ page_title }} - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="pp-card p-4 p-md-5">
+
+                    <!-- HEADER -->
+
+                    <div class="mb-4">
+
+                        <span class="pp-badge pp-badge-purple mb-2">
+                            Solution
+                        </span>
+
+                        <h1 class="pp-section-title">
+                            {{ page_title }}
+                        </h1>
+
+                        <p class="text-muted mb-2">
+                            Proposing a solution for:
+                        </p>
+
+                        <a
+                            href="{% url 'problems:detail' problem.pk %}"
+                            class="solution-problem-link"
+                        >
+                            {{ problem.title }}
+                        </a>
+
+                    </div>
+
+
+                    <!-- FORM -->
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+
+                        {% if form.non_field_errors %}
+
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="mb-4">
+
+                            <label
+                                for="{{ form.title.id_for_label }}"
+                                class="form-label fw-semibold"
+                            >
+                                Solution Title
+                            </label>
+
+                            {{ form.title }}
+
+                            {% for error in form.title.errors %}
+
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label
+                                for="{{ form.description.id_for_label }}"
+                                class="form-label fw-semibold"
+                            >
+                                Solution Description
+                            </label>
+
+                            {{ form.description }}
+
+                            {% for error in form.description.errors %}
+
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Explain how your solution works,
+                                what resources it needs, and how it
+                                could address the problem.
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn pp-btn-primary"
+                            >
+                                {{ submit_text }}
+                            </button>
+
+                            <a
+                                href="{% url 'problems:detail' problem.pk %}"
+                                class="btn pp-btn-outline"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

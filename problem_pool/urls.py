@@ -28,6 +28,11 @@ urlpatterns = [
     "",
     include("problems.urls")
 ),
+    
+    path(
+    "",
+    include("solutions.urls")
+    ),
 ]
 
 

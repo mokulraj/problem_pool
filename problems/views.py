@@ -119,19 +119,24 @@ def problem_list(request):
 
 
 def problem_detail(request, pk):
-
+    
     problem = get_object_or_404(
-        Problem.objects.select_related("created_by"),
+        Problem.objects.select_related(
+            "created_by"
+        ).prefetch_related(
+            "solutions__proposed_by"
+        ),
         pk=pk,
     )
 
-    Problem.objects.filter(
-        pk=problem.pk
-    ).update(
-        views=problem.views + 1
-    )
+    if request.user != problem.created_by:
+        Problem.objects.filter(
+            pk=problem.pk
+        ).update(
+            views=problem.views + 1
+        )
 
-    problem.views += 1
+        problem.views += 1
 
     return render(
         request,
@@ -140,7 +145,6 @@ def problem_detail(request, pk):
             "problem": problem,
         }
     )
-
 
 @login_required
 def problem_create(request):

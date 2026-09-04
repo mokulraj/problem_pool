@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Delete Solution - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-md-6">
+
+                <div class="pp-card p-4 text-center">
+
+                    <div class="empty-state-icon mx-auto">
+
+                        <i class="bi bi-trash"></i>
+
+                    </div>
+
+
+                    <h1 class="h4 fw-bold">
+                        Delete this solution?
+                    </h1>
+
+
+                    <p class="text-muted">
+                        You are about to permanently delete:
+                    </p>
+
+
+                    <p class="fw-bold">
+                        "{{ solution.title }}"
+                    </p>
+
+
+                    <p class="small text-muted">
+                        This action cannot be undone.
+                    </p>
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <div class="d-flex justify-content-center gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger"
+                            >
+                                Delete Solution
+                            </button>
+
+
+                            <a
+                                href="{% url 'solutions:detail' solution.pk %}"
+                                class="btn pp-btn-outline"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
