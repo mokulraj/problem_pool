@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Problems - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+            <div>
+
+                <h1 class="pp-section-title mb-1">
+                    All Problems
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Discover real-world problems and help build solutions.
+                </p>
+
+            </div>
+
+
+            {% if user.is_authenticated %}
+
+                <a
+                    href="{% url 'problems:create' %}"
+                    class="btn pp-btn-primary"
+                >
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Post a Problem
+                </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- SEARCH + FILTERS -->
+
+        <div class="pp-card p-3 mb-4">
+
+            <form method="get">
+
+                <div class="row g-2">
+
+                    <div class="col-lg-4">
+
+                        <div class="problem-search">
+
+                            <i class="bi bi-search"></i>
+
+                            <input
+                                type="text"
+                                name="q"
+                                value="{{ search_query }}"
+                                class="form-control"
+                                placeholder="Search problems..."
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-2">
+
+                        <select
+                            name="category"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All Categories
+                            </option>
+
+                            {% for value, label in categories %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if selected_category == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-2">
+
+                        <select
+                            name="status"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All Status
+                            </option>
+
+                            {% for value, label in statuses %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if selected_status == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-2">
+
+                        <select
+                            name="priority"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All Priority
+                            </option>
+
+                            {% for value, label in priorities %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if selected_priority == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-2">
+
+                        <select
+                            name="sort"
+                            class="form-select"
+                        >
+
+                            <option
+                                value="newest"
+                                {% if selected_sort == "newest" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Newest
+                            </option>
+
+                            <option
+                                value="most_viewed"
+                                {% if selected_sort == "most_viewed" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Most Viewed
+                            </option>
+
+                            <option
+                                value="most_solutions"
+                                {% if selected_sort == "most_solutions" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Most Solutions
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-3 d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn pp-btn-primary"
+                    >
+                        Apply Filters
+                    </button>
+
+
+                    <a
+                        href="{% url 'problems:list' %}"
+                        class="btn pp-btn-outline"
+                    >
+                        Reset
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- PROBLEM RESULTS -->
+
+        {% if problems %}
+
+            <div class="row g-3">
+
+                {% for problem in problems %}
+
+                    <div class="col-12">
+
+                        <article class="problem-card">
+
+                            <div class="problem-card-main">
+
+                                <div class="problem-card-icon">
+
+                                    {% if problem.category == "TECHNOLOGY" %}
+                                        <i class="bi bi-cpu"></i>
+                                    {% elif problem.category == "EDUCATION" %}
+                                        <i class="bi bi-book"></i>
+                                    {% elif problem.category == "ENVIRONMENT" %}
+                                        <i class="bi bi-tree"></i>
+                                    {% elif problem.category == "HEALTHCARE" %}
+                                        <i class="bi bi-heart-pulse"></i>
+                                    {% elif problem.category == "TRANSPORTATION" %}
+                                        <i class="bi bi-bus-front"></i>
+                                    {% elif problem.category == "CAMPUS" %}
+                                        <i class="bi bi-building"></i>
+                                    {% else %}
+                                        <i class="bi bi-lightbulb"></i>
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="flex-grow-1">
+
+                                    <div class="d-flex flex-wrap gap-2 mb-2">
+
+                                        <span class="pp-badge pp-badge-purple">
+                                            {{ problem.category_display }}
+                                        </span>
+
+
+                                        {% if problem.status == "OPEN" %}
+
+                                            <span class="pp-badge pp-badge-green">
+                                                {{ problem.status_display }}
+                                            </span>
+
+                                        {% elif problem.status == "IN_PROGRESS" %}
+
+                                            <span class="pp-badge pp-badge-blue">
+                                                {{ problem.status_display }}
+                                            </span>
+
+                                        {% elif problem.status == "SOLVED" %}
+
+                                            <span class="pp-badge pp-badge-green">
+                                                {{ problem.status_display }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="pp-badge pp-badge-red">
+                                                {{ problem.status_display }}
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if problem.priority == "CRITICAL" %}
+
+                                            <span class="pp-badge pp-badge-red">
+                                                Critical
+                                            </span>
+
+                                        {% elif problem.priority == "HIGH" %}
+
+                                            <span class="pp-badge pp-badge-orange">
+                                                High
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <h2 class="problem-card-title">
+
+                                        <a
+                                            href="{% url 'problems:detail' problem.pk %}"
+                                        >
+                                            {{ problem.title }}
+                                        </a>
+
+                                    </h2>
+
+
+                                    <p class="problem-card-description">
+
+                                        {{ problem.description|truncatechars:180 }}
+
+                                    </p>
+
+
+                                    <div class="problem-card-meta">
+
+                                        <span>
+                                            <i class="bi bi-person"></i>
+
+                                            {{ problem.created_by.get_full_name|default:problem.created_by.username }}
+
+                                        </span>
+
+
+                                        {% if problem.location %}
+
+                                            <span>
+                                                <i class="bi bi-geo-alt"></i>
+
+                                                {{ problem.location }}
+
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        <span>
+                                            <i class="bi bi-calendar3"></i>
+
+                                            {{ problem.created_at|date:"d M Y" }}
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="problem-card-stats">
+
+                                <div>
+                                    <strong>
+                                        {{ problem.solution_count }}
+                                    </strong>
+
+                                    <span>
+                                        Solutions
+                                    </span>
+                                </div>
+
+
+                                <div>
+                                    <strong>
+                                        {{ problem.views }}
+                                    </strong>
+
+                                    <span>
+                                        Views
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="pp-card empty-state">
+
+                <div class="empty-state-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <h2>
+                    No problems found
+                </h2>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+                <a
+                    href="{% url 'problems:list' %}"
+                    class="btn pp-btn-outline"
+                >
+                    Clear Filters
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

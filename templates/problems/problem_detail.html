@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ problem.title }} - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <!-- BREADCRUMB -->
+
+        <div class="mb-4">
+
+            <a
+                href="{% url 'problems:list' %}"
+                class="text-muted small"
+            >
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Problems
+            </a>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- MAIN CONTENT -->
+
+            <div class="col-lg-8">
+
+                <div class="pp-card p-4 p-md-5">
+
+                    <!-- BADGES -->
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+
+                        <span class="pp-badge pp-badge-purple">
+                            {{ problem.category_display }}
+                        </span>
+
+
+                        {% if problem.status == "OPEN" %}
+
+                            <span class="pp-badge pp-badge-green">
+                                {{ problem.status_display }}
+                            </span>
+
+                        {% elif problem.status == "IN_PROGRESS" %}
+
+                            <span class="pp-badge pp-badge-blue">
+                                {{ problem.status_display }}
+                            </span>
+
+                        {% elif problem.status == "SOLVED" %}
+
+                            <span class="pp-badge pp-badge-green">
+                                {{ problem.status_display }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="pp-badge pp-badge-red">
+                                {{ problem.status_display }}
+                            </span>
+
+                        {% endif %}
+
+
+                        {% if problem.priority == "CRITICAL" %}
+
+                            <span class="pp-badge pp-badge-red">
+                                Critical
+                            </span>
+
+                        {% elif problem.priority == "HIGH" %}
+
+                            <span class="pp-badge pp-badge-orange">
+                                High
+                            </span>
+
+                        {% elif problem.priority == "MEDIUM" %}
+
+                            <span class="pp-badge pp-badge-orange">
+                                Medium
+                            </span>
+
+                        {% else %}
+
+                            <span class="pp-badge pp-badge-blue">
+                                Low
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <h1 class="problem-detail-title">
+                        {{ problem.title }}
+                    </h1>
+
+
+                    <!-- AUTHOR -->
+
+                    <div class="problem-author">
+
+                        {% if problem.created_by.profile_image %}
+
+                            <img
+                                src="{{ problem.created_by.profile_image.url }}"
+                                alt="{{ problem.created_by.username }}"
+                            >
+
+                        {% else %}
+
+                            <div class="problem-author-placeholder">
+                                {{ problem.created_by.first_name|first|default:problem.created_by.username|first|upper }}
+                            </div>
+
+                        {% endif %}
+
+
+                        <div>
+
+                            <strong>
+                                {{ problem.created_by.get_full_name|default:problem.created_by.username }}
+                            </strong>
+
+                            <span>
+                                Posted on
+                                {{ problem.created_at|date:"d M Y" }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr class="my-4">
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="problem-description">
+
+                        {{ problem.description|linebreaks }}
+
+                    </div>
+
+
+                    <!-- STATS -->
+
+                    <div class="problem-detail-stats">
+
+                        <div>
+
+                            <strong>
+                                {{ problem.views }}
+                            </strong>
+
+                            <span>
+                                Views
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                {{ problem.solution_count }}
+                            </strong>
+
+                            <span>
+                                Solutions
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                {{ problem.get_priority_display }}
+                            </strong>
+
+                            <span>
+                                Priority
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="mt-4">
+
+                        {% if user.is_authenticated %}
+
+                            {% if problem.created_by == user %}
+
+                                <div class="d-flex flex-wrap gap-2">
+
+                                    <a
+                                        href="{% url 'problems:edit' problem.pk %}"
+                                        class="btn pp-btn-primary"
+                                    >
+                                        <i class="bi bi-pencil me-1"></i>
+                                        Edit Problem
+                                    </a>
+
+                                    <a
+                                        href="{% url 'problems:delete' problem.pk %}"
+                                        class="btn pp-btn-outline"
+                                    >
+                                        <i class="bi bi-trash me-1"></i>
+                                        Delete
+                                    </a>
+
+                                </div>
+
+                            {% else %}
+
+                                <a
+                                    href="#"
+                                    class="btn pp-btn-primary"
+                                >
+                                    <i class="bi bi-lightbulb me-1"></i>
+                                    Propose Solution
+                                </a>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <a
+                                href="{% url 'accounts:login' %}?next={{ request.path }}"
+                                class="btn pp-btn-primary"
+                            >
+                                Login to Propose a Solution
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SIDEBAR -->
+
+            <div class="col-lg-4">
+
+                <div class="pp-card p-4 mb-4">
+
+                    <h2 class="h5 fw-bold mb-3">
+                        About This Problem
+                    </h2>
+
+
+                    {% if problem.location %}
+
+                        <div class="problem-side-item">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            <div>
+
+                                <span>
+                                    Location
+                                </span>
+
+                                <strong>
+                                    {{ problem.location }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="problem-side-item">
+
+                        <i class="bi bi-grid"></i>
+
+                        <div>
+
+                            <span>
+                                Category
+                            </span>
+
+                            <strong>
+                                {{ problem.category_display }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="problem-side-item">
+
+                        <i class="bi bi-flag"></i>
+
+                        <div>
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong>
+                                {{ problem.status_display }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="problem-side-item">
+
+                        <i class="bi bi-calendar3"></i>
+
+                        <div>
+
+                            <span>
+                                Created
+                            </span>
+
+                            <strong>
+                                {{ problem.created_at|date:"d M Y" }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="pp-card p-4">
+
+                    <h2 class="h5 fw-bold mb-2">
+                        Ready to help?
+                    </h2>
+
+                    <p class="text-muted small">
+                        Have an idea that could solve this problem?
+                        Share your solution with the community.
+                    </p>
+
+                    {% if user.is_authenticated and problem.created_by != user %}
+
+                        <a
+                            href="#"
+                            class="btn pp-btn-primary w-100"
+                        >
+                            Propose Solution
+                        </a>
+
+                    {% elif not user.is_authenticated %}
+
+                        <a
+                            href="{% url 'accounts:login' %}?next={{ request.path }}"
+                            class="btn pp-btn-primary w-100"
+                        >
+                            Login to Participate
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ page_title }} - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="pp-card p-4 p-md-5">
+
+                    <div class="mb-4">
+
+                        <span class="pp-badge pp-badge-purple mb-2">
+                            ProblemPool
+                        </span>
+
+                        <h1 class="pp-section-title">
+                            {{ page_title }}
+                        </h1>
+
+                        <p class="text-muted mb-0">
+                            Share a real-world problem with the community
+                            and invite people to build solutions.
+                        </p>
+
+                    </div>
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+
+                        {% if form.non_field_errors %}
+
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Problem Title
+                            </label>
+
+                            {{ form.title }}
+
+                            {% for error in form.title.errors %}
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Description
+                            </label>
+
+                            {{ form.description }}
+
+                            {% for error in form.description.errors %}
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Explain the problem, who is affected,
+                                and why it matters.
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Category
+                                </label>
+
+                                {{ form.category }}
+
+                                {% for error in form.category.errors %}
+                                    <div class="form-error">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Priority
+                                </label>
+
+                                {{ form.priority }}
+
+                                {% for error in form.priority.errors %}
+                                    <div class="form-error">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Location
+                            </label>
+
+                            {{ form.location }}
+
+                            {% for error in form.location.errors %}
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn pp-btn-primary"
+                            >
+                                {{ submit_text }}
+                            </button>
+
+                            <a
+                                href="{% url 'problems:list' %}"
+                                class="btn pp-btn-outline"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
