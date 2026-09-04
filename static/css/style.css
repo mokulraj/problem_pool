@@ -1,0 +1,360 @@
+/* ============================================================
+   PROBLEMPOOL DESIGN SYSTEM
+   ============================================================ */
+
+:root {
+    --pp-purple: #4b2aad;
+    --pp-purple-dark: #392083;
+    --pp-purple-light: #6a4bd8;
+
+    --pp-text: #171526;
+    --pp-muted: #737181;
+
+    --pp-border: #e8e6f0;
+    --pp-background: #f8f7fc;
+    --pp-white: #ffffff;
+
+    --pp-green: #35a66f;
+    --pp-orange: #f39a28;
+    --pp-red: #e24b55;
+    --pp-blue: #3e7bdc;
+
+    --pp-radius: 12px;
+    --pp-shadow: 0 5px 20px rgba(37, 22, 92, 0.07);
+}
+
+
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    background: var(--pp-background);
+
+    color: var(--pp-text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+}
+
+button,
+a {
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+
+.pp-navbar {
+    background: var(--pp-white);
+
+    border-bottom: 1px solid var(--pp-border);
+
+    min-height: 70px;
+}
+
+.pp-brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-weight: 800;
+
+    font-size: 1.2rem;
+
+    color: var(--pp-text);
+}
+
+.pp-brand:hover {
+    color: var(--pp-purple);
+}
+
+.pp-brand-icon {
+    width: 34px;
+    height: 34px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pp-purple),
+            var(--pp-purple-light)
+        );
+}
+
+.pp-navbar .nav-link {
+    color: #555263;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+}
+
+.pp-navbar .nav-link:hover {
+    color: var(--pp-purple);
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.pp-btn-primary {
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pp-purple),
+            var(--pp-purple-light)
+        );
+
+    border: none;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+    padding: 9px 18px;
+}
+
+.pp-btn-primary:hover {
+    color: white;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 6px 15px rgba(75, 42, 173, 0.22);
+}
+
+.pp-btn-outline {
+    color: var(--pp-purple);
+
+    background: white;
+
+    border: 1px solid #d8d2ee;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+    padding: 8px 17px;
+}
+
+.pp-btn-outline:hover {
+    color: white;
+
+    background: var(--pp-purple);
+
+    border-color: var(--pp-purple);
+}
+
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.pp-card {
+    background: var(--pp-white);
+
+    border: 1px solid var(--pp-border);
+
+    border-radius: var(--pp-radius);
+
+    box-shadow: var(--pp-shadow);
+}
+
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+
+.pp-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 9px;
+
+    border-radius: 20px;
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+}
+
+.pp-badge-purple {
+    color: var(--pp-purple);
+
+    background: #eeeaff;
+}
+
+.pp-badge-green {
+    color: #168052;
+
+    background: #e5f7ef;
+}
+
+.pp-badge-orange {
+    color: #a85d00;
+
+    background: #fff0dc;
+}
+
+.pp-badge-red {
+    color: #b52e38;
+
+    background: #ffe6e8;
+}
+
+.pp-badge-blue {
+    color: #245cae;
+
+    background: #e8f1ff;
+}
+
+
+/* ============================================================
+   SECTION
+   ============================================================ */
+
+.pp-section {
+    padding: 70px 0;
+}
+
+.pp-section-title {
+    font-size: 1.6rem;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+}
+
+.pp-section-subtitle {
+    color: var(--pp-muted);
+
+    margin-bottom: 30px;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.pp-footer {
+    margin-top: 60px;
+
+    padding: 28px 0;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            110deg,
+            #392083,
+            #5a38bd
+        );
+}
+
+.pp-footer-brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-weight: 800;
+
+    font-size: 1.2rem;
+
+    margin-bottom: 4px;
+}
+
+
+/* ============================================================
+   FORM CONTROLS
+   ============================================================ */
+
+.form-control,
+.form-select {
+    border: 1px solid #dfdce8;
+
+    border-radius: 7px;
+
+    min-height: 43px;
+
+    font-size: 0.9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pp-purple);
+
+    box-shadow:
+        0 0 0 0.2rem rgba(75, 42, 173, 0.10);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 991px) {
+
+    .pp-navbar .nav-link {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+
+        margin: 5px 0;
+    }
+
+    .pp-section {
+        padding: 45px 0;
+    }
+}
+
+
+@media (max-width: 576px) {
+
+    .pp-section-title {
+        font-size: 1.35rem;
+    }
+
+    .pp-footer {
+        text-align: center;
+    }
+}
