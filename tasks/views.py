@@ -9,7 +9,7 @@ from .forms import TaskForm
 from .models import Task
 
 
-def user_can_manage_project(user, project):
+def user_is_project_member(user, project):
     if project.owner == user:
         return True
 
@@ -19,22 +19,21 @@ def user_can_manage_project(user, project):
     ).exists()
 
 
+def user_is_project_owner(user, project):
+    return project.owner == user
+
+
 @login_required
 def task_list(request, project_id):
     project = get_object_or_404(
-        Project.objects.select_related(
-            "owner",
-        ),
+        Project.objects.select_related("owner"),
         pk=project_id,
     )
 
-    if not user_can_manage_project(
-        request.user,
-        project,
-    ):
+    if not user_is_project_member(request.user, project):
         messages.error(
             request,
-            "You must be part of the project to view its tasks.",
+            "You must be a member of the project to view its tasks.",
         )
 
         return redirect(
@@ -61,17 +60,15 @@ def task_list(request, project_id):
 @login_required
 def task_create(request, project_id):
     project = get_object_or_404(
-        Project,
+        Project.objects.select_related("owner"),
         pk=project_id,
     )
 
-    if not user_can_manage_project(
-        request.user,
-        project,
-    ):
+    # Only the project owner can create tasks.
+    if not user_is_project_owner(request.user, project):
         messages.error(
             request,
-            "Only project members can create tasks.",
+            "Only the project owner can create tasks.",
         )
 
         return redirect(
@@ -120,26 +117,22 @@ def task_create(request, project_id):
 @login_required
 def task_edit(request, pk):
     task = get_object_or_404(
-        Task.objects.select_related(
-            "project",
-        ),
+        Task.objects.select_related("project"),
         pk=pk,
     )
 
     project = task.project
 
-    if not user_can_manage_project(
-        request.user,
-        project,
-    ):
+    # Only the project owner can edit tasks.
+    if not user_is_project_owner(request.user, project):
         messages.error(
             request,
-            "Only project members can edit tasks.",
+            "Only the project owner can edit tasks.",
         )
 
         return redirect(
-            "projects:detail",
-            pk=project.pk,
+            "tasks:list",
+            project_id=project.pk,
         )
 
     if request.method == "POST":
@@ -185,15 +178,14 @@ def task_edit(request, pk):
 @login_required
 def task_delete(request, pk):
     task = get_object_or_404(
-        Task.objects.select_related(
-            "project",
-        ),
+        Task.objects.select_related("project"),
         pk=pk,
     )
 
     project = task.project
 
-    if project.owner != request.user:
+    # Only the project owner can delete tasks.
+    if not user_is_project_owner(request.user, project):
         messages.error(
             request,
             "Only the project owner can delete tasks.",
@@ -231,26 +223,22 @@ def task_delete(request, pk):
 @login_required
 def task_complete(request, pk):
     task = get_object_or_404(
-        Task.objects.select_related(
-            "project",
-        ),
+        Task.objects.select_related("project"),
         pk=pk,
     )
 
     project = task.project
 
-    if not user_can_manage_project(
-        request.user,
-        project,
-    ):
+    # The task can only be completed by the person assigned to it.
+    if task.assigned_to != request.user:
         messages.error(
             request,
-            "Only project members can update tasks.",
+            "You can only complete tasks assigned to you.",
         )
 
         return redirect(
-            "projects:detail",
-            pk=project.pk,
+            "tasks:list",
+            project_id=project.pk,
         )
 
     if request.method != "POST":
@@ -265,6 +253,7 @@ def task_complete(request, pk):
         )
 
     task.status = Task.Status.COMPLETED
+
     task.save(
         update_fields=[
             "status",
