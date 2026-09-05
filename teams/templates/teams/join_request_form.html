@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    Join {{ project.name }} - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-7">
+
+                <div class="mb-4">
+
+                    <a
+                        href="{% url 'projects:detail' project.pk %}"
+                        class="text-muted small"
+                    >
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Back to Project
+                    </a>
+
+                </div>
+
+
+                <div class="pp-card p-4 p-md-5">
+
+                    <div class="mb-4">
+
+                        <span class="pp-badge pp-badge-purple mb-2">
+                            Team
+                        </span>
+
+                        <h1 class="h3 fw-bold mb-2">
+                            Join {{ project.name }}
+                        </h1>
+
+                        <p class="text-muted mb-0">
+                            Send a request to the project owner.
+                        </p>
+
+                    </div>
+
+
+                    {% if form.non_field_errors %}
+
+                        <div class="alert alert-danger">
+
+                            {{ form.non_field_errors }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+
+                        <div class="mb-4">
+
+                            <label
+                                for="{{ form.message.id_for_label }}"
+                                class="form-label fw-semibold"
+                            >
+                                Message
+                            </label>
+
+                            {{ form.message }}
+
+
+                            {% for error in form.message.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="d-flex flex-wrap gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn pp-btn-primary"
+                            >
+
+                                <i class="bi bi-send me-1"></i>
+
+                                Send Join Request
+
+                            </button>
+
+
+                            <a
+                                href="{% url 'projects:detail' project.pk %}"
+                                class="btn pp-btn-outline"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

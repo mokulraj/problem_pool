@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="mb-4">
+        <h1>Create Project</h1>
+        <p class="text-muted">
+            Turn this selected solution into a project.
+        </p>
+    </div>
+
+    <div class="card p-4">
+
+        <div class="mb-4">
+            <h4>{{ solution.title }}</h4>
+
+            <p class="text-muted mb-2">
+                Problem:
+                <a href="{% url 'problems:detail' solution.problem.pk %}">
+                    {{ solution.problem.title }}
+                </a>
+            </p>
+
+            <p>
+                {{ solution.description }}
+            </p>
+
+            <small class="text-muted">
+                Proposed by {{ solution.proposed_by.username }}
+            </small>
+        </div>
+
+        <hr>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="mb-3">
+
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <div class="form-text">
+                            {{ field.help_text }}
+                        </div>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+            {% endfor %}
+
+            <div class="d-flex gap-2">
+
+                <button type="submit" class="btn btn-primary">
+                    Create Project
+                </button>
+
+                <a
+                    href="{% url 'solutions:detail' solution.pk %}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

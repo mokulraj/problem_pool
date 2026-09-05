@@ -96,13 +96,14 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Solutions
-                        </a>
+                        <a href="{% url 'solutions:list' %}" class="nav-link">Solutions</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                       <a
+                            href="{% url 'projects:list' %}"
+                            class="nav-link"
+                        >
                             Projects
                         </a>
                     </li>

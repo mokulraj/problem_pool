@@ -43,4 +43,10 @@ urlpatterns = [
     views.select_solution,
     name="select",
 ),
+    
+    path(
+    "solutions/",
+    views.solution_list,
+    name="list",
+),
 ]

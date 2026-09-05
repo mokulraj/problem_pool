@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Projects - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="mb-5">
+
+            <span class="pp-badge pp-badge-purple mb-3">
+                Community Projects
+            </span>
+
+            <h1 class="display-5 fw-bold mb-2">
+                Projects
+            </h1>
+
+            <p class="text-muted mb-0">
+                Turn selected solutions into meaningful projects.
+            </p>
+
+        </div>
+
+
+        <!-- PROJECT LIST -->
+
+        {% if projects %}
+
+            <div class="row g-4">
+
+                {% for project in projects %}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <article class="pp-card h-100 p-4">
+
+                            <!-- STATUS -->
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                {% if project.status %}
+
+                                    <span class="pp-badge pp-badge-purple">
+                                        {{ project.get_status_display }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                {% if project.created_at %}
+
+                                    <small class="text-muted">
+                                        {{ project.created_at|date:"d M Y" }}
+                                    </small>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- TITLE -->
+
+                            <h2 class="h4 fw-bold mb-3">
+
+                                <a
+                                    href="{% url 'projects:detail' project.pk %}"
+                                    class="text-decoration-none text-dark"
+                                >
+                                    {{ project.title }}
+                                </a>
+
+                            </h2>
+
+
+                            <!-- DESCRIPTION -->
+
+                            <p class="text-muted mb-4">
+
+                                {{ project.description|truncatewords:25 }}
+
+                            </p>
+
+
+                            <!-- CREATOR -->
+
+                            {% if project.created_by %}
+
+                                <div class="d-flex align-items-center gap-2 mb-4">
+
+                                    {% if project.created_by.profile_image %}
+
+                                        <img
+                                            src="{{ project.created_by.profile_image.url }}"
+                                            alt="{{ project.created_by.username }}"
+                                            style="
+                                                width: 36px;
+                                                height: 36px;
+                                                object-fit: cover;
+                                                border-radius: 50%;
+                                            "
+                                        >
+
+                                    {% else %}
+
+                                        <div
+                                            class="rounded-circle d-flex align-items-center justify-content-center"
+                                            style="
+                                                width: 36px;
+                                                height: 36px;
+                                                background: #f0eef8;
+                                                font-weight: 700;
+                                            "
+                                        >
+                                            {{ project.created_by.username|first|upper }}
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <div>
+
+                                        <small class="text-muted d-block">
+                                            Created by
+                                        </small>
+
+                                        <strong>
+                                            {{ project.created_by.get_full_name|default:project.created_by.username }}
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- VIEW -->
+
+                            <a
+                                href="{% url 'projects:detail' project.pk %}"
+                                class="btn pp-btn-outline w-100"
+                            >
+                                View Project
+
+                                <i class="bi bi-arrow-right ms-1"></i>
+
+                            </a>
+
+                        </article>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <!-- EMPTY STATE -->
+
+            <div class="pp-card p-5 text-center">
+
+                <div class="empty-state-icon mx-auto mb-3">
+
+                    <i class="bi bi-kanban"></i>
+
+                </div>
+
+
+                <h2 class="h4 fw-bold">
+                    No projects yet
+                </h2>
+
+
+                <p class="text-muted mb-0">
+                    Projects are created from selected solutions.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    Join Requests - {{ project.name }} - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <div class="mb-4">
+
+            <a
+                href="{% url 'projects:detail' project.pk %}"
+                class="text-muted small"
+            >
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Back to Project
+
+            </a>
+
+        </div>
+
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h1 class="h3 fw-bold mb-1">
+                    Join Requests
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Manage requests to join {{ project.name }}.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if join_requests %}
+
+            <div class="row g-4">
+
+                {% for join_request in join_requests %}
+
+                    <div class="col-12">
+
+                        <div class="pp-card p-4">
+
+                            <div class="d-flex flex-wrap justify-content-between gap-3">
+
+                                <div>
+
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+
+                                        <div class="comment-avatar">
+
+                                            {{ join_request.user.first_name|first|default:join_request.user.username|first|upper }}
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <strong>
+
+                                                {{ join_request.user.get_full_name|default:join_request.user.username }}
+
+                                            </strong>
+
+                                            <div class="small text-muted">
+
+                                                {{ join_request.user.username }}
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {% if join_request.message %}
+
+                                        <p class="text-muted mb-2">
+
+                                            {{ join_request.message|linebreaks }}
+
+                                        </p>
+
+                                    {% endif %}
+
+
+                                    <div class="small text-muted">
+
+                                        Requested
+                                        {{ join_request.created_at|date:"d M Y, H:i" }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="text-md-end">
+
+                                    {% if join_request.status == "PENDING" %}
+
+                                        <span class="pp-badge pp-badge-orange">
+                                            Pending
+                                        </span>
+
+
+                                        <div class="d-flex flex-wrap gap-2 mt-3">
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'teams:approve' join_request.pk %}"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-success"
+                                                >
+
+                                                    <i class="bi bi-check-lg me-1"></i>
+
+                                                    Approve
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'teams:reject' join_request.pk %}"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                >
+
+                                                    <i class="bi bi-x-lg me-1"></i>
+
+                                                    Reject
+
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+
+                                    {% elif join_request.status == "APPROVED" %}
+
+                                        <span class="pp-badge pp-badge-green">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            Approved
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span class="pp-badge pp-badge-red">
+
+                                            Rejected
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="pp-card p-5 text-center">
+
+                <div class="empty-state-icon mx-auto">
+
+                    <i class="bi bi-people"></i>
+
+                </div>
+
+
+                <h2 class="h5 fw-bold">
+                    No join requests
+                </h2>
+
+
+                <p class="text-muted mb-0">
+                    There are no requests for this project yet.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -40,6 +40,8 @@ urlpatterns = [
 ),
     
     path("", include("projects.urls")),
+    
+    path("", include("teams.urls")),
 ]
 
 

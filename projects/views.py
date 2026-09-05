@@ -42,11 +42,22 @@ def project_detail(request, pk):
         pk=pk,
     )
 
+    is_team_member = project.team_memberships.filter(
+        user=request.user,
+    ).exists()
+
+    pending_join_request = project.join_requests.filter(
+        user=request.user,
+        status="PENDING",
+    ).exists()
+
     return render(
         request,
         "projects/project_detail.html",
         {
             "project": project,
+            "is_team_member": is_team_member,
+            "pending_join_request": pending_join_request,
         },
     )
 
@@ -63,8 +74,6 @@ def project_create(request, solution_id):
 
     problem = solution.problem
 
-    # Only the problem creator can convert
-    # the selected solution into a project.
     if problem.created_by != request.user:
         messages.error(
             request,
@@ -184,7 +193,9 @@ def project_edit(request, pk):
             )
 
     else:
-        form = ProjectForm(instance=project)
+        form = ProjectForm(
+            instance=project,
+        )
 
     return render(
         request,

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h1>Solutions</h1>
+    <p>Community solutions to submitted problems.</p>
+
+    {% if solutions %}
+
+        {% for solution in solutions %}
+
+            <div class="card mb-3 p-3">
+
+                <h3>
+                    <a href="{% url 'solutions:detail' solution.pk %}">
+                        {{ solution.title }}
+                    </a>
+                </h3>
+
+                <p>
+                    {{ solution.description|truncatewords:30 }}
+                </p>
+
+                <small>
+                    Problem:
+                    <a href="{% url 'problems:detail' solution.problem.pk %}">
+                        {{ solution.problem.title }}
+                    </a>
+                    · Proposed by {{ solution.proposed_by.username }}
+                </small>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="card p-4">
+            <h3>No solutions yet</h3>
+            <p>Solutions will appear here once users propose them.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

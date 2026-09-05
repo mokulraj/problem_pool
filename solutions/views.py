@@ -558,3 +558,18 @@ def select_solution(request, pk):
         "solutions:detail",
         pk=solution.pk,
     )
+    
+def solution_list(request):
+    solutions = (
+        Solution.objects
+        .select_related("problem", "proposed_by")
+        .order_by("-created_at")
+    )
+
+    return render(
+        request,
+        "solutions/solution_list.html",
+        {
+            "solutions": solutions,
+        },
+    )
