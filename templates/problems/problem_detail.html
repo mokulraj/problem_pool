@@ -433,13 +433,11 @@
     </div>
 
 
-    {% with solutions=problem.solutions.all %}
-
         {% if solutions %}
 
         <div class="solution-list">
 
-            {% for solution in problem.solutions.all %}
+             {% for solution in solutions %}
 
                 <article class="solution-card">
 

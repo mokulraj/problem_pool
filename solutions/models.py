@@ -84,3 +84,55 @@ class Solution(models.Model):
         self.save(
             update_fields=["score"]
         )
+
+
+class Vote(models.Model):
+
+    class VoteType(models.TextChoices):
+        UP = "UP", "Upvote"
+        DOWN = "DOWN", "Downvote"
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="votes",
+    )
+
+    solution = models.ForeignKey(
+        Solution,
+        on_delete=models.CASCADE,
+        related_name="votes",
+    )
+
+    vote_type = models.CharField(
+        max_length=10,
+        choices=VoteType.choices,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "solution"],
+                name="unique_user_solution_vote",
+            )
+        ]
+
+        indexes = [
+            models.Index(
+                fields=["solution", "vote_type"]
+            ),
+            models.Index(
+                fields=["user", "solution"]
+            ),
+        ]
+
+    def __str__(self):
+        return (
+            f"{self.user.username} - "
+            f"{self.solution.title} - "
+            f"{self.vote_type}"
+        )

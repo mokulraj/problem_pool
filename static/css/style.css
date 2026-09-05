@@ -1378,3 +1378,162 @@ a {
     }
 
 }
+
+/* ============================================================
+   VOTING
+   ============================================================ */
+
+.solution-voting {
+    margin-top: 10px;
+}
+
+.solution-vote-stats {
+    display: flex;
+
+    gap: 35px;
+
+    padding: 20px 0;
+
+    border-top: 1px solid var(--pp-border);
+
+    border-bottom: 1px solid var(--pp-border);
+}
+
+.vote-stat strong,
+.vote-stat span {
+    display: block;
+}
+
+.vote-stat strong {
+    color: var(--pp-purple);
+
+    font-size: 1.1rem;
+
+    font-weight: 800;
+}
+
+.vote-stat span {
+    color: var(--pp-muted);
+
+    font-size: 0.72rem;
+}
+
+.vote-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.vote-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 105px;
+
+    padding: 9px 16px;
+
+    border: 1px solid #d9d4eb;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #514c60;
+
+    font-size: 0.82rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.vote-button:hover {
+    color: var(--pp-purple);
+
+    border-color: var(--pp-purple);
+
+    background: #f8f6ff;
+}
+
+.vote-button.active {
+    color: white;
+
+    background: var(--pp-purple);
+
+    border-color: var(--pp-purple);
+}
+
+.vote-button-down.active {
+    background: var(--pp-red);
+
+    border-color: var(--pp-red);
+}
+
+.vote-message {
+    display: none;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 10px;
+
+    color: var(--pp-green);
+
+    font-size: 0.76rem;
+
+    font-weight: 600;
+}
+
+.vote-message.visible {
+    display: flex;
+}
+
+.own-solution-message {
+    margin-top: 15px;
+
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    background: #f7f5ff;
+
+    color: var(--pp-muted);
+
+    font-size: 0.78rem;
+}
+
+.own-solution-message i {
+    color: var(--pp-purple);
+
+    margin-right: 5px;
+}
+
+.own-solution-message a {
+    color: var(--pp-purple);
+
+    font-weight: 700;
+}
+
+@media (max-width: 576px) {
+
+    .solution-vote-stats {
+        gap: 20px;
+    }
+
+    .vote-actions {
+        width: 100%;
+    }
+
+    .vote-button {
+        flex: 1;
+    }
+
+}

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import F
@@ -8,10 +9,10 @@ from problems.models import Problem
 
 from .forms import SolutionForm
 from .models import Solution
-
+from .models import Vote
 
 def solution_detail(request, pk):
-
+    
     solution = get_object_or_404(
         Solution.objects.select_related(
             "problem",
@@ -20,14 +21,26 @@ def solution_detail(request, pk):
         pk=pk,
     )
 
+    user_vote = None
+
+    if request.user.is_authenticated:
+
+        user_vote = Vote.objects.filter(
+            user=request.user,
+            solution=solution,
+        ).values_list(
+            "vote_type",
+            flat=True,
+        ).first()
+
     return render(
         request,
         "solutions/solution_detail.html",
         {
             "solution": solution,
+            "user_vote": user_vote,
         },
     )
-
 
 @login_required
 def solution_create(request):
@@ -250,4 +263,207 @@ def solution_delete(request, pk):
         {
             "solution": solution,
         },
+    )
+    
+    
+@login_required
+def vote_solution(request, pk):
+
+    if request.method != "POST":
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Invalid request method.",
+            },
+            status=405,
+        )
+
+
+    solution = get_object_or_404(
+        Solution,
+        pk=pk,
+    )
+
+
+    # A user should not vote on their own solution.
+    if solution.proposed_by == request.user:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "You cannot vote on your own solution.",
+            },
+            status=403,
+        )
+
+
+    vote_type = request.POST.get(
+        "vote_type"
+    )
+
+
+    valid_vote_types = {
+        Vote.VoteType.UP,
+        Vote.VoteType.DOWN,
+    }
+
+
+    if vote_type not in valid_vote_types:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Invalid vote type.",
+            },
+            status=400,
+        )
+
+
+    with transaction.atomic():
+
+        vote = Vote.objects.filter(
+            user=request.user,
+            solution=solution,
+        ).first()
+
+
+        # ----------------------------------------------------
+        # EXISTING VOTE
+        # ----------------------------------------------------
+
+        if vote:
+
+            # Clicking the same vote removes it.
+            if vote.vote_type == vote_type:
+
+                vote.delete()
+
+                if vote_type == Vote.VoteType.UP:
+
+                    Solution.objects.filter(
+                        pk=solution.pk,
+                        upvotes__gt=0,
+                    ).update(
+                        upvotes=F("upvotes") - 1
+                    )
+
+                else:
+
+                    Solution.objects.filter(
+                        pk=solution.pk,
+                        downvotes__gt=0,
+                    ).update(
+                        downvotes=F("downvotes") - 1
+                    )
+
+                action = "removed"
+
+            # Clicking the opposite vote changes it.
+            else:
+
+                old_vote_type = vote.vote_type
+
+                vote.vote_type = vote_type
+                vote.save(
+                    update_fields=[
+                        "vote_type"
+                    ]
+                )
+
+                if old_vote_type == Vote.VoteType.UP:
+
+                    Solution.objects.filter(
+                        pk=solution.pk,
+                        upvotes__gt=0,
+                    ).update(
+                        upvotes=F("upvotes") - 1
+                    )
+
+                    Solution.objects.filter(
+                        pk=solution.pk
+                    ).update(
+                        downvotes=F("downvotes") + 1
+                    )
+
+                else:
+
+                    Solution.objects.filter(
+                        pk=solution.pk,
+                        downvotes__gt=0,
+                    ).update(
+                        downvotes=F("downvotes") - 1
+                    )
+
+                    Solution.objects.filter(
+                        pk=solution.pk
+                    ).update(
+                        upvotes=F("upvotes") + 1
+                    )
+
+                action = "changed"
+
+
+        # ----------------------------------------------------
+        # NEW VOTE
+        # ----------------------------------------------------
+
+        else:
+
+            Vote.objects.create(
+                user=request.user,
+                solution=solution,
+                vote_type=vote_type,
+            )
+
+            if vote_type == Vote.VoteType.UP:
+
+                Solution.objects.filter(
+                    pk=solution.pk
+                ).update(
+                    upvotes=F("upvotes") + 1
+                )
+
+            else:
+
+                Solution.objects.filter(
+                    pk=solution.pk
+                ).update(
+                    downvotes=F("downvotes") + 1
+                )
+
+            action = "added"
+
+
+        # Refresh values after F() updates.
+        solution.refresh_from_db()
+
+        solution.score = (
+            solution.upvotes -
+            solution.downvotes
+        )
+
+        solution.save(
+            update_fields=["score"]
+        )
+
+
+    current_vote = Vote.objects.filter(
+        user=request.user,
+        solution=solution,
+    ).values_list(
+        "vote_type",
+        flat=True,
+    ).first()
+
+
+    return JsonResponse(
+        {
+            "success": True,
+            "action": action,
+            "upvotes": solution.upvotes,
+            "downvotes": solution.downvotes,
+            "score": solution.score,
+            "user_vote": current_vote,
+        }
     )

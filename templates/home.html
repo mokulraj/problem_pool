@@ -7,50 +7,1281 @@
 
 {% block content %}
 
-<section class="pp-section">
+<style>
 
-    <div class="container">
+    /* =========================================================
+       HOMEPAGE
+    ========================================================= */
 
-        <div class="pp-card p-5 text-center">
+    .pp-home {
+        position: relative;
+        overflow: hidden;
+        background: #fbfaff;
+    }
 
-            <span class="pp-badge pp-badge-purple mb-3">
-                ProblemPool
-            </span>
 
-            <h1 class="fw-bold mb-3">
-                Where Problems Become
-                <span style="color: #4b2aad;">
-                    Projects
-                </span>
-            </h1>
+    /* =========================================================
+       BACKGROUND DECORATION
+    ========================================================= */
 
-            <p class="text-muted mx-auto" style="max-width: 650px;">
-                Turn real-world problems into collaborative
-                solutions, teams and meaningful projects.
-            </p>
+    .pp-home::before {
+        content: "";
+        position: absolute;
+        width: 520px;
+        height: 520px;
+        top: -220px;
+        left: -180px;
+        border-radius: 50%;
+        background: rgba(116, 82, 220, 0.10);
+        filter: blur(10px);
+        pointer-events: none;
+    }
 
-            <div class="d-flex justify-content-center gap-2 mt-4">
 
-                <a
-                    href="{% url 'problems:list' %}"
-                    class="btn pp-btn-primary"
-                >
-                    Explore Problems
-                </a>
+    .pp-home::after {
+        content: "";
+        position: absolute;
+        width: 450px;
+        height: 450px;
+        top: 100px;
+        right: -220px;
+        border-radius: 50%;
+        background: rgba(111, 168, 255, 0.10);
+        filter: blur(10px);
+        pointer-events: none;
+    }
 
-                <a
-                    href="{% url 'problems:create' %}"
-                    class="btn pp-btn-outline"
-                >
-                    Post a Problem
-                </a>
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .pp-hero {
+        position: relative;
+        z-index: 1;
+        padding: 70px 0 85px;
+    }
+
+
+    .pp-hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        align-items: center;
+        gap: 70px;
+    }
+
+
+    .pp-hero-content {
+        position: relative;
+        z-index: 3;
+    }
+
+
+    .pp-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 13px;
+        border: 1px solid #e4ddf7;
+        border-radius: 999px;
+        background: #f4f0ff;
+        color: #6541c8;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+
+    .pp-eyebrow-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #7049d8;
+        box-shadow: 0 0 0 5px rgba(112, 73, 216, 0.10);
+    }
+
+
+    .pp-hero-title {
+        margin: 23px 0 0;
+        max-width: 720px;
+        color: #171326;
+        font-size: clamp(3.4rem, 6vw, 6.4rem);
+        line-height: 0.94;
+        letter-spacing: -0.065em;
+        font-weight: 850;
+    }
+
+
+    .pp-hero-title .accent {
+        color: #6a46d5;
+    }
+
+
+    .pp-hero-title .outline {
+        color: transparent;
+        -webkit-text-stroke: 1.5px #6a46d5;
+    }
+
+
+    .pp-hero-description {
+        max-width: 610px;
+        margin: 28px 0 0;
+        color: #777184;
+        font-size: 1.08rem;
+        line-height: 1.8;
+    }
+
+
+    .pp-hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 32px;
+    }
+
+
+    .pp-primary-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 21px;
+        border-radius: 12px;
+        background: #6844d4;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 750;
+        box-shadow: 0 15px 30px rgba(104, 68, 212, 0.22);
+        transition: all 0.2s ease;
+    }
+
+
+    .pp-primary-btn:hover {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 19px 38px rgba(104, 68, 212, 0.28);
+    }
+
+
+    .pp-secondary-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 21px;
+        border: 1px solid #ded8eb;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        color: #302a3d;
+        text-decoration: none;
+        font-weight: 750;
+        transition: all 0.2s ease;
+    }
+
+
+    .pp-secondary-btn:hover {
+        color: #6844d4;
+        border-color: #bdb0df;
+        transform: translateY(-2px);
+    }
+
+
+    /* =========================================================
+       HERO VISUAL
+    ========================================================= */
+
+    .pp-hero-visual {
+        position: relative;
+        min-height: 510px;
+    }
+
+
+    .pp-visual-orb {
+        position: absolute;
+        width: 410px;
+        height: 410px;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background:
+            radial-gradient(
+                circle at 35% 30%,
+                #eee8ff,
+                #ddd3fa 48%,
+                #f8f6ff 72%
+            );
+    }
+
+
+    .pp-visual-ring {
+        position: absolute;
+        width: 440px;
+        height: 440px;
+        top: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 1px dashed rgba(104, 68, 212, 0.22);
+        border-radius: 50%;
+    }
+
+
+    .pp-floating-card {
+        position: absolute;
+        z-index: 3;
+        width: 235px;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.91);
+        box-shadow: 0 22px 50px rgba(53, 36, 94, 0.12);
+        backdrop-filter: blur(14px);
+    }
+
+
+    .pp-floating-card.problem {
+        top: 65px;
+        left: 5px;
+        transform: rotate(-4deg);
+    }
+
+
+    .pp-floating-card.solution {
+        top: 225px;
+        right: 0;
+        transform: rotate(4deg);
+    }
+
+
+    .pp-floating-card.project {
+        bottom: 35px;
+        left: 75px;
+        transform: rotate(-2deg);
+    }
+
+
+    .pp-mini-label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 11px;
+        color: #817b8d;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+
+    .pp-mini-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: #eee9ff;
+        color: #6844d4;
+    }
+
+
+    .pp-floating-card h3 {
+        margin: 0;
+        color: #272135;
+        font-size: 0.96rem;
+        line-height: 1.4;
+        font-weight: 800;
+    }
+
+
+    .pp-floating-card p {
+        margin: 7px 0 0;
+        color: #858091;
+        font-size: 0.76rem;
+        line-height: 1.5;
+    }
+
+
+    .pp-floating-status {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: #edf9f2;
+        color: #2c8a5c;
+        font-size: 0.65rem;
+        font-weight: 800;
+    }
+
+
+    .pp-visual-center {
+        position: absolute;
+        z-index: 2;
+        top: 170px;
+        left: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 125px;
+        height: 125px;
+        transform: translateX(-50%);
+        border: 10px solid rgba(255, 255, 255, 0.65);
+        border-radius: 50%;
+        background: #6844d4;
+        color: #fff;
+        box-shadow:
+            0 25px 55px rgba(104, 68, 212, 0.28),
+            0 0 0 1px rgba(104, 68, 212, 0.1);
+    }
+
+
+    .pp-visual-center i {
+        font-size: 2.4rem;
+    }
+
+
+    .pp-connection {
+        position: absolute;
+        z-index: 1;
+        height: 1px;
+        background: repeating-linear-gradient(
+            90deg,
+            #9b88d5 0,
+            #9b88d5 5px,
+            transparent 5px,
+            transparent 10px
+        );
+        transform-origin: left center;
+    }
+
+
+    .pp-connection.one {
+        width: 145px;
+        top: 160px;
+        left: 190px;
+        transform: rotate(15deg);
+    }
+
+
+    .pp-connection.two {
+        width: 145px;
+        top: 270px;
+        right: 180px;
+        transform: rotate(-12deg);
+    }
+
+
+    .pp-connection.three {
+        width: 145px;
+        bottom: 130px;
+        left: 175px;
+        transform: rotate(-17deg);
+    }
+
+
+    /* =========================================================
+       PROCESS
+    ========================================================= */
+
+    .pp-process-section {
+        position: relative;
+        z-index: 2;
+        padding: 25px 0 80px;
+    }
+
+
+    .pp-process-header {
+        max-width: 650px;
+        margin-bottom: 32px;
+    }
+
+
+    .pp-kicker {
+        margin-bottom: 8px;
+        color: #6844d4;
+        font-size: 0.72rem;
+        font-weight: 850;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+    }
+
+
+    .pp-section-title {
+        margin: 0;
+        color: #201a2e;
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.05;
+        letter-spacing: -0.045em;
+        font-weight: 850;
+    }
+
+
+    .pp-section-subtitle {
+        margin: 12px 0 0;
+        color: #85808f;
+        line-height: 1.7;
+    }
+
+
+    .pp-process-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+
+
+    .pp-process-card {
+        position: relative;
+        min-height: 205px;
+        padding: 24px;
+        overflow: hidden;
+        border: 1px solid #ebe7f2;
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 15px 40px rgba(42, 30, 70, 0.055);
+        transition: 0.22s ease;
+    }
+
+
+    .pp-process-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 22px 50px rgba(42, 30, 70, 0.09);
+    }
+
+
+    .pp-process-number {
+        position: absolute;
+        right: 16px;
+        top: 10px;
+        color: #f0edf7;
+        font-size: 4rem;
+        line-height: 1;
+        font-weight: 850;
+    }
+
+
+    .pp-process-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        margin-bottom: 22px;
+        border-radius: 14px;
+        background: #f0ebff;
+        color: #6844d4;
+        font-size: 1.2rem;
+    }
+
+
+    .pp-process-card h3 {
+        position: relative;
+        margin: 0 0 8px;
+        color: #282135;
+        font-size: 1.05rem;
+        font-weight: 800;
+    }
+
+
+    .pp-process-card p {
+        position: relative;
+        margin: 0;
+        color: #85808f;
+        font-size: 0.82rem;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       TRENDING PROBLEMS
+    ========================================================= */
+
+    .pp-trending {
+        position: relative;
+        z-index: 2;
+        padding: 75px 0 100px;
+        background: #f5f2fa;
+    }
+
+
+    .pp-trending-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+
+    .pp-view-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #6844d4;
+        text-decoration: none;
+        font-size: 0.86rem;
+        font-weight: 800;
+    }
+
+
+    .pp-view-all:hover {
+        color: #4e2da9;
+    }
+
+
+    .pp-problem-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+
+    .pp-problem-card {
+        position: relative;
+        min-height: 320px;
+        padding: 25px;
+        overflow: hidden;
+        border: 1px solid #e8e3ef;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 16px 42px rgba(42, 30, 70, 0.06);
+        transition: 0.22s ease;
+    }
+
+
+    .pp-problem-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 55px rgba(42, 30, 70, 0.10);
+    }
+
+
+    .pp-problem-card::after {
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        right: -50px;
+        bottom: -50px;
+        border-radius: 50%;
+        background: #f0ebff;
+    }
+
+
+    .pp-problem-top {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 26px;
+    }
+
+
+    .pp-category {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #f0ebff;
+        color: #6844d4;
+        font-size: 0.67rem;
+        font-weight: 850;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+
+    .pp-open {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #31855b;
+        font-size: 0.68rem;
+        font-weight: 800;
+    }
+
+
+    .pp-open::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #48ad78;
+    }
+
+
+    .pp-problem-title {
+        position: relative;
+        z-index: 2;
+        display: block;
+        min-height: 72px;
+        margin-bottom: 12px;
+        color: #241d32;
+        text-decoration: none;
+        font-size: 1.22rem;
+        line-height: 1.35;
+        letter-spacing: -0.02em;
+        font-weight: 850;
+    }
+
+
+    .pp-problem-title:hover {
+        color: #6844d4;
+    }
+
+
+    .pp-problem-description {
+        position: relative;
+        z-index: 2;
+        display: -webkit-box;
+        min-height: 72px;
+        overflow: hidden;
+        color: #85808f;
+        font-size: 0.84rem;
+        line-height: 1.65;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+
+    .pp-problem-bottom {
+        position: absolute;
+        z-index: 3;
+        right: 25px;
+        bottom: 22px;
+        left: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 15px;
+        border-top: 1px solid #efebf3;
+        color: #8b8594;
+        font-size: 0.7rem;
+    }
+
+
+    .pp-problem-bottom span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+
+    .pp-empty {
+        grid-column: 1 / -1;
+        padding: 60px 30px;
+        text-align: center;
+        border: 1px dashed #d8d0e5;
+        border-radius: 24px;
+        background: #fff;
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media (max-width: 1100px) {
+
+        .pp-hero-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .pp-hero-content {
+            text-align: center;
+        }
+
+        .pp-hero-description {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pp-hero-actions {
+            justify-content: center;
+        }
+
+        .pp-hero-visual {
+            max-width: 650px;
+            width: 100%;
+            margin: auto;
+        }
+
+    }
+
+
+    @media (max-width: 900px) {
+
+        .pp-process-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .pp-problem-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .pp-hero {
+            padding: 45px 0 55px;
+        }
+
+        .pp-hero-title {
+            font-size: 3.15rem;
+        }
+
+        .pp-hero-visual {
+            min-height: 440px;
+        }
+
+        .pp-visual-orb {
+            width: 300px;
+            height: 300px;
+        }
+
+        .pp-visual-ring {
+            width: 330px;
+            height: 330px;
+        }
+
+        .pp-visual-center {
+            top: 145px;
+            width: 95px;
+            height: 95px;
+        }
+
+        .pp-floating-card {
+            width: 190px;
+        }
+
+        .pp-floating-card.problem {
+            left: 0;
+        }
+
+        .pp-floating-card.solution {
+            right: 0;
+            top: 205px;
+        }
+
+        .pp-floating-card.project {
+            left: 30px;
+            bottom: 15px;
+        }
+
+        .pp-connection {
+            display: none;
+        }
+
+        .pp-process-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .pp-trending-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+    }
+
+</style>
+
+
+<div class="pp-home">
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="pp-hero">
+
+        <div class="container">
+
+            <div class="pp-hero-grid">
+
+
+                <!-- HERO CONTENT -->
+
+                <div class="pp-hero-content">
+
+                    <span class="pp-eyebrow">
+                        <span class="pp-eyebrow-dot"></span>
+                        Community powered problem solving
+                    </span>
+
+
+                    <h1 class="pp-hero-title">
+
+                        Real Problems.
+
+                        <br>
+
+                        <span class="accent">
+                            Real People.
+                        </span>
+
+                        <br>
+
+                        Real <span class="outline">Projects.</span>
+
+                    </h1>
+
+
+                    <p class="pp-hero-description">
+
+                        ProblemPool brings together people who see
+                        problems and people who want to solve them.
+                        Discover challenges, share ideas, build teams,
+                        and turn meaningful solutions into real projects.
+
+                    </p>
+
+
+                    <div class="pp-hero-actions">
+
+                        <a
+                            href="{% url 'problems:list' %}"
+                            class="pp-primary-btn"
+                        >
+                            Explore Problems
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
+
+
+                        {% if user.is_authenticated %}
+
+                            <a
+                                href="{% url 'problems:create' %}"
+                                class="pp-secondary-btn"
+                            >
+                                <i class="bi bi-plus-lg"></i>
+                                Post a Problem
+                            </a>
+
+                        {% else %}
+
+                            <a
+                                href="{% url 'accounts:login' %}?next={% url 'problems:create' %}"
+                                class="pp-secondary-btn"
+                            >
+                                <i class="bi bi-plus-lg"></i>
+                                Post a Problem
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- HERO VISUAL -->
+
+                <div class="pp-hero-visual">
+
+                    <div class="pp-visual-orb"></div>
+
+                    <div class="pp-visual-ring"></div>
+
+
+                    <div class="pp-connection one"></div>
+                    <div class="pp-connection two"></div>
+                    <div class="pp-connection three"></div>
+
+
+                    <div class="pp-visual-center">
+
+                        <i class="bi bi-stars"></i>
+
+                    </div>
+
+
+                    <!-- PROBLEM CARD -->
+
+                    <div class="pp-floating-card problem">
+
+                        <div class="pp-mini-label">
+
+                            <span class="pp-mini-icon">
+                                <i class="bi bi-exclamation-circle"></i>
+                            </span>
+
+                            Problem
+
+                        </div>
+
+
+                        <h3>
+                            Real-world challenges
+                            waiting to be solved.
+                        </h3>
+
+
+                        <p>
+                            Campus, community,
+                            environment and more.
+                        </p>
+
+
+                        <span class="pp-floating-status">
+                            Open for ideas
+                        </span>
+
+                    </div>
+
+
+                    <!-- SOLUTION CARD -->
+
+                    <div class="pp-floating-card solution">
+
+                        <div class="pp-mini-label">
+
+                            <span class="pp-mini-icon">
+                                <i class="bi bi-lightbulb"></i>
+                            </span>
+
+                            Solution
+
+                        </div>
+
+
+                        <h3>
+                            Ideas become
+                            practical solutions.
+                        </h3>
+
+
+                        <p>
+                            Collaborate with people
+                            who think differently.
+                        </p>
+
+                    </div>
+
+
+                    <!-- PROJECT CARD -->
+
+                    <div class="pp-floating-card project">
+
+                        <div class="pp-mini-label">
+
+                            <span class="pp-mini-icon">
+                                <i class="bi bi-rocket-takeoff"></i>
+                            </span>
+
+                            Project
+
+                        </div>
+
+
+                        <h3>
+                            Build something
+                            that actually matters.
+                        </h3>
+
+
+                        <p>
+                            Turn the best ideas
+                            into meaningful projects.
+                        </p>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+    </section>
 
-</section>
+
+    <!-- =====================================================
+         PROCESS
+    ====================================================== -->
+
+    <section class="pp-process-section">
+
+        <div class="container">
+
+            <div class="pp-process-header">
+
+                <div class="pp-kicker">
+                    How ProblemPool works
+                </div>
+
+                <h2 class="pp-section-title">
+                    From a problem to something real.
+                </h2>
+
+                <p class="pp-section-subtitle">
+                    One simple journey from discovering a challenge
+                    to building a solution with the community.
+                </p>
+
+            </div>
+
+
+            <div class="pp-process-grid">
+
+
+                <article class="pp-process-card">
+
+                    <span class="pp-process-number">
+                        01
+                    </span>
+
+                    <div class="pp-process-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+
+                    <h3>
+                        Discover
+                    </h3>
+
+                    <p>
+                        Find real problems posted by people,
+                        campuses and communities.
+                    </p>
+
+                </article>
+
+
+                <article class="pp-process-card">
+
+                    <span class="pp-process-number">
+                        02
+                    </span>
+
+                    <div class="pp-process-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+
+                    <h3>
+                        Solve
+                    </h3>
+
+                    <p>
+                        Share your ideas and propose practical
+                        solutions to meaningful challenges.
+                    </p>
+
+                </article>
+
+
+                <article class="pp-process-card">
+
+                    <span class="pp-process-number">
+                        03
+                    </span>
+
+                    <div class="pp-process-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <h3>
+                        Collaborate
+                    </h3>
+
+                    <p>
+                        Meet people with different skills and
+                        build a team around the strongest ideas.
+                    </p>
+
+                </article>
+
+
+                <article class="pp-process-card">
+
+                    <span class="pp-process-number">
+                        04
+                    </span>
+
+                    <div class="pp-process-icon">
+                        <i class="bi bi-rocket-takeoff"></i>
+                    </div>
+
+                    <h3>
+                        Build
+                    </h3>
+
+                    <p>
+                        Turn solutions into projects that create
+                        measurable real-world impact.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TRENDING PROBLEMS
+    ====================================================== -->
+
+    <section class="pp-trending">
+
+        <div class="container">
+
+            <div class="pp-trending-header">
+
+                <div>
+
+                    <div class="pp-kicker">
+                        Community pulse
+                    </div>
+
+                    <h2 class="pp-section-title">
+                        Problems worth solving.
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="{% url 'problems:list' %}"
+                    class="pp-view-all"
+                >
+                    Explore all problems
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+            </div>
+
+
+            <div class="pp-problem-grid">
+
+
+                {% for problem in trending_problems %}
+
+                    <article class="pp-problem-card">
+
+
+                        <div class="pp-problem-top">
+
+                            <span class="pp-category">
+                                {{ problem.get_category_display }}
+                            </span>
+
+
+                            {% if problem.status == "OPEN" %}
+
+                                <span class="pp-open">
+                                    Open
+                                </span>
+
+                            {% elif problem.status == "IN_PROGRESS" %}
+
+                                <span class="pp-open">
+                                    In Progress
+                                </span>
+
+                            {% elif problem.status == "SOLVED" %}
+
+                                <span class="pp-open">
+                                    Solved
+                                </span>
+
+                            {% else %}
+
+                                <span class="pp-open">
+                                    Closed
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <a
+                            href="{% url 'problems:detail' problem.pk %}"
+                            class="pp-problem-title"
+                        >
+                            {{ problem.title }}
+                        </a>
+
+
+                        <div class="pp-problem-description">
+                            {{ problem.description }}
+                        </div>
+
+
+                        <div class="pp-problem-bottom">
+
+                            <span>
+                                <i class="bi bi-eye"></i>
+                                {{ problem.views }}
+                            </span>
+
+
+                            <span>
+                                <i class="bi bi-lightbulb"></i>
+                                {{ problem.solution_count }}
+                            </span>
+
+
+                            <span>
+                                <i class="bi bi-geo-alt"></i>
+                                {{ problem.location|default:"Community" }}
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                {% empty %}
+
+                    <div class="pp-empty">
+
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+
+                        <h3 class="h5 mt-3">
+                            No problems yet
+                        </h3>
+
+                        <p class="text-muted">
+                            Be the first person to post a problem.
+                        </p>
+
+
+                        {% if user.is_authenticated %}
+
+                            <a
+                                href="{% url 'problems:create' %}"
+                                class="btn pp-btn-primary"
+                            >
+                                Post a Problem
+                            </a>
+
+                        {% else %}
+
+                            <a
+                                href="{% url 'accounts:login' %}?next={% url 'problems:create' %}"
+                                class="btn pp-btn-primary"
+                            >
+                                Get Started
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</div>
 
 {% endblock %}

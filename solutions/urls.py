@@ -31,4 +31,10 @@ urlpatterns = [
         views.solution_delete,
         name="delete",
     ),
+    
+    path(
+    "solutions/<int:pk>/vote/",
+    views.vote_solution,
+    name="vote",
+),
 ]

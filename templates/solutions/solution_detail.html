@@ -201,7 +201,159 @@
 
                     <!-- VOTING COMING NEXT -->
 
-                    <div class="solution-voting-placeholder mt-4">
+                    <!-- =====================================================
+     VOTING
+====================================================== -->
+
+<div class="solution-voting mt-4">
+
+    <div class="solution-vote-stats">
+
+        <div class="vote-stat">
+
+            <strong
+                id="upvote-count"
+            >
+                {{ solution.upvotes }}
+            </strong>
+
+            <span>
+                Upvotes
+            </span>
+
+        </div>
+
+
+        <div class="vote-stat">
+
+            <strong
+                id="downvote-count"
+            >
+                {{ solution.downvotes }}
+            </strong>
+
+            <span>
+                Downvotes
+            </span>
+
+        </div>
+
+
+        <div class="vote-stat">
+
+            <strong
+                id="score-count"
+            >
+                {{ solution.score }}
+            </strong>
+
+            <span>
+                Score
+            </span>
+
+        </div>
+
+    </div>
+
+
+    {% if user.is_authenticated %}
+
+        {% if solution.proposed_by != user %}
+
+            <div class="vote-actions">
+
+                <button
+                    type="button"
+                    class="vote-button
+                    {% if user_vote == 'UP' %}
+                        active
+                    {% endif %}"
+                    data-vote-type="UP"
+                    data-vote-url="{% url 'solutions:vote' solution.pk %}"
+                    id="upvote-button"
+                >
+                    <i class="bi bi-hand-thumbs-up"></i>
+
+                    Upvote
+                </button>
+
+
+                <button
+                    type="button"
+                    class="vote-button
+                    vote-button-down
+                    {% if user_vote == 'DOWN' %}
+                        active
+                    {% endif %}"
+                    data-vote-type="DOWN"
+                    data-vote-url="{% url 'solutions:vote' solution.pk %}"
+                    id="downvote-button"
+                >
+                    <i class="bi bi-hand-thumbs-down"></i>
+
+                    Downvote
+                </button>
+
+            </div>
+
+
+            <div
+                id="vote-message"
+                class="vote-message
+                {% if user_vote %}
+                    visible
+                {% endif %}"
+            >
+
+                {% if user_vote == "UP" %}
+
+                    <i class="bi bi-check-circle"></i>
+
+                    You have upvoted this solution.
+
+                {% elif user_vote == "DOWN" %}
+
+                    <i class="bi bi-check-circle"></i>
+
+                    You have downvoted this solution.
+
+                {% endif %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="own-solution-message">
+
+                <i class="bi bi-info-circle"></i>
+
+                You cannot vote on your own solution.
+
+            </div>
+
+        {% endif %}
+
+
+    {% else %}
+
+        <div class="own-solution-message">
+
+            <i class="bi bi-lock"></i>
+
+            <a
+                href="{% url 'accounts:login' %}?next={{ request.path }}"
+            >
+                Login
+            </a>
+
+            to vote on this solution.
+
+        </div>
+
+    {% endif %}
+
+</div>
 
                         <div>
                             <i class="bi bi-hand-thumbs-up"></i>

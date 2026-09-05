@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ProblemForm
 from .models import Problem
+from solutions.models import Solution
 
 
 def problem_list(request):
@@ -123,10 +124,34 @@ def problem_detail(request, pk):
     problem = get_object_or_404(
         Problem.objects.select_related(
             "created_by"
-        ).prefetch_related(
-            "solutions__proposed_by"
         ),
         pk=pk,
+    )
+
+    solutions = (
+        Solution.objects
+        .filter(problem=problem)
+        .select_related("proposed_by")
+        .order_by("-score", "-created_at")
+    )
+
+
+    Problem.objects.filter(
+        pk=problem.pk
+    ).update(
+        views=problem.views + 1
+    )
+
+    problem.views += 1
+
+
+    return render(
+        request,
+        "problems/problem_detail.html",
+        {
+            "problem": problem,
+            "solutions": solutions,
+        }
     )
 
     if request.user != problem.created_by:
