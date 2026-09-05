@@ -11,32 +11,27 @@ from .forms import (
 
 
 def register_view(request):
-
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect("/")
 
     if request.method == "POST":
-
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-
             user = form.save()
+
+            login(
+                request,
+                user,
+                backend="accounts.backends.EmailBackend",
+            )
 
             messages.success(
                 request,
-                "Your account has been created successfully."
+                "Your account has been created successfully.",
             )
 
-            login(
-               request,
-               user,
-               backend="accounts.backends.EmailBackend"
-           )
-
-        return redirect("accounts:profile")
-
-            
+            return redirect("accounts:profile")
 
     else:
         form = RegisterForm()
@@ -45,42 +40,38 @@ def register_view(request):
         request,
         "accounts/register.html",
         {
-            "form": form
-        }
+            "form": form,
+        },
     )
 
 
 def login_view(request):
-
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect("/")
 
     if request.method == "POST":
-
         form = LoginForm(request.POST)
 
         if form.is_valid():
-
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
 
             user = authenticate(
                 request,
                 email=email,
-                password=password
+                password=password,
             )
 
             if user is not None:
-
                 login(
                     request,
                     user,
-                    backend="accounts.backends.EmailBackend"
+                    backend="accounts.backends.EmailBackend",
                 )
 
                 messages.success(
                     request,
-                    f"Welcome back, {user.first_name or user.username}!"
+                    f"Welcome back, {user.first_name or user.username}!",
                 )
 
                 next_url = request.GET.get("next")
@@ -88,11 +79,11 @@ def login_view(request):
                 if next_url:
                     return redirect(next_url)
 
-                return redirect("home")
+                return redirect("/")
 
             messages.error(
                 request,
-                "Invalid email or password."
+                "Invalid email or password.",
             )
 
     else:
@@ -102,67 +93,62 @@ def login_view(request):
         request,
         "accounts/login.html",
         {
-            "form": form
-        }
+            "form": form,
+        },
     )
 
 
 @login_required
 def logout_view(request):
-
     logout(request)
 
     messages.success(
         request,
-        "You have been logged out successfully."
+        "You have been logged out successfully.",
     )
 
-    return redirect("home")
+    return redirect("/")
 
 
 @login_required
 def profile_view(request):
-
     return render(
         request,
         "accounts/profile.html",
         {
-            "profile_user": request.user
-        }
+            "profile_user": request.user,
+        },
     )
+
 
 @login_required
 def edit_profile_view(request):
-
     if request.method == "POST":
-
         form = ProfileForm(
             request.POST,
             request.FILES,
-            instance=request.user
+            instance=request.user,
         )
 
         if form.is_valid():
-
             form.save()
 
             messages.success(
                 request,
-                "Your profile has been updated successfully."
+                "Your profile has been updated successfully.",
             )
 
             return redirect("accounts:profile")
 
     else:
-
         form = ProfileForm(
-            instance=request.user
+            instance=request.user,
         )
 
     return render(
         request,
         "accounts/edit_profile.html",
         {
-            "form": form
-        }
+            "form": form,
+        },
     )

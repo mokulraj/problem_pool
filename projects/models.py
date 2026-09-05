@@ -21,7 +21,9 @@ class Project(models.Model):
         related_name="project",
     )
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(
+        max_length=200,
+    )
 
     description = models.TextField()
 
@@ -55,9 +57,14 @@ class Project(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
         indexes = [
-            models.Index(fields=["owner", "created_at"]),
-            models.Index(fields=["status", "created_at"]),
+            models.Index(
+                fields=["owner", "created_at"],
+            ),
+            models.Index(
+                fields=["status", "created_at"],
+            ),
         ]
 
     def __str__(self):
@@ -65,24 +72,15 @@ class Project(models.Model):
 
     @property
     def progress(self):
-        """
-        Progress will be calculated from project tasks.
-
-        Tasks are implemented in a later module.
-        Until tasks exist, progress is 0%.
-        """
-        tasks = getattr(self, "tasks", None)
-
-        if tasks is None:
-            return 0
-
-        total_tasks = tasks.count()
+        total_tasks = self.tasks.count()
 
         if total_tasks == 0:
             return 0
 
-        completed_tasks = tasks.filter(
+        completed_tasks = self.tasks.filter(
             status="COMPLETED"
         ).count()
 
-        return round((completed_tasks / total_tasks) * 100)
+        return round(
+            (completed_tasks / total_tasks) * 100
+        )

@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    Tasks - {{ project.name }} - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <div class="mb-4">
+
+            <a
+                href="{% url 'projects:detail' project.pk %}"
+                class="text-muted small"
+            >
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Back to Project
+
+            </a>
+
+        </div>
+
+
+        <!-- HEADER -->
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+            <div>
+
+                <div class="small text-uppercase text-muted fw-semibold">
+                    {{ project.name }}
+                </div>
+
+                <h1 class="h3 fw-bold mb-1">
+                    Project Tasks
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Plan and track the work required for this project.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'tasks:create' project.pk %}"
+                class="btn pp-btn-primary"
+            >
+
+                <i class="bi bi-plus-lg me-1"></i>
+
+                New Task
+
+            </a>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="pp-card p-4 mb-4">
+
+            <div class="d-flex justify-content-between mb-2">
+
+                <strong>
+                    Project Progress
+                </strong>
+
+                <strong>
+                    {{ project.progress }}%
+                </strong>
+
+            </div>
+
+
+            <div
+                class="progress"
+                style="height: 10px;"
+            >
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ project.progress }}%;"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TASKS -->
+
+        {% if tasks %}
+
+            <div class="row g-3">
+
+                {% for task in tasks %}
+
+                    <div class="col-12">
+
+                        <div class="pp-card p-4">
+
+                            <div class="d-flex flex-wrap justify-content-between gap-3">
+
+                                <div class="flex-grow-1">
+
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+
+                                        <h2 class="h5 fw-bold mb-0">
+
+                                            {{ task.title }}
+
+                                        </h2>
+
+
+                                        {% if task.status == "TODO" %}
+
+                                            <span class="pp-badge pp-badge-blue">
+                                                To Do
+                                            </span>
+
+                                        {% elif task.status == "IN_PROGRESS" %}
+
+                                            <span class="pp-badge pp-badge-orange">
+                                                In Progress
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="pp-badge pp-badge-green">
+                                                Completed
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    {% if task.description %}
+
+                                        <p class="text-muted small mb-2">
+
+                                            {{ task.description|truncatechars:250 }}
+
+                                        </p>
+
+                                    {% endif %}
+
+
+                                    <div class="d-flex flex-wrap gap-3 small text-muted">
+
+                                        {% if task.assigned_to %}
+
+                                            <span>
+
+                                                <i class="bi bi-person me-1"></i>
+
+                                                {{ task.assigned_to.username }}
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span>
+
+                                                <i class="bi bi-person me-1"></i>
+
+                                                Unassigned
+
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if task.due_date %}
+
+                                            <span>
+
+                                                <i class="bi bi-calendar me-1"></i>
+
+                                                Due
+                                                {{ task.due_date|date:"d M Y" }}
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- ACTIONS -->
+
+                                <div class="d-flex flex-wrap align-items-start gap-2">
+
+                                    {% if task.status != "COMPLETED" %}
+
+                                        <form
+                                            method="post"
+                                            action="{% url 'tasks:complete' task.pk %}"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-success"
+                                            >
+
+                                                <i class="bi bi-check-lg me-1"></i>
+
+                                                Complete
+
+                                            </button>
+
+                                        </form>
+
+                                    {% endif %}
+
+
+                                    <a
+                                        href="{% url 'tasks:edit' task.pk %}"
+                                        class="btn btn-sm pp-btn-outline"
+                                    >
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+
+                                    {% if project.owner == request.user %}
+
+                                        <form
+                                            method="post"
+                                            action="{% url 'tasks:delete' task.pk %}"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('Delete this task?');"
+                                            >
+
+                                                <i class="bi bi-trash"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="pp-card p-5 text-center">
+
+                <div class="empty-state-icon mx-auto">
+
+                    <i class="bi bi-check2-square"></i>
+
+                </div>
+
+
+                <h2 class="h5 fw-bold">
+                    No tasks yet
+                </h2>
+
+
+                <p class="text-muted mb-3">
+                    Break this project into smaller pieces of work.
+                </p>
+
+
+                <a
+                    href="{% url 'tasks:create' project.pk %}"
+                    class="btn pp-btn-primary"
+                >
+
+                    <i class="bi bi-plus-lg me-1"></i>
+
+                    Create First Task
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
