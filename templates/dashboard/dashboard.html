@@ -1,0 +1,673 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    Dashboard - ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <div class="mb-4">
+
+            <span class="pp-badge pp-badge-purple mb-2">
+                Dashboard
+            </span>
+
+            <h1 class="fw-bold mb-1">
+                Welcome back,
+                {{ user.first_name|default:user.username }}
+            </h1>
+
+            <p class="text-muted mb-0">
+                Here's what's happening across your ProblemPool activity.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             STAT CARDS
+        ====================================================== -->
+
+        <div class="row g-3 mb-4">
+
+            <!-- PROBLEMS -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="pp-card p-4 h-100">
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <div>
+
+                            <div class="small text-muted mb-1">
+                                Problems
+                            </div>
+
+                            <div class="h3 fw-bold mb-0">
+                                {{ problems_created }}
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-stat-icon">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="{% url 'problems:list' %}"
+                        class="small text-decoration-none mt-3 d-inline-block"
+                    >
+                        View Problems
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- SOLUTIONS -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="pp-card p-4 h-100">
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <div>
+
+                            <div class="small text-muted mb-1">
+                                Solutions
+                            </div>
+
+                            <div class="h3 fw-bold mb-0">
+                                {{ solutions_submitted }}
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-stat-icon">
+                            <i class="bi bi-stars"></i>
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="{% url 'solutions:create' %}"
+                        class="small text-decoration-none mt-3 d-inline-block"
+                    >
+                        Propose Solution
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- OWNED PROJECTS -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="pp-card p-4 h-100">
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <div>
+
+                            <div class="small text-muted mb-1">
+                                Projects Owned
+                            </div>
+
+                            <div class="h3 fw-bold mb-0">
+                                {{ projects_owned }}
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-stat-icon">
+                            <i class="bi bi-kanban"></i>
+                        </div>
+
+                    </div>
+
+                    <a
+                        href="{% url 'projects:list' %}"
+                        class="small text-decoration-none mt-3 d-inline-block"
+                    >
+                        View Projects
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- JOINED PROJECTS -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="pp-card p-4 h-100">
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <div>
+
+                            <div class="small text-muted mb-1">
+                                Projects Joined
+                            </div>
+
+                            <div class="h3 fw-bold mb-0">
+                                {{ projects_joined }}
+                            </div>
+
+                        </div>
+
+                        <div class="dashboard-stat-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+
+                    </div>
+
+                    <span class="small text-muted mt-3 d-inline-block">
+                        Team memberships
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SECONDARY STATS
+        ====================================================== -->
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+
+                <div class="pp-card p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span class="text-muted">
+                            Pending Join Requests
+                        </span>
+
+                        <strong>
+                            {{ pending_join_requests }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="pp-card p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span class="text-muted">
+                            Active Tasks
+                        </span>
+
+                        <strong>
+                            {{ active_tasks }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="pp-card p-3">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span class="text-muted">
+                            Completed Tasks
+                        </span>
+
+                        <strong>
+                            {{ completed_tasks }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- =================================================
+                 RECENT PROJECTS
+            ================================================== -->
+
+            <div class="col-lg-8">
+
+                <div class="pp-card p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <div>
+
+                            <h2 class="h5 fw-bold mb-1">
+                                Recent Projects
+                            </h2>
+
+                            <p class="text-muted small mb-0">
+                                Projects you own or have joined.
+                            </p>
+
+                        </div>
+
+
+                        <a
+                            href="{% url 'projects:list' %}"
+                            class="small text-decoration-none"
+                        >
+                            View all
+                        </a>
+
+                    </div>
+
+
+                    {% if recent_projects %}
+
+                        <div class="row g-3">
+
+                            {% for project in recent_projects %}
+
+                                <div class="col-md-6">
+
+                                    <div class="dashboard-project-card">
+
+                                        <div class="d-flex justify-content-between gap-2 mb-2">
+
+                                            <h3 class="h6 fw-bold mb-0">
+
+                                                {{ project.name }}
+
+                                            </h3>
+
+
+                                            {% if project.status == "PLANNING" %}
+
+                                                <span class="pp-badge pp-badge-blue">
+                                                    Planning
+                                                </span>
+
+                                            {% elif project.status == "ACTIVE" %}
+
+                                                <span class="pp-badge pp-badge-orange">
+                                                    Active
+                                                </span>
+
+                                            {% elif project.status == "COMPLETED" %}
+
+                                                <span class="pp-badge pp-badge-green">
+                                                    Completed
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="pp-badge pp-badge-red">
+                                                    Cancelled
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        <p class="small text-muted">
+
+                                            {{ project.description|truncatechars:100 }}
+
+                                        </p>
+
+
+                                        <div class="d-flex justify-content-between small mb-1">
+
+                                            <span class="text-muted">
+                                                Progress
+                                            </span>
+
+                                            <strong>
+                                                {{ project.progress }}%
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div
+                                            class="progress mb-3"
+                                            style="height: 6px;"
+                                        >
+
+                                            <div
+                                                class="progress-bar"
+                                                style="width: {{ project.progress }}%;"
+                                            ></div>
+
+                                        </div>
+
+
+                                        <a
+                                            href="{% url 'projects:detail' project.pk %}"
+                                            class="btn btn-sm pp-btn-outline w-100"
+                                        >
+                                            Open Project
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    {% else %}
+
+                        <div class="text-center py-4">
+
+                            <div class="empty-state-icon mx-auto">
+
+                                <i class="bi bi-kanban"></i>
+
+                            </div>
+
+
+                            <h3 class="h6 fw-bold">
+                                No projects yet
+                            </h3>
+
+
+                            <p class="small text-muted mb-0">
+                                Projects you create or join will appear here.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 OWNER REQUESTS
+            ================================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="pp-card p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <div>
+
+                            <h2 class="h5 fw-bold mb-1">
+                                Join Requests
+                            </h2>
+
+                            <p class="text-muted small mb-0">
+                                Requests for your projects.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if pending_requests_for_owner %}
+
+                        {% for join_request in pending_requests_for_owner %}
+
+                            <div class="dashboard-request-item">
+
+                                <div class="comment-avatar">
+
+                                    {{ join_request.user.first_name|first|default:join_request.user.username|first|upper }}
+
+                                </div>
+
+
+                                <div class="flex-grow-1">
+
+                                    <strong class="small">
+
+                                        {{ join_request.user.get_full_name|default:join_request.user.username }}
+
+                                    </strong>
+
+
+                                    <div class="small text-muted">
+
+                                        wants to join
+
+                                    </div>
+
+
+                                    <div class="small fw-semibold">
+
+                                        {{ join_request.project.name }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <a
+                                href="{% url 'teams:join_requests' join_request.project.pk %}"
+                                class="btn btn-sm pp-btn-outline w-100 mb-3"
+                            >
+
+                                Review Request
+
+                            </a>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+                        <div class="text-center py-4">
+
+                            <div class="empty-state-icon mx-auto">
+
+                                <i class="bi bi-person-check"></i>
+
+                            </div>
+
+
+                            <h3 class="h6 fw-bold">
+                                All caught up
+                            </h3>
+
+
+                            <p class="small text-muted mb-0">
+                                No pending requests.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RECENT PROBLEMS
+            ================================================== -->
+
+            <div class="col-lg-6">
+
+                <div class="pp-card p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h2 class="h5 fw-bold mb-0">
+                            Your Recent Problems
+                        </h2>
+
+                        <a
+                            href="{% url 'problems:list' %}"
+                            class="small text-decoration-none"
+                        >
+                            View all
+                        </a>
+
+                    </div>
+
+
+                    {% if recent_problems %}
+
+                        {% for problem in recent_problems %}
+
+                            <a
+                                href="{% url 'problems:detail' problem.pk %}"
+                                class="dashboard-list-item"
+                            >
+
+                                <div>
+
+                                    <strong>
+                                        {{ problem.title }}
+                                    </strong>
+
+                                    <div class="small text-muted">
+
+                                        {{ problem.created_at|date:"d M Y" }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <i class="bi bi-chevron-right text-muted"></i>
+
+                            </a>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+                        <p class="text-muted small mb-0">
+                            You haven't created any problems yet.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RECENT SOLUTIONS
+            ================================================== -->
+
+            <div class="col-lg-6">
+
+                <div class="pp-card p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h2 class="h5 fw-bold mb-0">
+                            Your Recent Solutions
+                        </h2>
+
+                        <a
+                            href="{% url 'solutions:create' %}"
+                            class="small text-decoration-none"
+                        >
+                            Add solution
+                        </a>
+
+                    </div>
+
+
+                    {% if recent_solutions %}
+
+                        {% for solution in recent_solutions %}
+
+                            <a
+                                href="{% url 'solutions:detail' solution.pk %}"
+                                class="dashboard-list-item"
+                            >
+
+                                <div>
+
+                                    <strong>
+                                        {{ solution.title }}
+                                    </strong>
+
+                                    <div class="small text-muted">
+
+                                        {{ solution.problem.title }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <i class="bi bi-chevron-right text-muted"></i>
+
+                            </a>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+                        <p class="text-muted small mb-0">
+                            You haven't submitted any solutions yet.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

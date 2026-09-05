@@ -1,152 +1,133 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ profile_user.get_full_name|default:profile_user.username }}
-    - ProblemPool
+    {{ profile_user.first_name|default:profile_user.username }} - Profile | ProblemPool
 {% endblock %}
-
 
 {% block content %}
 
-<section class="pp-section">
+<div class="container py-5">
 
-    <div class="container">
+    <div class="row justify-content-center">
 
-        <div class="row g-4">
+        <div class="col-lg-9">
 
-            <!-- PROFILE CARD -->
+            <!-- Profile Header -->
+            <div class="card border-0 shadow-sm mb-4">
 
-            <div class="col-lg-4">
+                <div class="card-body p-4 p-md-5">
 
-                <div class="pp-card profile-card">
+                    <div class="row align-items-center">
 
-                    <div class="profile-image-wrapper">
+                        <div class="col-md-auto text-center mb-4 mb-md-0">
 
-                        {% if profile_user.profile_image %}
+                            {% if profile_user.profile_image %}
 
-                            <img
-                                src="{{ profile_user.profile_image.url }}"
-                                alt="{{ profile_user.username }}"
-                                class="profile-image"
-                            >
+                                <img
+                                    src="{{ profile_user.profile_image.url }}"
+                                    alt="{{ profile_user.username }}"
+                                    class="rounded-circle"
+                                    style="
+                                        width: 130px;
+                                        height: 130px;
+                                        object-fit: cover;
+                                    "
+                                >
 
-                        {% else %}
+                            {% else %}
 
-                            <div class="profile-placeholder">
+                                <div
+                                    class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto"
+                                    style="
+                                        width: 130px;
+                                        height: 130px;
+                                        font-size: 48px;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    {{ profile_user.first_name|first|default:profile_user.username|first|upper }}
+                                </div>
 
-                               {% if profile_user.first_name %}
-   					 {{ profile_user.first_name|first|upper }}
-				{% else %}
-  					  {{ profile_user.username|first|upper }}
-				{% endif %}
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="col-md">
+
+                            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+
+                                <div>
+
+                                    <h1 class="mb-1">
+                                        {{ profile_user.first_name|default:profile_user.username }}
+                                        {{ profile_user.last_name }}
+                                    </h1>
+
+                                    <p class="text-muted mb-2">
+                                        @{{ profile_user.username }}
+                                    </p>
+
+                                    <span class="badge bg-primary">
+                                        Newcomer
+                                    </span>
+
+                                </div>
+
+
+                                <div>
+
+                                    <a
+                                        href="{% url 'accounts:edit_profile' %}"
+                                        class="btn btn-primary"
+                                    >
+                                        <i class="bi bi-pencil-square"></i>
+                                        Edit Profile
+                                    </a>
+
+                                </div>
 
                             </div>
 
-                        {% endif %}
-
-                    </div>
-
-
-                    <h2>
-                        {{ profile_user.get_full_name|default:profile_user.username }}
-                    </h2>
-
-                    <p class="profile-username">
-                        @{{ profile_user.username }}
-                    </p>
-
-
-                    <span class="pp-badge pp-badge-purple">
-                        {{ profile_user.level }}
-                    </span>
-
-
-                    {% if profile_user.bio %}
-
-                        <p class="profile-bio">
-                            {{ profile_user.bio }}
-                        </p>
-
-                    {% else %}
-
-                        <p class="profile-bio text-muted">
-                            No bio added yet.
-                        </p>
-
-                    {% endif %}
-
-
-                    {% if profile_user.location %}
-
-                        <div class="profile-info">
-                            <i class="bi bi-geo-alt"></i>
-                            {{ profile_user.location }}
                         </div>
 
-                    {% endif %}
-
-
-                    <div class="profile-points">
-
-                        <strong>
-                            {{ profile_user.points }}
-                        </strong>
-
-                        <span>
-                            Points
-                        </span>
-
                     </div>
-
-
-                    <a
-                        href="{% url 'accounts:edit_profile' %}"
-                        class="btn pp-btn-primary w-100 mt-3"
-                    >
-                        <i class="bi bi-pencil me-1"></i>
-                        Edit Profile
-                    </a>
 
                 </div>
 
             </div>
 
 
-            <!-- PROFILE DETAILS -->
+            <!-- Profile Information -->
+            <div class="card border-0 shadow-sm">
 
-            <div class="col-lg-8">
+                <div class="card-body p-4 p-md-5">
 
-                <div class="pp-card p-4 mb-4">
+                    <div class="mb-4">
 
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="h4 mb-1">
+                            Profile
+                        </h2>
 
-                        <div>
-
-                            <h2 class="pp-section-title mb-1">
-                                Profile
-                            </h2>
-
-                            <p class="text-muted mb-0">
-                                Your ProblemPool community profile
-                            </p>
-
-                        </div>
+                        <p class="text-muted mb-0">
+                            Your ProblemPool community profile
+                        </p>
 
                     </div>
 
 
-                    <div class="row g-3">
+                    <div class="row g-4">
 
                         <div class="col-md-6">
 
-                            <div class="profile-stat">
+                            <div class="p-3 bg-light rounded">
 
-                                <span>
+                                <small class="text-muted d-block mb-1">
                                     First Name
-                                </span>
+                                </small>
 
                                 <strong>
-                                    {{ profile_user.first_name|default:"-" }}
+                                    {{ profile_user.first_name|default:"Not provided" }}
                                 </strong>
 
                             </div>
@@ -156,14 +137,14 @@
 
                         <div class="col-md-6">
 
-                            <div class="profile-stat">
+                            <div class="p-3 bg-light rounded">
 
-                                <span>
+                                <small class="text-muted d-block mb-1">
                                     Last Name
-                                </span>
+                                </small>
 
                                 <strong>
-                                    {{ profile_user.last_name|default:"-" }}
+                                    {{ profile_user.last_name|default:"Not provided" }}
                                 </strong>
 
                             </div>
@@ -173,11 +154,11 @@
 
                         <div class="col-md-6">
 
-                            <div class="profile-stat">
+                            <div class="p-3 bg-light rounded">
 
-                                <span>
+                                <small class="text-muted d-block mb-1">
                                     Email
-                                </span>
+                                </small>
 
                                 <strong>
                                     {{ profile_user.email }}
@@ -190,11 +171,11 @@
 
                         <div class="col-md-6">
 
-                            <div class="profile-stat">
+                            <div class="p-3 bg-light rounded">
 
-                                <span>
+                                <small class="text-muted d-block mb-1">
                                     Member Since
-                                </span>
+                                </small>
 
                                 <strong>
                                     {{ profile_user.date_joined|date:"d M Y" }}
@@ -204,41 +185,101 @@
 
                         </div>
 
-                    </div>
 
-                </div>
+                        <div class="col-md-6">
 
+                            <div class="p-3 bg-light rounded">
 
-                <!-- SKILLS -->
+                                <small class="text-muted d-block mb-1">
+                                    Location
+                                </small>
 
-                <div class="pp-card p-4">
+                                <strong>
+                                    {{ profile_user.location|default:"Not provided" }}
+                                </strong>
 
-                    <h3 class="h5 fw-bold mb-3">
-                        Skills
-                    </h3>
-
-
-                    {% if profile_user.skill_list %}
-
-                        <div class="d-flex flex-wrap gap-2">
-
-                            {% for skill in profile_user.skill_list %}
-
-                                <span class="pp-badge pp-badge-blue">
-                                    {{ skill }}
-                                </span>
-
-                            {% endfor %}
+                            </div>
 
                         </div>
 
-                    {% else %}
 
-                        <p class="text-muted mb-0">
-                            No skills added yet.
-                        </p>
+                        <div class="col-md-6">
 
-                    {% endif %}
+                            <div class="p-3 bg-light rounded">
+
+                                <small class="text-muted d-block mb-1">
+                                    Points
+                                </small>
+
+                                <strong>
+                                    {{ profile_user.points|default:"0" }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Bio -->
+                    <div class="mt-5">
+
+                        <h3 class="h5 mb-3">
+                            About
+                        </h3>
+
+                        <div class="p-3 bg-light rounded">
+
+                            {% if profile_user.bio %}
+
+                                <p class="mb-0">
+                                    {{ profile_user.bio }}
+                                </p>
+
+                            {% else %}
+
+                                <p class="text-muted mb-0">
+                                    No bio added yet.
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Skills -->
+                    <div class="mt-5">
+
+                        <h3 class="h5 mb-3">
+                            Skills
+                        </h3>
+
+                        {% if profile_user.skills %}
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {% for skill in profile_user.skills.split|default:"" %}
+
+                                    <span class="badge bg-light text-dark border">
+                                        {{ skill }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <p class="text-muted">
+                                No skills added yet.
+                            </p>
+
+                        {% endif %}
+
+                    </div>
 
                 </div>
 
@@ -248,6 +289,6 @@
 
     </div>
 
-</section>
+</div>
 
 {% endblock %}
