@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "notifications",
     "dashboard",
     "core",
+    "comments",
 ]
 
 

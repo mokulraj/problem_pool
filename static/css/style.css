@@ -1537,3 +1537,173 @@ a {
     }
 
 }
+
+/* ============================================================
+   COMMENTS / DISCUSSION
+   ============================================================ */
+
+.comment-form textarea {
+    resize: vertical;
+
+    min-height: 100px;
+}
+
+.comment-login-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 14px 16px;
+
+    background: #f7f5ff;
+
+    border-radius: 9px;
+
+    color: var(--pp-muted);
+
+    font-size: 0.8rem;
+}
+
+.comment-login-box i {
+    color: var(--pp-purple);
+}
+
+.comment-login-box a {
+    color: var(--pp-purple);
+
+    font-weight: 700;
+}
+
+.comment-list {
+    display: flex;
+
+    flex-direction: column;
+}
+
+.comment-item {
+    display: flex;
+
+    gap: 12px;
+
+    padding: 18px 0;
+
+    border-top: 1px solid var(--pp-border);
+}
+
+.comment-avatar {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pp-purple),
+            var(--pp-purple-light)
+        );
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+}
+
+.comment-body {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 7px;
+}
+
+.comment-header strong {
+    display: block;
+
+    color: var(--pp-text);
+
+    font-size: 0.8rem;
+}
+
+.comment-header span {
+    display: block;
+
+    color: var(--pp-muted);
+
+    font-size: 0.68rem;
+
+    margin-top: 2px;
+}
+
+.comment-actions {
+    display: flex;
+
+    gap: 8px;
+}
+
+.comment-actions a {
+    color: var(--pp-muted);
+
+    font-size: 0.75rem;
+}
+
+.comment-actions a:hover {
+    color: var(--pp-purple);
+}
+
+.comment-content {
+    color: #514d5c;
+
+    font-size: 0.8rem;
+
+    line-height: 1.7;
+}
+
+.comment-content p {
+    margin-bottom: 0;
+}
+
+.form-error {
+    color: #c62828;
+
+    font-size: 0.75rem;
+
+    margin-top: 5px;
+}
+
+
+.comment-delete-preview {
+    margin-top: 15px;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    background: #f7f5ff;
+
+    color: var(--pp-muted);
+
+    font-size: 0.8rem;
+
+    text-align: left;
+}

@@ -33,6 +33,13 @@ urlpatterns = [
     "",
     include("solutions.urls")
     ),
+    
+    path(
+    "",
+    include("comments.urls")
+),
+    
+    path("", include("projects.urls")),
 ]
 
 

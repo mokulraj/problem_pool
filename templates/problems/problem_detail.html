@@ -28,7 +28,9 @@
 
         <div class="row g-4">
 
-            <!-- MAIN CONTENT -->
+            <!-- =================================================
+                 MAIN CONTENT
+            ================================================== -->
 
             <div class="col-lg-8">
 
@@ -120,7 +122,9 @@
                         {% else %}
 
                             <div class="problem-author-placeholder">
+
                                 {{ problem.created_by.first_name|first|default:problem.created_by.username|first|upper }}
+
                             </div>
 
                         {% endif %}
@@ -199,65 +203,70 @@
                     </div>
 
 
-       <!-- ACTIONS -->
+                    <!-- =================================================
+                         ACTIONS
+                    ================================================== -->
 
-<div class="mt-4">
+                    <div class="mt-4">
 
-    {% if user.is_authenticated %}
+                        {% if user.is_authenticated %}
 
-        {% if problem.created_by == user %}
+                            {% if problem.created_by == user %}
 
-            <div class="d-flex flex-wrap gap-2">
+                                <div class="d-flex flex-wrap gap-2">
 
-                <a
-                    href="{% url 'problems:edit' problem.pk %}"
-                    class="btn pp-btn-primary"
-                >
-                    <i class="bi bi-pencil me-1"></i>
-                    Edit Problem
-                </a>
+                                    <a
+                                        href="{% url 'problems:edit' problem.pk %}"
+                                        class="btn pp-btn-primary"
+                                    >
+                                        <i class="bi bi-pencil me-1"></i>
+                                        Edit Problem
+                                    </a>
 
-                <a
-                    href="{% url 'problems:delete' problem.pk %}"
-                    class="btn pp-btn-outline"
-                >
-                    <i class="bi bi-trash me-1"></i>
-                    Delete
-                </a>
+
+                                    <a
+                                        href="{% url 'problems:delete' problem.pk %}"
+                                        class="btn pp-btn-outline"
+                                    >
+                                        <i class="bi bi-trash me-1"></i>
+                                        Delete
+                                    </a>
+
+                                </div>
+
+                            {% else %}
+
+                                <a
+                                    href="{% url 'solutions:create' %}?problem={{ problem.pk }}"
+                                    class="btn pp-btn-primary"
+                                >
+                                    <i class="bi bi-lightbulb me-1"></i>
+                                    Propose a Solution
+                                </a>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <a
+                                href="{% url 'accounts:login' %}?next={{ request.path }}"
+                                class="btn pp-btn-primary"
+                            >
+                                Login to Propose a Solution
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
 
             </div>
 
-        {% else %}
 
-            <a
-                href="{% url 'solutions:create' %}?problem={{ problem.pk }}"
-                class="btn pp-btn-primary"
-            >
-                <i class="bi bi-lightbulb me-1"></i>
-                Propose a Solution
-            </a>
-
-        {% endif %}
-
-    {% else %}
-
-        <a
-            href="{% url 'accounts:login' %}?next={{ request.path }}"
-            class="btn pp-btn-primary"
-        >
-            Login to Propose a Solution
-        </a>
-
-    {% endif %}
-
-</div>
-
-</div>
-
-</div>
-
-
-            <!-- SIDEBAR -->
+            <!-- =================================================
+                 SIDEBAR
+            ================================================== -->
 
             <div class="col-lg-4">
 
@@ -350,25 +359,35 @@
                 </div>
 
 
+                <!-- READY TO HELP -->
+
                 <div class="pp-card p-4">
 
                     <h2 class="h5 fw-bold mb-2">
                         Ready to help?
                     </h2>
 
+
                     <p class="text-muted small">
+
                         Have an idea that could solve this problem?
                         Share your solution with the community.
+
                     </p>
+
 
                     {% if user.is_authenticated and problem.created_by != user %}
 
-                        <a
-                            href="#"
-                            class="btn pp-btn-primary w-100"
-                        >
-                            Propose Solution
-                        </a>
+                        {% if problem.status == "OPEN" or problem.status == "IN_PROGRESS" %}
+
+                            <a
+                                href="{% url 'solutions:create' %}?problem={{ problem.pk }}"
+                                class="btn pp-btn-primary w-100"
+                            >
+                                Propose Solution
+                            </a>
+
+                        {% endif %}
 
                     {% elif not user.is_authenticated %}
 
@@ -392,178 +411,28 @@
 </section>
 
 
+<!-- =====================================================
+     SOLUTIONS
+====================================================== -->
 
+<div class="container">
 
-<!-- SOLUTIONS -->
+    <div class="pp-card p-4 p-md-5 mt-4">
 
-<div class="pp-card p-4 p-md-5 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
 
-        <div>
+                <h2 class="h4 fw-bold mb-1">
+                    Solutions
+                    ({{ problem.solution_count }})
+                </h2>
 
-            <h2 class="h4 fw-bold mb-1">
-                Solutions
-                ({{ problem.solution_count }})
-            </h2>
-
-            <p class="text-muted small mb-0">
-                Community proposals for this problem.
-            </p>
-
-        </div>
-
-
-        {% if user.is_authenticated and problem.created_by != user %}
-
-            {% if problem.status == "OPEN" or problem.status == "IN_PROGRESS" %}
-
-                <a
-                    href="{% url 'solutions:create' %}?problem={{ problem.pk }}"
-                    class="btn pp-btn-primary"
-                >
-                    <i class="bi bi-lightbulb me-1"></i>
-                    Propose Solution
-                </a>
-
-            {% endif %}
-
-        {% endif %}
-
-    </div>
-
-
-        {% if solutions %}
-
-        <div class="solution-list">
-
-             {% for solution in solutions %}
-
-                <article class="solution-card">
-
-                    <div class="solution-card-icon">
-
-                        <i class="bi bi-lightbulb"></i>
-
-                    </div>
-
-
-                    <div class="flex-grow-1">
-
-                        <div class="d-flex flex-wrap gap-2 mb-2">
-
-                            {% if solution.status == "SELECTED" %}
-
-                                <span class="pp-badge pp-badge-green">
-                                    <i class="bi bi-check-circle me-1"></i>
-                                    Selected
-                                </span>
-
-                            {% elif solution.status == "SHORTLISTED" %}
-
-                                <span class="pp-badge pp-badge-orange">
-                                    Shortlisted
-                                </span>
-
-                            {% elif solution.status == "REJECTED" %}
-
-                                <span class="pp-badge pp-badge-red">
-                                    Rejected
-                                </span>
-
-                            {% else %}
-
-                                <span class="pp-badge pp-badge-blue">
-                                    Proposed
-                                </span>
-
-                            {% endif %}
-
-                        </div>
-
-
-                        <h3 class="solution-card-title">
-
-                            <a
-                                href="{% url 'solutions:detail' solution.pk %}"
-                            >
-                                {{ solution.title }}
-                            </a>
-
-                        </h3>
-
-
-                        <p class="solution-card-description">
-
-                            {{ solution.description|truncatechars:150 }}
-
-                        </p>
-
-
-                        <div class="solution-card-meta">
-
-                            <span>
-                                <i class="bi bi-person"></i>
-
-                                {{ solution.proposed_by.get_full_name|default:solution.proposed_by.username }}
-
-                            </span>
-
-
-                            <span>
-                                <i class="bi bi-calendar3"></i>
-
-                                {{ solution.created_at|date:"d M Y" }}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="solution-score">
-
-                        <strong>
-                            {{ solution.score }}
-                        </strong>
-
-                        <span>
-                            Score
-                        </span>
-
-
-                        <a
-                            href="{% url 'solutions:detail' solution.pk %}"
-                            class="small mt-2"
-                        >
-                            View
-                        </a>
-
-                    </div>
-
-                </article>
-
-            {% endfor %}
-
-        </div>
-
-    {% else %}
-
-        <div class="empty-state py-5">
-
-            <div class="empty-state-icon mx-auto">
-
-                <i class="bi bi-lightbulb"></i>
+                <p class="text-muted small mb-0">
+                    Community proposals for this problem.
+                </p>
 
             </div>
-
-            <h3 class="h5 fw-bold">
-                No solutions yet
-            </h3>
-
-            <p class="text-muted mb-3">
-                Be the first person to propose a solution.
-            </p>
 
 
             {% if user.is_authenticated and problem.created_by != user %}
@@ -574,7 +443,8 @@
                         href="{% url 'solutions:create' %}?problem={{ problem.pk }}"
                         class="btn pp-btn-primary"
                     >
-                        Propose First Solution
+                        <i class="bi bi-lightbulb me-1"></i>
+                        Propose Solution
                     </a>
 
                 {% endif %}
@@ -583,9 +453,392 @@
 
         </div>
 
-    {% endif %}
-{% endwith %}
+
+        {% if solutions %}
+
+            <div class="solution-list">
+
+                {% for solution in solutions %}
+
+                    <article class="solution-card">
+
+                        <div class="solution-card-icon">
+
+                            <i class="bi bi-lightbulb"></i>
+
+                        </div>
+
+
+                        <div class="flex-grow-1">
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+
+                                {% if solution.status == "SELECTED" %}
+
+                                    <span class="pp-badge pp-badge-green">
+
+                                        <i class="bi bi-check-circle me-1"></i>
+
+                                        Selected
+
+                                    </span>
+
+                                {% elif solution.status == "SHORTLISTED" %}
+
+                                    <span class="pp-badge pp-badge-orange">
+                                        Shortlisted
+                                    </span>
+
+                                {% elif solution.status == "REJECTED" %}
+
+                                    <span class="pp-badge pp-badge-red">
+                                        Rejected
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="pp-badge pp-badge-blue">
+                                        Proposed
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <h3 class="solution-card-title">
+
+                                <a
+                                    href="{% url 'solutions:detail' solution.pk %}"
+                                >
+                                    {{ solution.title }}
+                                </a>
+
+                            </h3>
+
+
+                            <p class="solution-card-description">
+
+                                {{ solution.description|truncatechars:150 }}
+
+                            </p>
+
+
+                            <div class="solution-card-meta">
+
+                                <span>
+
+                                    <i class="bi bi-person"></i>
+
+                                    {{ solution.proposed_by.get_full_name|default:solution.proposed_by.username }}
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="bi bi-calendar3"></i>
+
+                                    {{ solution.created_at|date:"d M Y" }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="solution-score">
+
+                            <strong>
+                                {{ solution.score }}
+                            </strong>
+
+                            <span>
+                                Score
+                            </span>
+
+
+                            <a
+                                href="{% url 'solutions:detail' solution.pk %}"
+                                class="small mt-2"
+                            >
+                                View
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state py-5">
+
+                <div class="empty-state-icon mx-auto">
+
+                    <i class="bi bi-lightbulb"></i>
+
+                </div>
+
+
+                <h3 class="h5 fw-bold">
+                    No solutions yet
+                </h3>
+
+
+                <p class="text-muted mb-3">
+
+                    Be the first person to propose a solution.
+
+                </p>
+
+
+                {% if user.is_authenticated and problem.created_by != user %}
+
+                    {% if problem.status == "OPEN" or problem.status == "IN_PROGRESS" %}
+
+                        <a
+                            href="{% url 'solutions:create' %}?problem={{ problem.pk }}"
+                            class="btn pp-btn-primary"
+                        >
+                            Propose First Solution
+                        </a>
+
+                    {% endif %}
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         PROBLEM DISCUSSION
+    ====================================================== -->
+
+    <div class="pp-card p-4 p-md-5 mt-4">
+
+        <div class="mb-4">
+
+            <h2 class="h4 fw-bold mb-1">
+
+                Discussion
+                ({{ problem.comments.count }})
+
+            </h2>
+
+
+            <p class="text-muted small mb-0">
+
+                Share feedback, questions, and ideas about this problem.
+
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             COMMENT FORM
+        ================================================== -->
+
+        {% if user.is_authenticated %}
+
+            <form
+                method="post"
+                action="{% url 'comments:create' %}"
+                class="comment-form mb-4"
+            >
+
+                {% csrf_token %}
+
+
+                <input
+                    type="hidden"
+                    name="problem_id"
+                    value="{{ problem.pk }}"
+                >
+
+
+                <input
+                    type="hidden"
+                    name="next"
+                    value="{{ request.path }}"
+                >
+
+
+                <textarea
+                    name="content"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Share your thoughts, feedback, or ideas..."
+                    required
+                ></textarea>
+
+
+                <div class="d-flex justify-content-end mt-2">
+
+                    <button
+                        type="submit"
+                        class="btn pp-btn-primary"
+                    >
+
+                        <i class="bi bi-chat-left-text me-1"></i>
+
+                        Add Comment
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        {% else %}
+
+            <div class="comment-login-box mb-4">
+
+                <i class="bi bi-lock"></i>
+
+
+                <span>
+
+                    <a
+                        href="{% url 'accounts:login' %}?next={{ request.path }}"
+                    >
+                        Login
+                    </a>
+
+                    to join the discussion.
+
+                </span>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             COMMENTS LIST
+        ================================================== -->
+
+        {% with comments=problem.comments.all %}
+
+            {% if comments %}
+
+                <div class="comment-list">
+
+                    {% for comment in comments %}
+
+                        <article class="comment-item">
+
+                            <div class="comment-avatar">
+
+                                {{ comment.user.first_name|first|default:comment.user.username|first|upper }}
+
+                            </div>
+
+
+                            <div class="comment-body">
+
+                                <div class="comment-header">
+
+                                    <div>
+
+                                        <strong>
+
+                                            {{ comment.user.get_full_name|default:comment.user.username }}
+
+                                        </strong>
+
+
+                                        <span>
+
+                                            {{ comment.created_at|date:"d M Y, H:i" }}
+
+                                        </span>
+
+                                    </div>
+
+
+                                    {% if comment.user == user %}
+
+                                        <div class="comment-actions">
+
+                                            <a
+                                                href="{% url 'comments:edit' comment.pk %}"
+                                                title="Edit"
+                                            >
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+
+                                            <a
+                                                href="{% url 'comments:delete' comment.pk %}"
+                                                title="Delete"
+                                            >
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="comment-content">
+
+                                    {{ comment.content|linebreaks }}
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state py-4">
+
+                    <div class="empty-state-icon mx-auto">
+
+                        <i class="bi bi-chat"></i>
+
+                    </div>
+
+
+                    <h3 class="h6 fw-bold">
+
+                        No comments yet
+
+                    </h3>
+
+
+                    <p class="text-muted small mb-0">
+
+                        Start the discussion.
+
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+    </div>
 
 </div>
+
 
 {% endblock %}

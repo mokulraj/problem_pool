@@ -37,4 +37,10 @@ urlpatterns = [
     views.vote_solution,
     name="vote",
 ),
+    
+    path(
+    "solutions/<int:pk>/select/",
+    views.select_solution,
+    name="select",
+),
 ]

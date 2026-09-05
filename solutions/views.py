@@ -17,6 +17,8 @@ def solution_detail(request, pk):
         Solution.objects.select_related(
             "problem",
             "proposed_by",
+        ).prefetch_related(
+            "comments__user",
         ),
         pk=pk,
     )
@@ -33,12 +35,19 @@ def solution_detail(request, pk):
             flat=True,
         ).first()
 
+    comments = (
+        solution.comments
+        .select_related("user")
+        .order_by("created_at")
+    )
+
     return render(
         request,
         "solutions/solution_detail.html",
         {
             "solution": solution,
             "user_vote": user_vote,
+            "comments": comments,
         },
     )
 
@@ -466,4 +475,86 @@ def vote_solution(request, pk):
             "score": solution.score,
             "user_vote": current_vote,
         }
+    )
+    
+
+@login_required
+def select_solution(request, pk):
+    if request.method != "POST":
+        messages.error(
+            request,
+            "Invalid request.",
+        )
+
+        return redirect(
+            "solutions:detail",
+            pk=pk,
+        )
+
+    solution = get_object_or_404(
+        Solution.objects.select_related("problem"),
+        pk=pk,
+    )
+
+    problem = solution.problem
+
+    if problem.created_by != request.user:
+        messages.error(
+            request,
+            "Only the problem owner can select a solution.",
+        )
+
+        return redirect(
+            "solutions:detail",
+            pk=solution.pk,
+        )
+
+    if solution.status == Solution.Status.REJECTED:
+        messages.error(
+            request,
+            "A rejected solution cannot be selected.",
+        )
+
+        return redirect(
+            "solutions:detail",
+            pk=solution.pk,
+        )
+
+    if solution.status == Solution.Status.SELECTED:
+        messages.info(
+            request,
+            "This solution is already selected.",
+        )
+
+        return redirect(
+            "solutions:detail",
+            pk=solution.pk,
+        )
+
+    with transaction.atomic():
+        # If another solution was previously selected,
+        # return it to shortlisted status.
+        Solution.objects.filter(
+            problem=problem,
+            status=Solution.Status.SELECTED,
+        ).exclude(
+            pk=solution.pk,
+        ).update(
+            status=Solution.Status.SHORTLISTED,
+        )
+
+        solution.status = Solution.Status.SELECTED
+        solution.save(update_fields=["status", "updated_at"])
+
+        problem.status = problem.Status.IN_PROGRESS
+        problem.save(update_fields=["status", "updated_at"])
+
+    messages.success(
+        request,
+        "Solution selected successfully. You can now convert it into a project.",
+    )
+
+    return redirect(
+        "solutions:detail",
+        pk=solution.pk,
     )
