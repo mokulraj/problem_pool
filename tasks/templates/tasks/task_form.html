@@ -1,276 +1,314 @@
 {% extends "base.html" %}
 
-
-{% block title %}
-    {{ page_title }} - ProblemPool
-{% endblock %}
-
+{% block title %}{{ page_title }} - ProblemPool{% endblock %}
 
 {% block content %}
 
-<section class="pp-section">
+<style>
+    .task-page {
+        min-height: calc(100vh - 160px);
+        padding: 55px 20px 70px;
+        background: #f8f7fc;
+    }
 
-    <div class="container">
+    .task-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
 
-        <div class="row justify-content-center">
+    .task-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
 
-            <div class="col-lg-8">
+    .task-header h1 {
+        margin: 0 0 10px;
+        font-size: 38px;
+        font-weight: 800;
+        color: #171323;
+        letter-spacing: -0.8px;
+    }
 
-                <div class="mb-4">
+    .task-header p {
+        margin: 0;
+        color: #77728a;
+        font-size: 16px;
+    }
+
+    .task-card {
+        background: #ffffff;
+        border-radius: 22px;
+        padding: 38px;
+        box-shadow: 0 12px 35px rgba(71, 52, 130, 0.08);
+        border: 1px solid #eeeaf7;
+    }
+
+    .project-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 28px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #f1ecff;
+        color: #6038c7;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .form-section {
+        margin-bottom: 24px;
+    }
+
+    .form-section label {
+        display: block;
+        margin-bottom: 9px;
+        color: #181522;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        min-height: 52px;
+        padding: 13px 15px;
+        border: 1px solid #ded9eb;
+        border-radius: 12px;
+        background: #ffffff;
+        color: #282432;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    textarea.form-control {
+        min-height: 145px;
+        resize: vertical;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #6840d8;
+        box-shadow: 0 0 0 4px rgba(104, 64, 216, 0.10);
+    }
+
+    .field-help {
+        margin-top: 8px;
+        color: #77728a;
+        font-size: 13px;
+    }
+
+    .field-error {
+        margin-top: 7px;
+        color: #c62828;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+    .button-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 28px;
+        border-top: 1px solid #eeeaf4;
+    }
+
+    .btn-primary-task,
+    .btn-secondary-task {
+        min-height: 50px;
+        padding: 0 24px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .btn-primary-task {
+        border: none;
+        background: #633bd1;
+        color: #ffffff;
+        box-shadow: 0 7px 18px rgba(99, 59, 209, 0.22);
+    }
+
+    .btn-primary-task:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(99, 59, 209, 0.28);
+        color: #ffffff;
+    }
+
+    .btn-secondary-task {
+        border: 1px solid #ddd7ed;
+        background: #ffffff;
+        color: #5330b5;
+    }
+
+    .btn-secondary-task:hover {
+        background: #f8f5ff;
+        color: #5330b5;
+    }
+
+    .required-mark {
+        color: #633bd1;
+    }
+
+    @media (max-width: 700px) {
+        .task-page {
+            padding: 35px 15px 50px;
+        }
+
+        .task-header h1 {
+            font-size: 30px;
+        }
+
+        .task-card {
+            padding: 25px 20px;
+            border-radius: 18px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .button-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-primary-task,
+        .btn-secondary-task {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="task-page">
+    <div class="task-container">
+
+        <div class="task-header">
+            <h1>{{ page_title }}</h1>
+            <p>Create and assign work for your project.</p>
+        </div>
+
+        <div class="task-card">
+
+            <div class="project-label">
+                Project: {{ project }}
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="field-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- Task Title -->
+                <div class="form-section">
+                    <label for="{{ form.title.id_for_label }}">
+                        Task Title <span class="required-mark">*</span>
+                    </label>
+
+                    {{ form.title }}
+
+                    {% if form.title.errors %}
+                        <div class="field-error">
+                            {{ form.title.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="form-section">
+                    <label for="{{ form.description.id_for_label }}">
+                        Description
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+                        <div class="field-error">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Assign To -->
+                <div class="form-section">
+                    <label for="{{ form.assigned_to.id_for_label }}">
+                        Assign To
+                    </label>
+
+                    {{ form.assigned_to }}
+
+                    <div class="field-help">
+                        Only project team members can be assigned tasks.
+                    </div>
+
+                    {% if form.assigned_to.errors %}
+                        <div class="field-error">
+                            {{ form.assigned_to.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Due Date -->
+                <div class="form-section">
+                    <label for="{{ form.due_date.id_for_label }}">
+                        Due Date
+                    </label>
+
+                    {{ form.due_date }}
+
+                    <div class="field-help">
+                        The due date cannot be after the project deadline.
+                    </div>
+
+                    {% if form.due_date.errors %}
+                        <div class="field-error">
+                            {{ form.due_date.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-row">
+
+                    <button type="submit" class="btn-primary-task">
+                        +&nbsp; {{ page_title }}
+                    </button>
 
                     <a
-                        href="{% url 'tasks:list' project.pk %}"
-                        class="text-muted small"
+                        href="{% url 'tasks:list' project.id %}"
+                        class="btn-secondary-task"
                     >
-
-                        <i class="bi bi-arrow-left me-1"></i>
-
-                        Back to Tasks
-
+                        Cancel
                     </a>
 
                 </div>
 
-
-                <div class="mb-4">
-
-                    <div class="small text-uppercase text-muted fw-semibold mb-1">
-
-                        {{ project.name }}
-
-                    </div>
-
-                    <h1 class="h3 fw-bold mb-1">
-
-                        {{ page_title }}
-
-                    </h1>
-
-                    <p class="text-muted mb-0">
-
-                        Add a clear piece of work to the project.
-
-                    </p>
-
-                </div>
-
-
-                <div class="pp-card p-4 p-md-5">
-
-                    <form method="post">
-
-                        {% csrf_token %}
-
-
-                        {% if form.non_field_errors %}
-
-                            <div class="alert alert-danger">
-
-                                {{ form.non_field_errors }}
-
-                            </div>
-
-                        {% endif %}
-
-
-                        <!-- TITLE -->
-
-                        <div class="mb-3">
-
-                            <label
-                                for="{{ form.title.id_for_label }}"
-                                class="form-label fw-semibold"
-                            >
-
-                                Task Title
-
-                            </label>
-
-
-                            {{ form.title }}
-
-
-                            {% for error in form.title.errors %}
-
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-
-                            {% endfor %}
-
-                        </div>
-
-
-                        <!-- DESCRIPTION -->
-
-                        <div class="mb-3">
-
-                            <label
-                                for="{{ form.description.id_for_label }}"
-                                class="form-label fw-semibold"
-                            >
-
-                                Description
-
-                            </label>
-
-
-                            {{ form.description }}
-
-
-                            {% for error in form.description.errors %}
-
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-
-                            {% endfor %}
-
-                        </div>
-
-
-                        <!-- ASSIGNEE -->
-
-                        <div class="mb-3">
-
-                            <label
-                                for="{{ form.assigned_to.id_for_label }}"
-                                class="form-label fw-semibold"
-                            >
-
-                                Assign To
-
-                            </label>
-
-
-                            {{ form.assigned_to }}
-
-
-                            {% for error in form.assigned_to.errors %}
-
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-
-                            {% endfor %}
-
-
-                            <div class="form-text">
-
-                                Only project team members can be assigned tasks.
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="row g-3">
-
-                            <!-- STATUS -->
-
-                            <div class="col-md-6">
-
-                                <label
-                                    for="{{ form.status.id_for_label }}"
-                                    class="form-label fw-semibold"
-                                >
-
-                                    Status
-
-                                </label>
-
-
-                                {{ form.status }}
-
-
-                                {% for error in form.status.errors %}
-
-                                    <div class="text-danger small mt-1">
-                                        {{ error }}
-                                    </div>
-
-                                {% endfor %}
-
-                            </div>
-
-
-                            <!-- DUE DATE -->
-
-                            <div class="col-md-6">
-
-                                <label
-                                    for="{{ form.due_date.id_for_label }}"
-                                    class="form-label fw-semibold"
-                                >
-
-                                    Due Date
-
-                                </label>
-
-
-                                {{ form.due_date }}
-
-
-                                {% for error in form.due_date.errors %}
-
-                                    <div class="text-danger small mt-1">
-                                        {{ error }}
-                                    </div>
-
-                                {% endfor %}
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ACTIONS -->
-
-                        <div class="d-flex flex-wrap gap-2 mt-4">
-
-                            <button
-                                type="submit"
-                                class="btn pp-btn-primary"
-                            >
-
-                                {% if task %}
-
-                                    <i class="bi bi-check-lg me-1"></i>
-
-                                    Save Changes
-
-                                {% else %}
-
-                                    <i class="bi bi-plus-lg me-1"></i>
-
-                                    Create Task
-
-                                {% endif %}
-
-                            </button>
-
-
-                            <a
-                                href="{% url 'tasks:list' project.pk %}"
-                                class="btn pp-btn-outline"
-                            >
-
-                                Cancel
-
-                            </a>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
+            </form>
 
         </div>
 
     </div>
-
-</section>
+</div>
 
 {% endblock %}

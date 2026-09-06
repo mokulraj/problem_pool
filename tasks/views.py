@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
+from notifications.models import Notification
 from projects.models import Project
 from teams.models import TeamMembership
 
@@ -64,7 +65,6 @@ def task_create(request, project_id):
         pk=project_id,
     )
 
-    # Only the project owner can create tasks.
     if not user_is_project_owner(request.user, project):
         messages.error(
             request,
@@ -84,9 +84,29 @@ def task_create(request, project_id):
 
         if form.is_valid():
             task = form.save(commit=False)
+
             task.project = project
+
+            # New tasks always start as To Do.
+            task.status = Task.Status.TODO
+
             task.full_clean()
             task.save()
+
+            # Notify assigned member that a task was assigned.
+            if task.assigned_to:
+                Notification.objects.create(
+                    recipient=task.assigned_to,
+                    message=(
+                        f"You have been assigned the task "
+                        f"'{task.title}' in project "
+                        f"'{project}'."
+                    ),
+                    notification_type=(
+                        Notification.NotificationType.TASK_ASSIGNED
+                    ),
+                    related_project=project,
+                )
 
             messages.success(
                 request,
@@ -117,13 +137,16 @@ def task_create(request, project_id):
 @login_required
 def task_edit(request, pk):
     task = get_object_or_404(
-        Task.objects.select_related("project"),
+        Task.objects.select_related(
+            "project",
+            "assigned_to",
+        ),
         pk=pk,
     )
 
     project = task.project
 
-    # Only the project owner can edit tasks.
+    # Only the project owner can edit task details.
     if not user_is_project_owner(request.user, project):
         messages.error(
             request,
@@ -143,9 +166,34 @@ def task_edit(request, pk):
         )
 
         if form.is_valid():
+            old_assigned_to = task.assigned_to
+            current_status = task.status
+
             task = form.save(commit=False)
+
+            # Owner cannot modify status.
+            task.status = current_status
+
             task.full_clean()
             task.save()
+
+            # Notify a newly assigned member.
+            if (
+                task.assigned_to
+                and task.assigned_to != old_assigned_to
+            ):
+                Notification.objects.create(
+                    recipient=task.assigned_to,
+                    message=(
+                        f"You have been assigned the task "
+                        f"'{task.title}' in project "
+                        f"'{project}'."
+                    ),
+                    notification_type=(
+                        Notification.NotificationType.TASK_ASSIGNED
+                    ),
+                    related_project=project,
+                )
 
             messages.success(
                 request,
@@ -184,7 +232,6 @@ def task_delete(request, pk):
 
     project = task.project
 
-    # Only the project owner can delete tasks.
     if not user_is_project_owner(request.user, project):
         messages.error(
             request,
@@ -221,19 +268,30 @@ def task_delete(request, pk):
 
 
 @login_required
-def task_complete(request, pk):
+def task_status_update(request, pk):
+    """
+    Only the member assigned to the task can change its status.
+
+    The project owner can view the status but cannot change it.
+    """
+
     task = get_object_or_404(
-        Task.objects.select_related("project"),
+        Task.objects.select_related(
+            "project",
+            "project__owner",
+            "assigned_to",
+        ),
         pk=pk,
     )
 
     project = task.project
 
-    # The task can only be completed by the person assigned to it.
+    # SECURITY:
+    # Only the assigned member may change the status.
     if task.assigned_to != request.user:
         messages.error(
             request,
-            "You can only complete tasks assigned to you.",
+            "Only the member assigned to this task can update its status.",
         )
 
         return redirect(
@@ -252,6 +310,129 @@ def task_complete(request, pk):
             project_id=project.pk,
         )
 
+    new_status = request.POST.get("status")
+
+    valid_statuses = {
+        Task.Status.TODO,
+        Task.Status.IN_PROGRESS,
+        Task.Status.COMPLETED,
+    }
+
+    if new_status not in valid_statuses:
+        messages.error(
+            request,
+            "Invalid task status.",
+        )
+
+        return redirect(
+            "tasks:list",
+            project_id=project.pk,
+        )
+
+    old_status = task.status
+
+    if old_status == new_status:
+        messages.info(
+            request,
+            "The task is already in that status.",
+        )
+
+        return redirect(
+            "tasks:list",
+            project_id=project.pk,
+        )
+
+    task.status = new_status
+
+    task.save(
+        update_fields=[
+            "status",
+            "updated_at",
+        ]
+    )
+
+    # ---------------------------------------------------------
+    # CREATE REAL NOTIFICATION FOR PROJECT OWNER
+    # ---------------------------------------------------------
+
+    if project.owner != request.user:
+
+        Notification.objects.create(
+            recipient=project.owner,
+            message=(
+                f"{request.user.username} updated the task "
+                f"'{task.title}' from "
+                f"'{dict(Task.Status.choices).get(old_status)}' "
+                f"to "
+                f"'{task.get_status_display()}'."
+            ),
+            notification_type=(
+                Notification.NotificationType.TASK_STATUS_UPDATED
+            ),
+            related_project=project,
+        )
+
+    messages.success(
+        request,
+        f"Task status updated to {task.get_status_display()}.",
+    )
+
+    return redirect(
+        "tasks:list",
+        project_id=project.pk,
+    )
+
+
+@login_required
+def task_complete(request, pk):
+    """
+    Kept only for backwards compatibility.
+
+    The task list UI no longer uses this endpoint.
+    """
+
+    task = get_object_or_404(
+        Task.objects.select_related("project"),
+        pk=pk,
+    )
+
+    project = task.project
+
+    if task.assigned_to != request.user:
+        messages.error(
+            request,
+            "Only the assigned member can complete this task.",
+        )
+
+        return redirect(
+            "tasks:list",
+            project_id=project.pk,
+        )
+
+    if request.method != "POST":
+        messages.error(
+            request,
+            "Invalid request.",
+        )
+
+        return redirect(
+            "tasks:list",
+            project_id=project.pk,
+        )
+
+    old_status = task.status
+
+    if old_status == Task.Status.COMPLETED:
+        messages.info(
+            request,
+            "This task is already completed.",
+        )
+
+        return redirect(
+            "tasks:list",
+            project_id=project.pk,
+        )
+
     task.status = Task.Status.COMPLETED
 
     task.save(
@@ -259,6 +440,18 @@ def task_complete(request, pk):
             "status",
             "updated_at",
         ]
+    )
+
+    Notification.objects.create(
+        recipient=project.owner,
+        message=(
+            f"{request.user.username} completed the task "
+            f"'{task.title}'."
+        ),
+        notification_type=(
+            Notification.NotificationType.TASK_STATUS_UPDATED
+        ),
+        related_project=project,
     )
 
     messages.success(

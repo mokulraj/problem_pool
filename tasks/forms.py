@@ -11,7 +11,6 @@ class TaskForm(forms.ModelForm):
             "title",
             "description",
             "assigned_to",
-            "status",
             "due_date",
         ]
 
@@ -30,11 +29,6 @@ class TaskForm(forms.ModelForm):
                 }
             ),
             "assigned_to": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
-            ),
-            "status": forms.Select(
                 attrs={
                     "class": "form-select",
                 }

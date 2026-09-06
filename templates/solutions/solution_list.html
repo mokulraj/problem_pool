@@ -1,49 +1,1727 @@
 {% extends "base.html" %}
 
+{% block title %}Solutions | ProblemPool{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.solutions-page {
+    min-height: 100vh;
+    padding-bottom: 70px;
+
+    background:
+        radial-gradient(
+            circle at 15% 5%,
+            rgba(99, 102, 241, 0.07),
+            transparent 28%
+        ),
+        linear-gradient(
+            180deg,
+            #faf9ff 0%,
+            #ffffff 45%,
+            #faf9ff 100%
+        );
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.solutions-hero {
+    padding: 42px 0 28px;
+}
+
+.solutions-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.community-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 7px 14px;
+
+    border-radius: 30px;
+
+    background: #eeeaff;
+    color: #5b36d6;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.solutions-title {
+    margin: 14px 0 8px;
+
+    font-size: clamp(42px, 5vw, 60px);
+    line-height: 1.05;
+
+    font-weight: 800;
+    letter-spacing: -2px;
+
+    color: #111827;
+}
+
+.solutions-subtitle {
+    max-width: 600px;
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   PROPOSE BUTTON
+===================================================== */
+
+.propose-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    padding: 13px 20px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #5b36d6;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 7px 18px rgba(91, 54, 214, 0.20);
+
+    transition: all 0.2s ease;
+}
+
+.propose-btn:hover {
+    color: #ffffff;
+    background: #4d2bc0;
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   FILTER CARD
+===================================================== */
+
+.solution-filters {
+    position: relative;
+    z-index: 20;
+
+    margin-top: 8px;
+    margin-bottom: 28px;
+
+    padding: 13px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8eaf0;
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.055);
+}
+
+.filter-row {
+    align-items: center;
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.filter-search {
+    position: relative;
+    width: 100%;
+}
+
+.filter-search i {
+    position: absolute;
+
+    left: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #94a3b8;
+
+    font-size: 17px;
+
+    pointer-events: none;
+
+    z-index: 2;
+}
+
+.filter-search input {
+    width: 100%;
+    height: 46px;
+
+    padding: 0 15px 0 43px;
+
+    border: 1px solid #e1e5ec;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition: all 0.2s ease;
+}
+
+.filter-search input::placeholder {
+    color: #94a3b8;
+}
+
+.filter-search input:focus {
+    border-color: #7c5ce6;
+
+    box-shadow:
+        0 0 0 3px rgba(124, 92, 230, 0.10);
+}
+
+
+/* =====================================================
+   CUSTOM SELECT
+===================================================== */
+
+.custom-select {
+    position: relative;
+
+    width: 100%;
+}
+
+.custom-select-button {
+    width: 100%;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 12px;
+
+    border: 1px solid #e1e5ec;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.custom-select-button:hover,
+.custom-select-button.open {
+    border-color: #7c5ce6;
+
+    box-shadow:
+        0 0 0 3px rgba(124, 92, 230, 0.10);
+}
+
+.custom-select-content {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 0;
+    flex: 1;
+}
+
+.custom-select-content i {
+    flex-shrink: 0;
+
+    color: #64748b;
+
+    font-size: 16px;
+}
+
+.custom-select-text {
+    display: block;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    color: #475569;
+}
+
+.custom-select-arrow {
+    flex-shrink: 0;
+
+    margin-left: 7px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    transition: transform 0.2s ease;
+}
+
+.custom-select-button.open .custom-select-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* =====================================================
+   CUSTOM MENU
+===================================================== */
+
+.custom-select-menu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+    left: 0;
+
+    width: 100%;
+
+    padding: 6px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e5ec;
+    border-radius: 9px;
+
+    box-shadow:
+        0 12px 28px rgba(15, 23, 42, 0.14);
+
+    z-index: 99999;
+
+    display: none;
+
+    max-height: 250px;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+}
+
+.custom-select-menu.show {
+    display: block;
+}
+
+.custom-select-option {
+    width: 100%;
+
+    padding: 9px 10px;
+
+    border-radius: 6px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.custom-select-option:hover {
+    background: #f3f0ff;
+
+    color: #5b36d6;
+}
+
+.custom-select-option.selected {
+    background: #eeeaff;
+
+    color: #5b36d6;
+
+    font-weight: 600;
+}
+
+
+/* Hide original select */
+
+.real-filter-select {
+    display: none !important;
+}
+
+
+/* =====================================================
+   SOLUTION GRID
+===================================================== */
+
+.solution-grid {
+    margin-top: 0;
+}
+
+
+/* =====================================================
+   SOLUTION CARD
+===================================================== */
+
+.solution-card {
+    height: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e7e9ef;
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 14px rgba(15, 23, 42, 0.055);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.solution-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 26px rgba(15, 23, 42, 0.09);
+}
+
+.solution-card-body {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 23px 24px;
+}
+
+
+/* =====================================================
+   CARD TOP
+===================================================== */
+
+.solution-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 17px;
+}
+
+.solution-label {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #5b36d6;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.solution-label i {
+    font-size: 17px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.solution-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 4px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status-selected {
+    background: #eaf8ef;
+    color: #168344;
+}
+
+.status-proposed {
+    background: #efedff;
+    color: #5136d6;
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.solution-card-title {
+    margin: 0 0 11px;
+
+    font-size: 21px;
+    line-height: 1.38;
+
+    font-weight: 750;
+
+    letter-spacing: -0.3px;
+}
+
+.solution-card-title a {
+    color: #111827;
+
+    text-decoration: none;
+}
+
+.solution-card-title a:hover {
+    color: #5b36d6;
+}
+
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+.solution-description {
+    margin: 0 0 20px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+}
+
+
+/* =====================================================
+   PROBLEM
+===================================================== */
+
+.problem-section {
+    margin-top: auto;
+
+    padding-top: 16px;
+
+    border-top: 1px solid #edf0f4;
+}
+
+.problem-label {
+    margin-bottom: 7px;
+
+    color: #5b36d6;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.problem-pill {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 7px;
+
+    max-width: 100%;
+
+    padding: 7px 10px;
+
+    border: 1px solid #e4e7ed;
+
+    border-radius: 18px;
+
+    background: #f8f9fb;
+
+    color: #526079;
+
+    font-size: 11px;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+.problem-pill:hover {
+    color: #5136d9;
+
+    border-color: #d4cff7;
+
+    background: #f5f3ff;
+}
+
+.problem-pill i {
+    color: #ef4444;
+
+    font-size: 13px;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   AUTHOR
+===================================================== */
+
+.solution-author {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 15px;
+    padding-top: 14px;
+
+    border-top: 1px solid #edf0f4;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+}
+
+.author-avatar,
+.author-avatar-placeholder {
+    width: 34px;
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    margin-right: 9px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.author-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ebe8ff;
+
+    color: #5136d6;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.author-label {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+.author-name {
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.solution-time {
+    flex-shrink: 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-solutions {
+    padding: 60px 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e8eaf0;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.empty-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0edff;
+
+    color: #5936df;
+
+    font-size: 30px;
+}
+
+.empty-solutions h3 {
+    margin-bottom: 8px;
+
+    color: #111827;
+
+    font-weight: 700;
+}
+
+.empty-solutions p {
+    max-width: 500px;
+
+    margin: 0 auto 22px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 991px) {
+
+    .solutions-hero {
+        padding-top: 32px;
+    }
+
+    .solution-filters {
+        padding: 12px;
+    }
+
+}
+
+
+@media (max-width: 767px) {
+
+    .solutions-title {
+        font-size: 45px;
+    }
+
+    .solutions-subtitle {
+        font-size: 15px;
+    }
+
+    .propose-btn {
+        width: 100%;
+
+        margin-top: 22px;
+    }
+
+    .solution-card-body {
+        padding: 21px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
 {% block content %}
 
-<div class="container py-5">
+<div class="solutions-page">
 
-    <h1>Solutions</h1>
-    <p>Community solutions to submitted problems.</p>
 
-    {% if solutions %}
+    <!-- =================================================
+         HERO
+    ================================================== -->
 
-        {% for solution in solutions %}
+    <section class="solutions-hero">
 
-            <div class="card mb-3 p-3">
+        <div class="container">
 
-                <h3>
-                    <a href="{% url 'solutions:detail' solution.pk %}">
-                        {{ solution.title }}
-                    </a>
-                </h3>
+            <div class="row align-items-center">
 
-                <p>
-                    {{ solution.description|truncatewords:30 }}
-                </p>
+                <div class="col-lg-8">
 
-                <small>
-                    Problem:
-                    <a href="{% url 'problems:detail' solution.problem.pk %}">
-                        {{ solution.problem.title }}
-                    </a>
-                    · Proposed by {{ solution.proposed_by.username }}
-                </small>
+                    <div class="solutions-hero-content">
+
+                        <span class="community-badge">
+
+                            <i class="bi bi-lightbulb-fill"></i>
+
+                            Community Ideas
+
+                        </span>
+
+
+                        <h1 class="solutions-title">
+                            Solutions
+                        </h1>
+
+
+                        <p class="solutions-subtitle">
+
+                            Explore ideas and solutions created by the
+                            ProblemPool community.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-4 text-lg-end">
+
+                    {% if user.is_authenticated %}
+
+                        <a
+                            href="{% url 'solutions:create' %}"
+                            class="propose-btn"
+                        >
+
+                            <i class="bi bi-plus-lg"></i>
+
+                            Propose a Solution
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
 
             </div>
 
-        {% endfor %}
-
-    {% else %}
-
-        <div class="card p-4">
-            <h3>No solutions yet</h3>
-            <p>Solutions will appear here once users propose them.</p>
         </div>
 
-    {% endif %}
+    </section>
+
+
+    <!-- =================================================
+         FILTERS
+    ================================================== -->
+
+    <div class="container">
+
+        <div class="solution-filters">
+
+            <form
+                method="get"
+                id="solutionFilterForm"
+            >
+
+                <div class="row g-2 filter-row">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="col-lg-6">
+
+                        <div class="filter-search">
+
+                            <i class="bi bi-search"></i>
+
+                            <input
+                                type="text"
+                                name="q"
+                                value="{{ search_query }}"
+                                placeholder="Search solutions..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         CATEGORY
+                    ================================================== -->
+
+                    <div class="col-md-4 col-lg-2">
+
+                        <div class="custom-select">
+
+
+                            <!-- REAL SELECT -->
+
+                            <select
+                                name="category"
+                                id="categorySelect"
+                                class="real-filter-select"
+                            >
+
+                                <option value="">
+                                    All Categories
+                                </option>
+
+                                {% for value, label in categories %}
+
+                                    <option
+                                        value="{{ value }}"
+                                        {% if selected_category == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ label }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+
+                            <!-- BUTTON -->
+
+                            <button
+                                type="button"
+                                class="custom-select-button"
+                                data-select="categorySelect"
+                            >
+
+                                <span class="custom-select-content">
+
+                                    <i class="bi bi-grid"></i>
+
+                                    <span class="custom-select-text">
+                                        All Categories
+                                    </span>
+
+                                </span>
+
+
+                                <i class="bi bi-chevron-down custom-select-arrow"></i>
+
+                            </button>
+
+
+                            <!-- MENU -->
+
+                            <div
+                                class="custom-select-menu"
+                                data-menu="categorySelect"
+                            >
+
+                                <div
+                                    class="custom-select-option"
+                                    data-value=""
+                                >
+                                    All Categories
+                                </div>
+
+
+                                {% for value, label in categories %}
+
+                                    <div
+                                        class="custom-select-option"
+                                        data-value="{{ value }}"
+                                    >
+                                        {{ label }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         STATUS
+                    ================================================== -->
+
+                    <div class="col-md-4 col-lg-2">
+
+                        <div class="custom-select">
+
+
+                            <select
+                                name="status"
+                                id="statusSelect"
+                                class="real-filter-select"
+                            >
+
+                                <option value="">
+                                    All Status
+                                </option>
+
+                                {% for value, label in statuses %}
+
+                                    <option
+                                        value="{{ value }}"
+                                        {% if selected_status == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ label }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+
+                            <button
+                                type="button"
+                                class="custom-select-button"
+                                data-select="statusSelect"
+                            >
+
+                                <span class="custom-select-content">
+
+                                    <i class="bi bi-flag"></i>
+
+                                    <span class="custom-select-text">
+                                        All Status
+                                    </span>
+
+                                </span>
+
+
+                                <i class="bi bi-chevron-down custom-select-arrow"></i>
+
+                            </button>
+
+
+                            <div
+                                class="custom-select-menu"
+                                data-menu="statusSelect"
+                            >
+
+                                <div
+                                    class="custom-select-option"
+                                    data-value=""
+                                >
+                                    All Status
+                                </div>
+
+
+                                {% for value, label in statuses %}
+
+                                    <div
+                                        class="custom-select-option"
+                                        data-value="{{ value }}"
+                                    >
+                                        {{ label }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         SORT
+                    ================================================== -->
+
+                    <div class="col-md-4 col-lg-2">
+
+                        <div class="custom-select">
+
+
+                            <select
+                                name="sort"
+                                id="sortSelect"
+                                class="real-filter-select"
+                            >
+
+                                <option
+                                    value="newest"
+                                    {% if selected_sort == "newest" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Newest
+                                </option>
+
+
+                                <option
+                                    value="most_votes"
+                                    {% if selected_sort == "most_votes" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Most Votes
+                                </option>
+
+
+                                <option
+                                    value="most_viewed"
+                                    {% if selected_sort == "most_viewed" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Most Viewed
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                type="button"
+                                class="custom-select-button"
+                                data-select="sortSelect"
+                            >
+
+                                <span class="custom-select-content">
+
+                                    <i class="bi bi-sort-down"></i>
+
+                                    <span class="custom-select-text">
+                                        Newest
+                                    </span>
+
+                                </span>
+
+
+                                <i class="bi bi-chevron-down custom-select-arrow"></i>
+
+                            </button>
+
+
+                            <div
+                                class="custom-select-menu"
+                                data-menu="sortSelect"
+                            >
+
+                                <div
+                                    class="custom-select-option"
+                                    data-value="newest"
+                                >
+                                    Newest
+                                </div>
+
+
+                                <div
+                                    class="custom-select-option"
+                                    data-value="most_votes"
+                                >
+                                    Most Votes
+                                </div>
+
+
+                                <div
+                                    class="custom-select-option"
+                                    data-value="most_viewed"
+                                >
+                                    Most Viewed
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             SOLUTIONS
+        ================================================== -->
+
+        {% if solutions %}
+
+            <div class="row g-3 solution-grid">
+
+                {% for solution in solutions %}
+
+                    <div class="col-12 col-md-6 col-lg-4">
+
+                        <article class="solution-card">
+
+                            <div class="solution-card-body">
+
+
+                                <!-- TOP -->
+
+                                <div class="solution-card-top">
+
+                                    <span class="solution-label">
+
+                                        <i class="bi bi-lightbulb"></i>
+
+                                        Solution
+
+                                    </span>
+
+
+                                    {% if solution.status == "SELECTED" %}
+
+                                        <span class="solution-status status-selected">
+
+                                            <i class="bi bi-check-lg"></i>
+
+                                            Selected
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="solution-status status-proposed">
+
+                                            Proposed
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- TITLE -->
+
+                                <h2 class="solution-card-title">
+
+                                    <a
+                                        href="{% url 'solutions:detail' solution.pk %}"
+                                    >
+
+                                        {{ solution.title }}
+
+                                    </a>
+
+                                </h2>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <p class="solution-description">
+
+                                    {{ solution.description|truncatewords:35 }}
+
+                                </p>
+
+
+                                <!-- PROBLEM -->
+
+                                <div class="problem-section">
+
+                                    <div class="problem-label">
+
+                                        Solves this problem
+
+                                    </div>
+
+
+                                    <a
+                                        href="{% url 'problems:detail' solution.problem.pk %}"
+                                        class="problem-pill"
+                                        title="{{ solution.problem.title }}"
+                                    >
+
+                                        <i class="bi bi-signpost-split"></i>
+
+                                        <span class="text-truncate">
+
+                                            {{ solution.problem.title }}
+
+                                        </span>
+
+                                    </a>
+
+                                </div>
+
+
+                                <!-- AUTHOR -->
+
+                                <div class="solution-author">
+
+                                    <div class="author-info">
+
+                                        {% if solution.proposed_by.profile_image %}
+
+                                            <img
+                                                src="{{ solution.proposed_by.profile_image.url }}"
+                                                alt="{{ solution.proposed_by.username }}"
+                                                class="author-avatar"
+                                            >
+
+                                        {% else %}
+
+                                            <div class="author-avatar-placeholder">
+
+                                                {{ solution.proposed_by.username|first|upper }}
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        <div>
+
+                                            <span class="author-label">
+
+                                                Proposed by
+
+                                            </span>
+
+
+                                            <span class="author-name">
+
+                                                {{ solution.proposed_by.username }}
+
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span class="solution-time">
+
+                                        {{ solution.created_at|timesince }} ago
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- EMPTY STATE -->
+
+            <div class="empty-solutions">
+
+                <div class="empty-icon">
+
+                    <i class="bi bi-lightbulb"></i>
+
+                </div>
+
+
+                <h3>
+                    No solutions found
+                </h3>
+
+
+                <p>
+                    No solutions match your current filters.
+                </p>
+
+
+                <a
+                    href="{% url 'solutions:list' %}"
+                    class="propose-btn"
+                >
+
+                    <i class="bi bi-arrow-counterclockwise"></i>
+
+                    Clear Filters
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
 
 </div>
+
+
+<!-- =====================================================
+     DROPDOWN JAVASCRIPT
+====================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form =
+        document.getElementById("solutionFilterForm");
+
+
+    if (!form) {
+        return;
+    }
+
+
+    const dropdowns =
+        document.querySelectorAll(".custom-select");
+
+
+    dropdowns.forEach(function (dropdown) {
+
+        const button =
+            dropdown.querySelector(
+                ".custom-select-button"
+            );
+
+        const menu =
+            dropdown.querySelector(
+                ".custom-select-menu"
+            );
+
+        const select =
+            dropdown.querySelector(
+                ".real-filter-select"
+            );
+
+        const text =
+            dropdown.querySelector(
+                ".custom-select-text"
+            );
+
+        const options =
+            dropdown.querySelectorAll(
+                ".custom-select-option"
+            );
+
+
+        /* =============================================
+           UPDATE DISPLAY
+        ============================================= */
+
+        function updateDisplay() {
+
+            const currentValue =
+                select.value;
+
+
+            options.forEach(function (option) {
+
+                if (
+                    option.dataset.value ===
+                    currentValue
+                ) {
+
+                    option.classList.add(
+                        "selected"
+                    );
+
+                    text.textContent =
+                        option.textContent.trim();
+
+                } else {
+
+                    option.classList.remove(
+                        "selected"
+                    );
+
+                }
+
+            });
+
+        }
+
+
+        updateDisplay();
+
+
+        /* =============================================
+           OPEN DROPDOWN
+        ============================================= */
+
+        button.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+
+                /* Close other dropdowns */
+
+                document
+                    .querySelectorAll(
+                        ".custom-select-menu.show"
+                    )
+                    .forEach(function (otherMenu) {
+
+                        if (otherMenu !== menu) {
+
+                            otherMenu.classList.remove(
+                                "show"
+                            );
+
+
+                            const otherButton =
+                                otherMenu
+                                    .parentElement
+                                    .querySelector(
+                                        ".custom-select-button"
+                                    );
+
+
+                            if (otherButton) {
+
+                                otherButton.classList.remove(
+                                    "open"
+                                );
+
+                            }
+
+                        }
+
+                    });
+
+
+                menu.classList.toggle(
+                    "show"
+                );
+
+                button.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+
+        /* =============================================
+           SELECT OPTION
+        ============================================= */
+
+        options.forEach(function (option) {
+
+            option.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+
+                    const value =
+                        this.dataset.value;
+
+
+                    /* Update real select */
+
+                    select.value = value;
+
+
+                    /* Update visible text */
+
+                    text.textContent =
+                        this.textContent.trim();
+
+
+                    /* Selected styling */
+
+                    options.forEach(
+                        function (item) {
+
+                            item.classList.remove(
+                                "selected"
+                            );
+
+                        }
+                    );
+
+
+                    this.classList.add(
+                        "selected"
+                    );
+
+
+                    /* Close */
+
+                    menu.classList.remove(
+                        "show"
+                    );
+
+                    button.classList.remove(
+                        "open"
+                    );
+
+
+                    /*
+                     * Apply filter
+                     */
+
+                    form.submit();
+
+                }
+            );
+
+        });
+
+    });
+
+
+    /* =============================================
+       CLICK OUTSIDE
+    ============================================= */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                !event.target.closest(
+                    ".custom-select"
+                )
+            ) {
+
+                document
+                    .querySelectorAll(
+                        ".custom-select-menu.show"
+                    )
+                    .forEach(function (menu) {
+
+                        menu.classList.remove(
+                            "show"
+                        );
+
+                    });
+
+
+                document
+                    .querySelectorAll(
+                        ".custom-select-button.open"
+                    )
+                    .forEach(function (button) {
+
+                        button.classList.remove(
+                            "open"
+                        );
+
+                    });
+
+            }
+
+        }
+    );
+
+
+    /* =============================================
+       ESC KEY
+    ============================================= */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                document
+                    .querySelectorAll(
+                        ".custom-select-menu.show"
+                    )
+                    .forEach(function (menu) {
+
+                        menu.classList.remove(
+                            "show"
+                        );
+
+                    });
+
+
+                document
+                    .querySelectorAll(
+                        ".custom-select-button.open"
+                    )
+                    .forEach(function (button) {
+
+                        button.classList.remove(
+                            "open"
+                        );
+
+                    });
+
+            }
+
+        }
+    );
+
+
+    /* =============================================
+       SEARCH ENTER
+    ============================================= */
+
+    const search =
+        form.querySelector(
+            'input[name="q"]'
+        );
+
+
+    if (search) {
+
+        search.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    form.submit();
+
+                }
+
+            }
+        );
+
+    }
+
+});
+
+</script>
 
 {% endblock %}

@@ -1,0 +1,1187 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications | ProblemPool{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.notifications-page {
+    min-height: calc(100vh - 80px);
+
+    padding: 42px 0 70px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #faf9ff 0%,
+            #ffffff 60%,
+            #faf9ff 100%
+        );
+}
+
+
+.notifications-container {
+    width: 100%;
+
+    max-width: 1050px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.notifications-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 25px;
+}
+
+
+.notifications-eyebrow {
+    margin-bottom: 6px;
+
+    color: #6335d8;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+}
+
+
+.notifications-title {
+    margin: 0 0 8px;
+
+    color: #111827;
+
+    font-size: 38px;
+
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+}
+
+
+.notifications-description {
+    margin: 0;
+
+    color: #69758a;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MARK ALL
+========================================================= */
+
+.mark-all-form {
+    margin: 0;
+
+    flex-shrink: 0;
+}
+
+
+.mark-all-button {
+    height: 40px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 16px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: #5b36d6;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all .18s ease;
+}
+
+
+.mark-all-button:hover {
+    background: #4d2bc0;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   FILTER BUTTONS
+========================================================= */
+
+.notification-tabs {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+
+.notification-tab {
+    min-height: 35px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 0 13px;
+
+    border: 1px solid #e1e5ec;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        transform .18s ease;
+}
+
+
+.notification-tab:hover {
+    background: #f7f4ff;
+
+    border-color: #d1c6fa;
+
+    color: #5b36d6;
+
+    transform: translateY(-1px);
+}
+
+
+.notification-tab.active {
+    background: #5b36d6;
+
+    border-color: #5b36d6;
+
+    color: #ffffff;
+}
+
+
+.notification-tab-count {
+    min-width: 19px;
+
+    height: 19px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 5px;
+
+    border-radius: 999px;
+
+    background: #e9ddff;
+
+    color: #5b36d6;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.notification-tab.active .notification-tab-count {
+    background: rgba(255,255,255,.2);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   NOTIFICATION LIST
+========================================================= */
+
+.notifications-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.notification-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    min-height: 100px;
+
+    padding: 17px 19px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7e9ef;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 12px rgba(15,23,42,.035);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+
+.notification-card:hover {
+    transform: translateY(-1px);
+
+    border-color: #ddd8ee;
+
+    box-shadow:
+        0 8px 20px rgba(15,23,42,.06);
+}
+
+
+.notification-card.unread {
+    border-left: 3px solid #6335d8;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fbfaff 0%,
+            #ffffff 35%
+        );
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.notification-icon {
+    width: 52px;
+
+    height: 52px;
+
+    flex: 0 0 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0eaff;
+
+    color: #6335d8;
+
+    font-size: 23px;
+}
+
+
+.notification-icon.comment {
+    background: #eaf9f4;
+
+    color: #159a78;
+}
+
+
+.notification-icon.vote {
+    background: #fff7e7;
+
+    color: #df9800;
+}
+
+
+.notification-icon.project {
+    background: #edf5ff;
+
+    color: #2879e7;
+}
+
+
+.notification-icon.task {
+    background: #eef3ff;
+
+    color: #4266d2;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.notification-body {
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.notification-message {
+    margin: 0 0 5px;
+
+    color: #172033;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+
+    font-weight: 500;
+}
+
+
+.notification-card.unread .notification-message {
+    font-weight: 650;
+}
+
+
+.notification-time {
+    color: #98a1b0;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.notification-action {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 8px;
+
+    padding: 6px 10px;
+
+    border-radius: 6px;
+
+    background: #f0ebff;
+
+    color: #6034d3;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: all .18s ease;
+}
+
+
+.notification-action:hover {
+    background: #e4dcff;
+
+    color: #4d28ba;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.notification-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+}
+
+
+.notification-unread-dot {
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #6335d8;
+}
+
+
+.mark-read-form {
+    margin: 0;
+}
+
+
+.mark-read-button {
+    padding: 5px 8px;
+
+    border: 0;
+
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #7c8696;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.mark-read-button:hover {
+    background: #f2effa;
+
+    color: #5b36d6;
+}
+
+
+/* =========================================================
+   THREE DOTS
+========================================================= */
+
+.notification-menu-button {
+    width: 30px;
+
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #8a93a3;
+
+    cursor: pointer;
+}
+
+
+.notification-menu-button:hover {
+    background: #f3f4f7;
+
+    color: #475569;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.notifications-empty {
+    padding: 70px 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e7e9ef;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 12px rgba(15,23,42,.035);
+}
+
+
+.empty-icon {
+    width: 66px;
+
+    height: 66px;
+
+    margin: 0 auto 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0eaff;
+
+    color: #6335d8;
+
+    font-size: 28px;
+}
+
+
+.notifications-empty h3 {
+    margin: 0 0 7px;
+
+    color: #172033;
+
+    font-size: 19px;
+
+    font-weight: 750;
+}
+
+
+.notifications-empty p {
+    margin: 0;
+
+    color: #8791a2;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767px) {
+
+    .notifications-page {
+        padding: 28px 0 50px;
+    }
+
+
+    .notifications-header {
+        flex-direction: column;
+    }
+
+
+    .mark-all-form {
+        width: 100%;
+    }
+
+
+    .mark-all-button {
+        width: 100%;
+    }
+
+
+    .notification-card {
+        align-items: flex-start;
+
+        padding: 14px;
+    }
+
+
+    .notification-icon {
+        width: 45px;
+
+        height: 45px;
+
+        flex-basis: 45px;
+
+        font-size: 20px;
+    }
+
+
+    .notification-actions {
+        align-self: flex-start;
+    }
+
+
+    .notifications-title {
+        font-size: 32px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="notifications-page">
+
+    <div class="container">
+
+        <main class="notifications-container">
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <div class="notifications-header">
+
+                <div>
+
+                    <div class="notifications-eyebrow">
+                        Activity
+                    </div>
+
+
+                    <h1 class="notifications-title">
+                        Notifications
+                    </h1>
+
+
+                    <p class="notifications-description">
+                        Stay updated with activity related to your
+                        problems, solutions, projects and tasks.
+                    </p>
+
+                </div>
+
+
+                {% if unread_count > 0 %}
+
+                    <form
+                        method="post"
+                        action="{% url 'notifications:mark_all_read' %}"
+                        class="mark-all-form"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="mark-all-button"
+                        >
+
+                            <i class="bi bi-check2-all"></i>
+
+                            Mark all as read
+
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================================
+                 FILTER BUTTONS
+            ================================================== -->
+
+            <div class="notification-tabs">
+
+
+                <!-- ALL -->
+
+                <a
+                    href="{% url 'notifications:list' %}?filter=all"
+                    class="
+                        notification-tab
+                        {% if active_filter == 'all' %}
+                            active
+                        {% endif %}
+                    "
+                >
+
+                    All
+
+                </a>
+
+
+                <!-- UNREAD -->
+
+                <a
+                    href="{% url 'notifications:list' %}?filter=unread"
+                    class="
+                        notification-tab
+                        {% if active_filter == 'unread' %}
+                            active
+                        {% endif %}
+                    "
+                >
+
+                    <i class="bi bi-circle"></i>
+
+                    Unread
+
+                    {% if unread_count > 0 %}
+
+                        <span class="notification-tab-count">
+                            {{ unread_count }}
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- PROBLEMS -->
+
+                <a
+                    href="{% url 'notifications:list' %}?filter=problems"
+                    class="
+                        notification-tab
+                        {% if active_filter == 'problems' %}
+                            active
+                        {% endif %}
+                    "
+                >
+
+                    Problems
+
+                    {% if problem_count > 0 %}
+
+                        <span class="notification-tab-count">
+                            {{ problem_count }}
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- SOLUTIONS -->
+
+                <a
+                    href="{% url 'notifications:list' %}?filter=solutions"
+                    class="
+                        notification-tab
+                        {% if active_filter == 'solutions' %}
+                            active
+                        {% endif %}
+                    "
+                >
+
+                    Solutions
+
+                    {% if solution_count > 0 %}
+
+                        <span class="notification-tab-count">
+                            {{ solution_count }}
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- PROJECTS -->
+
+                <a
+                    href="{% url 'notifications:list' %}?filter=projects"
+                    class="
+                        notification-tab
+                        {% if active_filter == 'projects' %}
+                            active
+                        {% endif %}
+                    "
+                >
+
+                    Projects
+
+                    {% if project_count > 0 %}
+
+                        <span class="notification-tab-count">
+                            {{ project_count }}
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- SYSTEM -->
+
+                <a
+                    href="{% url 'notifications:list' %}?filter=system"
+                    class="
+                        notification-tab
+                        {% if active_filter == 'system' %}
+                            active
+                        {% endif %}
+                    "
+                >
+
+                    System
+
+                    {% if system_count > 0 %}
+
+                        <span class="notification-tab-count">
+                            {{ system_count }}
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 NOTIFICATION LIST
+            ================================================== -->
+
+            {% if notifications %}
+
+                <div class="notifications-list">
+
+                    {% for notification in notifications %}
+
+                        <article
+                            class="
+                                notification-card
+
+                                {% if not notification.is_read %}
+                                    unread
+                                {% endif %}
+                            "
+                        >
+
+
+                            <!-- ICON -->
+
+                            <div
+                                class="
+                                    notification-icon
+
+                                    {% if notification.notification_type == 'COMMENT' %}
+                                        comment
+
+                                    {% elif notification.notification_type == 'VOTE' %}
+                                        vote
+
+                                    {% elif notification.notification_type == 'PROJECT_COMPLETED' %}
+                                        project
+
+                                    {% elif notification.notification_type == 'TASK_ASSIGNED' %}
+                                        task
+                                    {% endif %}
+                                "
+                            >
+
+                                {% if notification.notification_type == "SOLUTION_PROPOSED" %}
+
+                                    <i class="bi bi-lightbulb"></i>
+
+                                {% elif notification.notification_type == "COMMENT" %}
+
+                                    <i class="bi bi-chat-square-text"></i>
+
+                                {% elif notification.notification_type == "VOTE" %}
+
+                                    <i class="bi bi-star"></i>
+
+                                {% elif notification.notification_type == "SOLUTION_SELECTED" %}
+
+                                    <i class="bi bi-check-circle"></i>
+
+                                {% elif notification.notification_type == "JOIN_REQUEST" %}
+
+                                    <i class="bi bi-people"></i>
+
+                                {% elif notification.notification_type == "JOIN_APPROVED" %}
+
+                                    <i class="bi bi-person-check"></i>
+
+                                {% elif notification.notification_type == "TASK_ASSIGNED" %}
+
+                                    <i class="bi bi-list-task"></i>
+
+                                {% elif notification.notification_type == "PROJECT_COMPLETED" %}
+
+                                    <i class="bi bi-folder-check"></i>
+
+                                {% else %}
+
+                                    <i class="bi bi-bell"></i>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- MESSAGE -->
+
+                            <div class="notification-body">
+
+                                <p class="notification-message">
+
+                                    {{ notification.message }}
+
+                                </p>
+
+
+                                <div class="notification-time">
+
+                                    {{ notification.created_at|timesince }}
+                                    ago
+
+                                </div>
+
+
+                                <!-- SOLUTION -->
+
+                                {% if notification.related_solution %}
+
+                                    <a
+                                        href="{% url 'solutions:detail' notification.related_solution.pk %}"
+                                        class="notification-action"
+                                    >
+
+                                        <i class="bi bi-arrow-right"></i>
+
+                                        View solution
+
+                                    </a>
+
+
+                                <!-- PROBLEM -->
+
+                                {% elif notification.related_problem %}
+
+                                    <a
+                                        href="{% url 'problems:detail' notification.related_problem.pk %}"
+                                        class="notification-action"
+                                    >
+
+                                        <i class="bi bi-arrow-right"></i>
+
+                                        View problem
+
+                                    </a>
+
+
+                                <!-- PROJECT -->
+
+                                {% elif notification.related_project %}
+
+                                    <a
+                                        href="{% url 'projects:detail' notification.related_project.pk %}"
+                                        class="notification-action"
+                                    >
+
+                                        <i class="bi bi-arrow-right"></i>
+
+                                        View project
+
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- ACTIONS -->
+
+                            <div class="notification-actions">
+
+
+                                {% if not notification.is_read %}
+
+                                    <span
+                                        class="notification-unread-dot"
+                                        title="Unread"
+                                    ></span>
+
+
+                                    <form
+                                        method="post"
+                                        action="{% url 'notifications:mark_read' notification.pk %}"
+                                        class="mark-read-form"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="mark-read-button"
+                                        >
+
+                                            Mark read
+
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+
+                                <button
+                                    type="button"
+                                    class="notification-menu-button"
+                                    title="Notification options"
+                                    onclick="toggleNotificationMenu(this)"
+                                >
+
+                                    <i class="bi bi-three-dots-vertical"></i>
+
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- =================================================
+                     EMPTY
+                ================================================== -->
+
+                <div class="notifications-empty">
+
+                    <div class="empty-icon">
+
+                        <i class="bi bi-bell-slash"></i>
+
+                    </div>
+
+
+                    <h3>
+                        No notifications found
+                    </h3>
+
+
+                    <p>
+
+                        {% if active_filter == "unread" %}
+
+                            You don't have any unread notifications.
+
+                        {% elif active_filter == "problems" %}
+
+                            You don't have any problem notifications.
+
+                        {% elif active_filter == "solutions" %}
+
+                            You don't have any solution notifications.
+
+                        {% elif active_filter == "projects" %}
+
+                            You don't have any project notifications.
+
+                        {% elif active_filter == "system" %}
+
+                            You don't have any system notifications.
+
+                        {% else %}
+
+                            You don't have any notifications yet.
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+ * Notification options button.
+ *
+ * Currently this simply gives a small visual response.
+ * Mark Read and View buttons are fully functional.
+ */
+
+function toggleNotificationMenu(button) {
+
+    const card = button.closest(
+        ".notification-card"
+    );
+
+    if (!card) {
+        return;
+    }
+
+    const message =
+        card.querySelector(
+            ".notification-message"
+        );
+
+    if (message) {
+
+        card.style.borderColor =
+            "#cfc5f7";
+
+        setTimeout(function () {
+
+            card.style.borderColor =
+                "";
+
+        }, 700);
+
+    }
+
+}
+
+</script>
+
+{% endblock %}

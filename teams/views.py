@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
+from notifications.models import Notification
 from projects.models import Project
 
 from .forms import JoinRequestForm
@@ -11,12 +12,14 @@ from .models import JoinRequest, TeamMembership
 
 @login_required
 def join_project(request, project_id):
+
     project = get_object_or_404(
         Project.objects.select_related("owner"),
         pk=project_id,
     )
 
     if project.owner == request.user:
+
         messages.info(
             request,
             "You are already the owner of this project.",
@@ -31,6 +34,7 @@ def join_project(request, project_id):
         project=project,
         user=request.user,
     ).exists():
+
         messages.info(
             request,
             "You are already a member of this project.",
@@ -48,6 +52,7 @@ def join_project(request, project_id):
     ).first()
 
     if existing_request:
+
         messages.info(
             request,
             "You already have a pending join request.",
@@ -59,23 +64,68 @@ def join_project(request, project_id):
         )
 
     if request.method == "POST":
+
         form = JoinRequestForm(request.POST)
 
         if form.is_valid():
+
             join_request = form.save(commit=False)
 
             join_request.project = project
             join_request.user = request.user
 
             try:
+
                 join_request.full_clean()
+
             except Exception as exc:
+
                 form.add_error(
                     None,
                     exc,
                 )
+
             else:
-                join_request.save()
+
+                with transaction.atomic():
+
+                    join_request.save()
+
+                    # -------------------------------------------------
+                    # NOTIFY PROJECT OWNER
+                    # -------------------------------------------------
+
+                    if project.owner != request.user:
+
+                        notification_message = (
+                            f"{request.user.get_full_name() or request.user.username} "
+                            f"requested to join your project: "
+                            f"{project}"
+                        )
+
+                        # Prevent duplicate notifications for the
+                        # same project/user/message.
+                        notification_exists = (
+                            Notification.objects.filter(
+                                recipient=project.owner,
+                                notification_type=(
+                                    Notification.NotificationType.JOIN_REQUEST
+                                ),
+                                related_project=project,
+                                message=notification_message,
+                            ).exists()
+                        )
+
+                        if not notification_exists:
+
+                            Notification.objects.create(
+                                recipient=project.owner,
+                                message=notification_message,
+                                notification_type=(
+                                    Notification.NotificationType.JOIN_REQUEST
+                                ),
+                                related_project=project,
+                            )
 
                 messages.success(
                     request,
@@ -88,6 +138,7 @@ def join_project(request, project_id):
                 )
 
     else:
+
         form = JoinRequestForm()
 
     return render(
@@ -102,6 +153,7 @@ def join_project(request, project_id):
 
 @login_required
 def cancel_join_request(request, request_id):
+
     join_request = get_object_or_404(
         JoinRequest.objects.select_related(
             "project",
@@ -111,6 +163,7 @@ def cancel_join_request(request, request_id):
     )
 
     if join_request.user != request.user:
+
         messages.error(
             request,
             "You do not have permission to cancel this request.",
@@ -122,6 +175,7 @@ def cancel_join_request(request, request_id):
         )
 
     if join_request.status != JoinRequest.Status.PENDING:
+
         messages.error(
             request,
             "Only pending requests can be cancelled.",
@@ -133,6 +187,7 @@ def cancel_join_request(request, request_id):
         )
 
     if request.method != "POST":
+
         messages.error(
             request,
             "Invalid request.",
@@ -160,12 +215,14 @@ def cancel_join_request(request, request_id):
 
 @login_required
 def project_join_requests(request, project_id):
+
     project = get_object_or_404(
         Project,
         pk=project_id,
     )
 
     if project.owner != request.user:
+
         messages.error(
             request,
             "Only the project owner can manage join requests.",
@@ -196,7 +253,9 @@ def project_join_requests(request, project_id):
 
 @login_required
 def approve_join_request(request, request_id):
+
     if request.method != "POST":
+
         messages.error(
             request,
             "Invalid request.",
@@ -217,6 +276,7 @@ def approve_join_request(request, request_id):
     project = join_request.project
 
     if project.owner != request.user:
+
         messages.error(
             request,
             "Only the project owner can approve join requests.",
@@ -228,6 +288,7 @@ def approve_join_request(request, request_id):
         )
 
     if join_request.status != JoinRequest.Status.PENDING:
+
         messages.error(
             request,
             "This request is no longer pending.",
@@ -239,6 +300,7 @@ def approve_join_request(request, request_id):
         )
 
     with transaction.atomic():
+
         membership, created = TeamMembership.objects.get_or_create(
             project=project,
             user=join_request.user,
@@ -248,12 +310,14 @@ def approve_join_request(request, request_id):
         )
 
         if not created:
+
             messages.info(
                 request,
                 "This user is already a team member.",
             )
 
             join_request.status = JoinRequest.Status.APPROVED
+
             join_request.save(
                 update_fields=[
                     "status",
@@ -288,7 +352,9 @@ def approve_join_request(request, request_id):
 
 @login_required
 def reject_join_request(request, request_id):
+
     if request.method != "POST":
+
         messages.error(
             request,
             "Invalid request.",
@@ -309,6 +375,7 @@ def reject_join_request(request, request_id):
     project = join_request.project
 
     if project.owner != request.user:
+
         messages.error(
             request,
             "Only the project owner can reject join requests.",
@@ -320,6 +387,7 @@ def reject_join_request(request, request_id):
         )
 
     if join_request.status != JoinRequest.Status.PENDING:
+
         messages.error(
             request,
             "This request is no longer pending.",
@@ -352,12 +420,14 @@ def reject_join_request(request, request_id):
 
 @login_required
 def leave_project(request, project_id):
+
     project = get_object_or_404(
         Project,
         pk=project_id,
     )
 
     if request.method != "POST":
+
         messages.error(
             request,
             "Invalid request.",
@@ -369,6 +439,7 @@ def leave_project(request, project_id):
         )
 
     if project.owner == request.user:
+
         messages.error(
             request,
             "The project owner cannot leave their own project.",
@@ -385,6 +456,7 @@ def leave_project(request, project_id):
     ).first()
 
     if membership is None:
+
         messages.error(
             request,
             "You are not a member of this project.",

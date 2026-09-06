@@ -6,13 +6,15 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 
 from problems.models import Problem
+from notifications.models import Notification
 
 from .forms import SolutionForm
 from .models import Solution
 from .models import Vote
 
+
 def solution_detail(request, pk):
-    
+
     solution = get_object_or_404(
         Solution.objects.select_related(
             "problem",
@@ -27,13 +29,18 @@ def solution_detail(request, pk):
 
     if request.user.is_authenticated:
 
-        user_vote = Vote.objects.filter(
-            user=request.user,
-            solution=solution,
-        ).values_list(
-            "vote_type",
-            flat=True,
-        ).first()
+        user_vote = (
+            Vote.objects
+            .filter(
+                user=request.user,
+                solution=solution,
+            )
+            .values_list(
+                "vote_type",
+                flat=True,
+            )
+            .first()
+        )
 
     comments = (
         solution.comments
@@ -51,12 +58,14 @@ def solution_detail(request, pk):
         },
     )
 
+
 @login_required
 def solution_create(request):
 
     problem_id = request.GET.get("problem")
 
     if not problem_id:
+
         messages.error(
             request,
             "A problem is required before submitting a solution.",
@@ -75,6 +84,7 @@ def solution_create(request):
         Problem.Status.SOLVED,
         Problem.Status.CLOSED,
     ]:
+
         messages.warning(
             request,
             "Solutions cannot be submitted to a closed or solved problem.",
@@ -107,8 +117,28 @@ def solution_create(request):
                 Problem.objects.filter(
                     pk=problem.pk
                 ).update(
-                    solution_count=problem.solution_count + 1
+                    solution_count=F("solution_count") + 1
                 )
+
+                # -------------------------------------------------
+                # NOTIFY PROBLEM OWNER
+                # -------------------------------------------------
+
+                if problem.created_by != request.user:
+
+                    Notification.objects.create(
+                        recipient=problem.created_by,
+                        message=(
+                            f"{request.user.get_full_name() or request.user.username} "
+                            f"proposed a solution for your problem: "
+                            f"{problem.title}"
+                        ),
+                        notification_type=(
+                            Notification.NotificationType.SOLUTION_PROPOSED
+                        ),
+                        related_problem=problem,
+                        related_solution=solution,
+                    )
 
             messages.success(
                 request,
@@ -123,7 +153,6 @@ def solution_create(request):
     else:
 
         form = SolutionForm()
-
 
     return render(
         request,
@@ -196,7 +225,6 @@ def solution_edit(request, pk):
             instance=solution,
         )
 
-
     return render(
         request,
         "solutions/solution_form.html",
@@ -265,7 +293,6 @@ def solution_delete(request, pk):
             pk=problem_id,
         )
 
-
     return render(
         request,
         "solutions/solution_confirm_delete.html",
@@ -273,8 +300,8 @@ def solution_delete(request, pk):
             "solution": solution,
         },
     )
-    
-    
+
+
 @login_required
 def vote_solution(request, pk):
 
@@ -288,14 +315,18 @@ def vote_solution(request, pk):
             status=405,
         )
 
-
     solution = get_object_or_404(
-        Solution,
+        Solution.objects.select_related(
+            "proposed_by",
+            "problem",
+        ),
         pk=pk,
     )
 
+    # ---------------------------------------------------------
+    # USER CANNOT VOTE ON OWN SOLUTION
+    # ---------------------------------------------------------
 
-    # A user should not vote on their own solution.
     if solution.proposed_by == request.user:
 
         return JsonResponse(
@@ -306,17 +337,14 @@ def vote_solution(request, pk):
             status=403,
         )
 
-
     vote_type = request.POST.get(
         "vote_type"
     )
-
 
     valid_vote_types = {
         Vote.VoteType.UP,
         Vote.VoteType.DOWN,
     }
-
 
     if vote_type not in valid_vote_types:
 
@@ -328,6 +356,7 @@ def vote_solution(request, pk):
             status=400,
         )
 
+    notify_solution_owner = False
 
     with transaction.atomic():
 
@@ -336,14 +365,16 @@ def vote_solution(request, pk):
             solution=solution,
         ).first()
 
-
-        # ----------------------------------------------------
+        # =====================================================
         # EXISTING VOTE
-        # ----------------------------------------------------
+        # =====================================================
 
         if vote:
 
-            # Clicking the same vote removes it.
+            # -------------------------------------------------
+            # SAME VOTE = REMOVE
+            # -------------------------------------------------
+
             if vote.vote_type == vote_type:
 
                 vote.delete()
@@ -368,12 +399,16 @@ def vote_solution(request, pk):
 
                 action = "removed"
 
-            # Clicking the opposite vote changes it.
+            # -------------------------------------------------
+            # OPPOSITE VOTE = CHANGE
+            # -------------------------------------------------
+
             else:
 
                 old_vote_type = vote.vote_type
 
                 vote.vote_type = vote_type
+
                 vote.save(
                     update_fields=[
                         "vote_type"
@@ -412,10 +447,13 @@ def vote_solution(request, pk):
 
                 action = "changed"
 
+                # DOWN -> UP
+                if vote_type == Vote.VoteType.UP:
+                    notify_solution_owner = True
 
-        # ----------------------------------------------------
+        # =====================================================
         # NEW VOTE
-        # ----------------------------------------------------
+        # =====================================================
 
         else:
 
@@ -433,6 +471,8 @@ def vote_solution(request, pk):
                     upvotes=F("upvotes") + 1
                 )
 
+                notify_solution_owner = True
+
             else:
 
                 Solution.objects.filter(
@@ -443,8 +483,10 @@ def vote_solution(request, pk):
 
             action = "added"
 
+        # =====================================================
+        # REFRESH SOLUTION VALUES
+        # =====================================================
 
-        # Refresh values after F() updates.
         solution.refresh_from_db()
 
         solution.score = (
@@ -453,18 +495,60 @@ def vote_solution(request, pk):
         )
 
         solution.save(
-            update_fields=["score"]
+            update_fields=[
+                "score"
+            ]
         )
 
+        # =====================================================
+        # CREATE UPVOTE NOTIFICATION
+        # =====================================================
 
-    current_vote = Vote.objects.filter(
-        user=request.user,
-        solution=solution,
-    ).values_list(
-        "vote_type",
-        flat=True,
-    ).first()
+        if notify_solution_owner:
 
+            existing_upvote_notification = Notification.objects.filter(
+                recipient=solution.proposed_by,
+                notification_type=Notification.NotificationType.VOTE,
+                related_solution=solution,
+                related_problem=solution.problem,
+                message__startswith=(
+                    f"{request.user.get_full_name() or request.user.username} "
+                    f"upvoted your solution:"
+                ),
+            ).exists()
+
+            if not existing_upvote_notification:
+
+                Notification.objects.create(
+                    recipient=solution.proposed_by,
+                    message=(
+                        f"{request.user.get_full_name() or request.user.username} "
+                        f"upvoted your solution: "
+                        f"{solution.title}"
+                    ),
+                    notification_type=(
+                        Notification.NotificationType.VOTE
+                    ),
+                    related_solution=solution,
+                    related_problem=solution.problem,
+                )
+
+    # =========================================================
+    # CURRENT USER VOTE
+    # =========================================================
+
+    current_vote = (
+        Vote.objects
+        .filter(
+            user=request.user,
+            solution=solution,
+        )
+        .values_list(
+            "vote_type",
+            flat=True,
+        )
+        .first()
+    )
 
     return JsonResponse(
         {
@@ -476,11 +560,13 @@ def vote_solution(request, pk):
             "user_vote": current_vote,
         }
     )
-    
+
 
 @login_required
 def select_solution(request, pk):
+
     if request.method != "POST":
+
         messages.error(
             request,
             "Invalid request.",
@@ -492,13 +578,17 @@ def select_solution(request, pk):
         )
 
     solution = get_object_or_404(
-        Solution.objects.select_related("problem"),
+        Solution.objects.select_related(
+            "problem",
+            "proposed_by",
+        ),
         pk=pk,
     )
 
     problem = solution.problem
 
     if problem.created_by != request.user:
+
         messages.error(
             request,
             "Only the problem owner can select a solution.",
@@ -510,6 +600,7 @@ def select_solution(request, pk):
         )
 
     if solution.status == Solution.Status.REJECTED:
+
         messages.error(
             request,
             "A rejected solution cannot be selected.",
@@ -521,6 +612,7 @@ def select_solution(request, pk):
         )
 
     if solution.status == Solution.Status.SELECTED:
+
         messages.info(
             request,
             "This solution is already selected.",
@@ -532,8 +624,11 @@ def select_solution(request, pk):
         )
 
     with transaction.atomic():
-        # If another solution was previously selected,
-        # return it to shortlisted status.
+
+        # -----------------------------------------------------
+        # PREVIOUS SELECTED SOLUTION
+        # -----------------------------------------------------
+
         Solution.objects.filter(
             problem=problem,
             status=Solution.Status.SELECTED,
@@ -543,11 +638,62 @@ def select_solution(request, pk):
             status=Solution.Status.SHORTLISTED,
         )
 
-        solution.status = Solution.Status.SELECTED
-        solution.save(update_fields=["status", "updated_at"])
+        # -----------------------------------------------------
+        # SELECT CURRENT SOLUTION
+        # -----------------------------------------------------
 
-        problem.status = problem.Status.IN_PROGRESS
-        problem.save(update_fields=["status", "updated_at"])
+        solution.status = Solution.Status.SELECTED
+
+        solution.save(
+            update_fields=[
+                "status",
+                "updated_at",
+            ]
+        )
+
+        # -----------------------------------------------------
+        # UPDATE PROBLEM
+        # -----------------------------------------------------
+
+        problem.status = Problem.Status.IN_PROGRESS
+
+        problem.save(
+            update_fields=[
+                "status",
+                "updated_at",
+            ]
+        )
+
+        # -----------------------------------------------------
+        # NOTIFY SOLUTION AUTHOR
+        # -----------------------------------------------------
+
+        if solution.proposed_by != request.user:
+
+            existing_selected_notification = Notification.objects.filter(
+                recipient=solution.proposed_by,
+                notification_type=(
+                    Notification.NotificationType.SOLUTION_SELECTED
+                ),
+                related_solution=solution,
+                related_problem=problem,
+            ).exists()
+
+            if not existing_selected_notification:
+
+                Notification.objects.create(
+                    recipient=solution.proposed_by,
+                    message=(
+                        f"Your solution '{solution.title}' "
+                        f"was selected for the problem "
+                        f"'{problem.title}'."
+                    ),
+                    notification_type=(
+                        Notification.NotificationType.SOLUTION_SELECTED
+                    ),
+                    related_solution=solution,
+                    related_problem=problem,
+                )
 
     messages.success(
         request,
@@ -558,18 +704,106 @@ def select_solution(request, pk):
         "solutions:detail",
         pk=solution.pk,
     )
-    
+
+
 def solution_list(request):
+
+    # =========================================================
+    # GET FILTER VALUES
+    # =========================================================
+
+    selected_category = request.GET.get(
+        "category",
+        "",
+    )
+
+    selected_status = request.GET.get(
+        "status",
+        "",
+    )
+
+    selected_sort = request.GET.get(
+        "sort",
+        "newest",
+    )
+
+    # =========================================================
+    # BASE QUERY
+    # =========================================================
+
     solutions = (
         Solution.objects
-        .select_related("problem", "proposed_by")
-        .order_by("-created_at")
+        .select_related(
+            "problem",
+            "proposed_by",
+        )
     )
+
+    # =========================================================
+    # CATEGORY FILTER
+    # =========================================================
+
+    if selected_category:
+
+        solutions = solutions.filter(
+            problem__category=selected_category
+        )
+
+    # =========================================================
+    # STATUS FILTER
+    # =========================================================
+
+    if selected_status:
+
+        solutions = solutions.filter(
+            status=selected_status
+        )
+
+    # =========================================================
+    # SORTING
+    # =========================================================
+
+    if selected_sort == "most_votes":
+
+        solutions = solutions.order_by(
+            "-upvotes",
+            "-created_at",
+        )
+
+    elif selected_sort == "most_viewed":
+
+        solutions = solutions.order_by(
+            "-problem__views",
+            "-created_at",
+        )
+
+    else:
+
+        solutions = solutions.order_by(
+            "-created_at",
+        )
+
+    # =========================================================
+    # CATEGORY OPTIONS
+    # =========================================================
+
+    categories = Problem.Category.choices
+
+    # =========================================================
+    # STATUS OPTIONS
+    # =========================================================
+
+    statuses = Solution.Status.choices
 
     return render(
         request,
         "solutions/solution_list.html",
         {
             "solutions": solutions,
+            "categories": categories,
+            "statuses": statuses,
+            "selected_category": selected_category,
+            "selected_status": selected_status,
+            "selected_sort": selected_sort,
         },
     )

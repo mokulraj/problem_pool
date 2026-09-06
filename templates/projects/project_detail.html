@@ -1,390 +1,1762 @@
 {% extends "base.html" %}
 
+{% block title %}{{ project.name }} | ProblemPool{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.project-detail-page {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 12% 12%,
+            rgba(99, 102, 241, 0.06),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 88% 25%,
+            rgba(168, 85, 247, 0.05),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            #fafaff 0%,
+            #ffffff 45%,
+            #fafaff 100%
+        );
+
+    padding: 46px 0 70px;
+}
+
+
+/* =========================================================
+   PROJECT HERO
+========================================================= */
+
+.project-hero {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    margin-bottom: 34px;
+}
+
+.project-hero-icon {
+    width: 92px;
+    height: 92px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 18px;
+
+    background: #f0edff;
+    color: #5a32df;
+
+    font-size: 39px;
+}
+
+.project-hero-content {
+    min-width: 0;
+}
+
+.project-title {
+    margin: 0 0 8px;
+
+    color: #111827;
+
+    font-size: clamp(30px, 4vw, 39px);
+    line-height: 1.2;
+
+    font-weight: 750;
+
+    letter-spacing: -1px;
+}
+
+.project-description {
+    max-width: 900px;
+
+    margin: 0 0 14px;
+
+    color: #475569;
+
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 11px;
+
+    border-radius: 7px;
+
+    background: #eeeaff;
+    color: #5a32df;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   COMMON CARD
+========================================================= */
+
+.project-card {
+    height: 100%;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    border: 1px solid #e8eaf0;
+    border-radius: 14px;
+
+    box-shadow:
+        0 5px 17px rgba(15, 23, 42, 0.06);
+
+    overflow: hidden;
+}
+
+.project-card-body {
+    padding: 27px 26px;
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.project-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    margin-bottom: 22px;
+}
+
+.project-card-header-icon {
+    width: 31px;
+    height: 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #5a32df;
+
+    font-size: 22px;
+}
+
+.project-card-header h2 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.project-card-header p {
+    margin: 6px 0 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   TEAM
+========================================================= */
+
+.team-member-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 17px;
+
+    border: 1px solid #e4e7ed;
+    border-radius: 10px;
+
+    background: #ffffff;
+}
+
+.team-avatar,
+.team-avatar-placeholder {
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+.team-avatar {
+    object-fit: cover;
+}
+
+.team-avatar-placeholder {
+    background: #eeeaff;
+    color: #5735d7;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.team-member-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.team-member-name {
+    color: #111827;
+
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.team-member-note {
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.owner-badge {
+    display: inline-flex;
+
+    margin-left: 10px;
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    background: #eeeaff;
+    color: #5a32df;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TEAM ACTIONS
+========================================================= */
+
+.team-action-area {
+    margin-top: 15px;
+}
+
+.project-alert {
+    padding: 12px 15px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+}
+
+.project-alert h5 {
+    margin-bottom: 4px;
+
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.project-alert p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.progress-content {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 190px;
+
+    text-align: center;
+}
+
+.progress-circle {
+    width: 122px;
+    height: 122px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            white 57%,
+            transparent 58%
+        ),
+        conic-gradient(
+            #5a32df {{ project.progress }}%,
+            #eeeaff {{ project.progress }}%
+        );
+}
+
+.progress-circle-inner {
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: white;
+    color: #111827;
+
+    font-size: 27px;
+    font-weight: 750;
+}
+
+.progress-description {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   TASKS
+========================================================= */
+
+.tasks-card {
+    margin-top: 25px;
+}
+
+.task-create-button {
+    min-height: 42px;
+
+    padding: 9px 16px;
+}
+
+.clean-task-list {
+    width: 100%;
+}
+
+.clean-task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 35px;
+
+    padding: 23px 0;
+
+    border-top: 1px solid #edf0f4;
+}
+
+.clean-task-item:first-child {
+    border-top: 0;
+}
+
+.clean-task-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.clean-task-title {
+    color: #111827;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.5;
+}
+
+.clean-task-description {
+    margin-top: 6px;
+
+    color: #64748b;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.clean-task-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 16px;
+
+    margin-top: 10px;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.clean-task-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+/* =========================================================
+   TASK RIGHT SIDE
+========================================================= */
+
+.clean-task-right {
+    width: 245px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   MEMBER STATUS
+========================================================= */
+
+.clean-status-form {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}
+
+.clean-status-select {
+    width: 100%;
+    height: 41px;
+
+    padding: 7px 11px;
+
+    border: 1px solid #ddd8ec;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #334155;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.clean-status-select:hover {
+    border-color: #b5a5e9;
+}
+
+.clean-status-select:focus {
+    border-color: #6338e8;
+
+    box-shadow:
+        0 0 0 3px rgba(99, 56, 232, 0.09);
+}
+
+.clean-status-button {
+    width: 100%;
+    height: 38px;
+
+    margin-top: 7px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #6338e8;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.clean-status-button:hover {
+    background: #5128d0;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   READ ONLY STATUS
+========================================================= */
+
+.clean-status-view {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 6px;
+}
+
+.clean-status-label {
+    color: #94a3b8;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.7px;
+}
+
+.clean-status-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 78px;
+    min-height: 38px;
+
+    padding: 7px 13px;
+
+    border-radius: 9px;
+
+    background: #eeeaff;
+    color: #5a32df;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   OWNER ACTIONS
+========================================================= */
+
+.clean-owner-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 7px;
+
+    margin-top: 10px;
+}
+
+.clean-owner-actions form {
+    margin: 0;
+}
+
+.clean-edit-button,
+.clean-delete-button {
+    min-height: 32px;
+
+    padding: 5px 11px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.clean-edit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d8dbe2;
+
+    background: #ffffff;
+
+    color: #475569;
+}
+
+.clean-edit-button:hover {
+    background: #f8fafc;
+
+    color: #334155;
+}
+
+.clean-delete-button {
+    border: 1px solid #fecaca;
+
+    background: #ffffff;
+
+    color: #dc2626;
+}
+
+.clean-delete-button:hover {
+    background: #fff5f5;
+}
+
+
+/* =========================================================
+   EMPTY TASKS
+========================================================= */
+
+.tasks-empty {
+    min-height: 215px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #faf9ff,
+            #f8f7ff
+        );
+
+    text-align: center;
+}
+
+.tasks-empty-icon {
+    margin-bottom: 13px;
+
+    color: #5a32df;
+
+    font-size: 39px;
+}
+
+.tasks-empty h3 {
+    margin: 0 0 7px;
+
+    color: #111827;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.tasks-empty p {
+    margin: 0 0 18px;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   INFORMATION
+========================================================= */
+
+.info-content-title {
+    margin-bottom: 10px;
+
+    color: #111827;
+
+    font-size: 16px;
+    font-weight: 650;
+}
+
+.info-content-text {
+    margin: 0;
+
+    color: #526079;
+
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   PROJECT INFORMATION
+========================================================= */
+
+.project-information {
+    margin-top: 25px;
+}
+
+.project-info-grid {
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 0;
+}
+
+.project-info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 4px 22px;
+
+    border-right: 1px solid #e5e8ee;
+}
+
+.project-info-item:first-child {
+    padding-left: 0;
+}
+
+.project-info-item:last-child {
+    border-right: 0;
+}
+
+.project-info-icon {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #5a32df;
+
+    font-size: 20px;
+}
+
+.project-info-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.project-info-value {
+    color: #334155;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PRIMARY BUTTON
+========================================================= */
+
+.project-primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 9px 16px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: linear-gradient(
+        135deg,
+        #6338e8,
+        #4520c7
+    );
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 6px 14px rgba(91, 54, 232, 0.2);
+
+    transition: 0.2s ease;
+}
+
+.project-primary-btn:hover {
+    color: white;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(91, 54, 232, 0.25);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .project-info-grid {
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 22px;
+    }
+
+    .project-info-item {
+        padding: 0;
+
+        border-right: 0;
+    }
+
+    .clean-task-item {
+        align-items: flex-start;
+    }
+
+}
+
+
+@media (max-width: 767px) {
+
+    .project-detail-page {
+        padding-top: 30px;
+    }
+
+    .project-hero {
+        flex-direction: column;
+
+        gap: 17px;
+    }
+
+    .project-hero-icon {
+        width: 70px;
+        height: 70px;
+
+        font-size: 30px;
+    }
+
+    .project-title {
+        font-size: 29px;
+    }
+
+    .project-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .project-info-item {
+        padding: 5px 0;
+    }
+
+    .project-card-body {
+        padding: 22px 18px;
+    }
+
+    .team-member-card {
+        align-items: flex-start;
+    }
+
+    .owner-badge {
+        display: block;
+
+        width: fit-content;
+
+        margin: 5px 0 0;
+    }
+
+    .clean-task-item {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 18px;
+    }
+
+    .clean-task-right {
+        width: 100%;
+    }
+
+    .clean-status-view {
+        align-items: flex-start;
+    }
+
+    .clean-owner-actions {
+        justify-content: flex-start;
+    }
+
+    .task-create-button {
+        margin-top: 10px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
 {% block content %}
 
-<div class="container py-5">
+<div class="project-detail-page">
 
-    <!-- PROJECT HEADER -->
-    <div class="mb-4">
-        <h1>{{ project.name }}</h1>
-
-        <p class="text-muted">
-            {{ project.description }}
-        </p>
-
-        <span class="badge bg-secondary">
-            {{ project.get_status_display }}
-        </span>
-    </div>
+    <div class="container">
 
 
-    <!-- TEAM MANAGEMENT -->
-    <div class="card mb-4 p-4">
+        <!-- =====================================================
+             PROJECT HERO
+        ====================================================== -->
 
-        <h2>Team Members</h2>
+        <div class="project-hero">
 
-        <p class="text-muted">
-            People working on this project.
-        </p>
-
-        <div class="mb-3">
-            <strong>{{ project.owner.username }}</strong>
-
-            <span class="badge bg-primary">
-                Project Owner
-            </span>
-        </div>
-
-
-        {% if request.user != project.owner %}
-
-            {% if is_team_member %}
-
-                <div class="alert alert-success">
-                    <h5>Your Membership</h5>
-
-                    <p class="mb-0">
-                        You are a member of this project.
-                    </p>
-                </div>
-
-                <form
-                    method="post"
-                    action="{% url 'teams:leave' project.pk %}"
-                >
-                    {% csrf_token %}
-
-                    <button
-                        type="submit"
-                        class="btn btn-outline-danger"
-                    >
-                        Leave Project
-                    </button>
-                </form>
-
-
-            {% elif pending_join_request %}
-
-                <div class="alert alert-warning">
-
-                    <h5>Join Request Pending</h5>
-
-                    <p class="mb-0">
-                        Your request to join this project is waiting
-                        for approval from the project owner.
-                    </p>
-
-                </div>
-
-
-            {% else %}
-
-                <div class="mt-3">
-
-                    <h5>Join This Project</h5>
-
-                    <p>
-                        Interested in contributing to this project?
-                    </p>
-
-                    <a
-                        href="{% url 'teams:join' project.pk %}"
-                        class="btn btn-primary"
-                    >
-                        Request to Join
-                    </a>
-
-                </div>
-
-            {% endif %}
-
-
-        {% else %}
-
-            <div class="alert alert-info">
-                You are the owner of this project.
+            <div class="project-hero-icon">
+                <i class="bi bi-calendar-event"></i>
             </div>
 
-            <a
-                href="{% url 'teams:join_requests' project.pk %}"
-                class="btn btn-primary"
-            >
-                Manage Join Requests
-            </a>
+            <div class="project-hero-content">
 
-        {% endif %}
+                <h1 class="project-title">
+                    {{ project.name }}
+                </h1>
 
-    </div>
-
-
-    <!-- PROGRESS -->
-    <div class="card mb-4 p-4">
-
-        <h2>Progress</h2>
-
-        <h3>{{ project.progress }}%</h3>
-
-        <p class="text-muted">
-            Progress is calculated from completed project tasks.
-        </p>
-
-    </div>
-
-
-    <!-- TASKS -->
-    <div class="card mb-4 p-4">
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-
-            <div>
-                <h2 class="mb-1">Tasks</h2>
-
-                <p class="text-muted mb-0">
-                    Tasks for this project.
+                <p class="project-description">
+                    {{ project.description }}
                 </p>
-            </div>
 
-            {% if request.user == project.owner %}
-                <a
-                    href="{% url 'tasks:create' project.pk %}"
-                    class="btn btn-primary"
-                >
-                    Create Task
-                </a>
-            {% endif %}
+                <span class="project-status">
+                    <i class="bi bi-record-circle"></i>
+                    {{ project.get_status_display }}
+                </span>
+
+            </div>
 
         </div>
 
 
-        {% if project.tasks.all %}
+        <!-- =====================================================
+             TEAM + PROGRESS
+        ====================================================== -->
 
-            {% for task in project.tasks.all %}
+        <div class="row g-4">
 
-                <div class="border rounded p-3 mb-3">
 
-                    <div class="d-flex justify-content-between">
+            <!-- TEAM -->
 
-                        <div>
-                            <h5 class="mb-1">
-                                {{ task.title }}
-                            </h5>
+            <div class="col-12 col-lg-6">
 
-                            {% if task.description %}
-                                <p class="mb-2">
-                                    {{ task.description }}
+                <div class="project-card">
+
+                    <div class="project-card-body">
+
+                        <div class="project-card-header">
+
+                            <div class="project-card-header-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Team Members
+                                </h2>
+
+                                <p>
+                                    People working on this project.
                                 </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="team-member-card">
+
+                            {% if project.owner.profile_image %}
+
+                                <img
+                                    src="{{ project.owner.profile_image.url }}"
+                                    alt="{{ project.owner.username }}"
+                                    class="team-avatar"
+                                >
+
+                            {% else %}
+
+                                <div class="team-avatar-placeholder">
+                                    {{ project.owner.username|first|upper }}
+                                </div>
+
                             {% endif %}
+
+
+                            <div class="team-member-info">
+
+                                <div>
+
+                                    <span class="team-member-name">
+                                        {{ project.owner.username }}
+                                    </span>
+
+                                    <span class="owner-badge">
+                                        Project Owner
+                                    </span>
+
+                                </div>
+
+
+                                {% if request.user == project.owner %}
+
+                                    <div class="team-member-note">
+                                        You are the owner of this project.
+                                    </div>
+
+                                {% elif is_team_member %}
+
+                                    <div class="team-member-note">
+                                        You are a member of this project.
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
                         </div>
 
-                        <span class="badge bg-secondary">
-                            {{ task.get_status_display }}
-                        </span>
 
-                    </div>
+                        <div class="team-action-area">
 
+                            {% if request.user == project.owner %}
 
-                    <!-- ASSIGNED MEMBER -->
-                    {% if task.assigned_to %}
+                                <div class="project-alert alert alert-info mb-3">
 
-                        <div class="mt-2">
+                                    <h5>
+                                        Project Management
+                                    </h5>
 
-                            <small class="text-muted">
-                                Assigned to:
-                                <strong>
-                                    {{ task.assigned_to.username }}
-                                </strong>
-                            </small>
+                                    <p>
+                                        Manage your project team and approve
+                                        new members.
+                                    </p>
 
-                        </div>
+                                </div>
 
-                    {% else %}
-
-                        <div class="mt-2">
-
-                            <small class="text-muted">
-                                Not assigned
-                            </small>
-
-                        </div>
-
-                    {% endif %}
+                                <a
+                                    href="{% url 'teams:join_requests' project.pk %}"
+                                    class="project-primary-btn"
+                                >
+                                    <i class="bi bi-people"></i>
+                                    Manage Join Requests
+                                </a>
 
 
-                    <!-- DUE DATE -->
-                    {% if task.due_date %}
+                            {% elif is_team_member %}
 
-                        <small class="text-muted d-block mt-1">
-                            Due: {{ task.due_date }}
-                        </small>
+                                <div class="project-alert alert alert-success mb-3">
 
-                    {% endif %}
+                                    <h5>
+                                        Your Membership
+                                    </h5>
 
+                                    <p>
+                                        You are a member of this project.
+                                    </p>
 
-                    <!-- TASK ACTIONS -->
-                    <div class="mt-3">
-
-                        {% if task.status != "COMPLETED" %}
-
-                            {% if task.assigned_to == request.user %}
+                                </div>
 
                                 <form
                                     method="post"
-                                    action="{% url 'tasks:complete' task.pk %}"
-                                    class="d-inline"
+                                    action="{% url 'teams:leave' project.pk %}"
                                 >
+
                                     {% csrf_token %}
 
                                     <button
                                         type="submit"
-                                        class="btn btn-sm btn-success"
+                                        class="btn btn-outline-danger btn-sm"
                                     >
-                                        Complete
+                                        <i class="bi bi-box-arrow-left"></i>
+                                        Leave Project
                                     </button>
 
                                 </form>
 
+
+                            {% elif pending_join_request %}
+
+                                <div class="project-alert alert alert-warning">
+
+                                    <h5>
+                                        Join Request Pending
+                                    </h5>
+
+                                    <p>
+                                        Your request is waiting for approval
+                                        from the project owner.
+                                    </p>
+
+                                </div>
+
+
+                            {% else %}
+
+                                <div>
+
+                                    <h6 class="fw-semibold mb-2">
+                                        Join This Project
+                                    </h6>
+
+                                    <p class="text-muted small">
+                                        Interested in contributing to this project?
+                                    </p>
+
+                                    <a
+                                        href="{% url 'teams:join' project.pk %}"
+                                        class="project-primary-btn"
+                                    >
+                                        <i class="bi bi-person-plus"></i>
+                                        Request to Join
+                                    </a>
+
+                                </div>
+
                             {% endif %}
 
-                        {% else %}
-
-                            <span class="text-success">
-                                ✓ Completed
-                            </span>
-
-                        {% endif %}
-
-
-                        <!-- OWNER CONTROLS -->
-                        {% if request.user == project.owner %}
-
-                            <a
-                                href="{% url 'tasks:edit' task.pk %}"
-                                class="btn btn-sm btn-outline-secondary"
-                            >
-                                Edit
-                            </a>
-
-                            <form
-                                method="post"
-                                action="{% url 'tasks:delete' task.pk %}"
-                                class="d-inline"
-                                onsubmit="return confirm('Are you sure you want to delete this task?');"
-                            >
-                                {% csrf_token %}
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-sm btn-outline-danger"
-                                >
-                                    Delete
-                                </button>
-
-                            </form>
-
-                        {% endif %}
+                        </div>
 
                     </div>
 
                 </div>
 
-            {% endfor %}
+            </div>
 
 
-        {% else %}
+            <!-- PROGRESS -->
 
-            <div class="text-center py-4">
+            <div class="col-12 col-lg-6">
 
-                <h5>No tasks yet</h5>
+                <div class="project-card progress-card">
 
-                {% if request.user == project.owner %}
+                    <div class="project-card-body">
 
-                    <p class="text-muted">
-                        Create the first task for this project.
-                    </p>
+                        <div class="project-card-header">
 
-                    <a
-                        href="{% url 'tasks:create' project.pk %}"
-                        class="btn btn-primary"
-                    >
-                        Create Task
-                    </a>
+                            <div class="project-card-header-icon">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
 
-                {% else %}
+                            <div>
 
-                    <p class="text-muted mb-0">
-                        The project owner has not created any tasks yet.
-                    </p>
+                                <h2>
+                                    Progress
+                                </h2>
 
-                {% endif %}
+                            </div>
+
+                        </div>
+
+
+                        <div class="progress-content">
+
+                            <div class="progress-circle">
+
+                                <div class="progress-circle-inner">
+                                    {{ project.progress }}%
+                                </div>
+
+                            </div>
+
+                            <p class="progress-description">
+                                Progress is calculated from completed project tasks.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        {% endif %}
-
-    </div>
+        </div>
 
 
-    <!-- ORIGINAL PROBLEM -->
-    <div class="card mb-4 p-4">
+        <!-- =====================================================
+             TASKS
+        ====================================================== -->
 
-        <h2>Original Problem</h2>
+        <div class="project-card tasks-card">
 
-        <h3>
-            {{ project.problem.title }}
-        </h3>
-
-        <p>
-            {{ project.problem.description }}
-        </p>
-
-    </div>
+            <div class="project-card-body">
 
 
-    <!-- SELECTED SOLUTION -->
-    <div class="card mb-4 p-4">
+                <!-- TASK HEADER -->
 
-        <h2>Selected Solution</h2>
+                <div class="project-card-header">
 
-        <h3>
-            {{ project.selected_solution.title }}
-        </h3>
+                    <div class="project-card-header-icon">
+                        <i class="bi bi-clipboard2"></i>
+                    </div>
 
-        <p>
-            {{ project.selected_solution.description }}
-        </p>
+                    <div class="flex-grow-1">
 
-    </div>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <h2>
+                                    Tasks
+                                </h2>
+
+                                <p>
+                                    Tasks for this project.
+                                </p>
+
+                            </div>
 
 
-    <!-- PROJECT INFORMATION -->
-    <div class="card p-4">
+                            {% if request.user == project.owner %}
 
-        <h2>Project Information</h2>
+                                <a
+                                    href="{% url 'tasks:create' project.pk %}"
+                                    class="project-primary-btn task-create-button"
+                                >
+                                    <i class="bi bi-plus-lg"></i>
+                                    Create Task
+                                </a>
 
-        <p>
-            <strong>Owner</strong>
-            {{ project.owner.username }}
-        </p>
+                            {% endif %}
 
-        <p>
-            <strong>Start Date</strong>
-            {{ project.start_date }}
-        </p>
+                        </div>
 
-        <p>
-            <strong>Deadline</strong>
-            {{ project.end_date }}
-        </p>
+                    </div>
 
-        <p>
-            <strong>Progress</strong>
-            {{ project.progress }}%
-        </p>
+                </div>
 
-        <p>
-            <strong>Created</strong>
-            {{ project.created_at }}
-        </p>
+
+                <!-- TASK LIST -->
+
+                {% with project_tasks=project.tasks.all %}
+
+                    {% if project_tasks %}
+
+                        <div class="clean-task-list">
+
+                            {% for task in project_tasks %}
+
+                                <div class="clean-task-item">
+
+
+                                    <!-- TASK DETAILS -->
+
+                                    <div class="clean-task-content">
+
+                                        <div class="clean-task-title">
+                                            {{ task.title }}
+                                        </div>
+
+
+                                        {% if task.description %}
+
+                                            <div class="clean-task-description">
+                                                {{ task.description }}
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        <div class="clean-task-meta">
+
+                                            {% if task.assigned_to %}
+
+                                                <span>
+                                                    <i class="bi bi-person"></i>
+                                                    Assigned to:
+                                                    <strong>
+                                                        {{ task.assigned_to.username }}
+                                                    </strong>
+                                                </span>
+
+                                            {% else %}
+
+                                                <span>
+                                                    <i class="bi bi-person"></i>
+                                                    Unassigned
+                                                </span>
+
+                                            {% endif %}
+
+
+                                            {% if task.due_date %}
+
+                                                <span>
+                                                    <i class="bi bi-calendar3"></i>
+                                                    Due:
+                                                    {{ task.due_date|date:"M. j, Y" }}
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- STATUS + ACTIONS -->
+
+                                    <div class="clean-task-right">
+
+
+                                        <!-- ASSIGNED MEMBER -->
+
+                                        {% if task.assigned_to == request.user %}
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'tasks:status_update' task.pk %}"
+                                                class="clean-status-form"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <select
+                                                    name="status"
+                                                    class="clean-status-select"
+                                                >
+
+                                                    <option
+                                                        value="TODO"
+                                                        {% if task.status == "TODO" %}
+                                                            selected
+                                                        {% endif %}
+                                                    >
+                                                        Pending / To Do
+                                                    </option>
+
+                                                    <option
+                                                        value="IN_PROGRESS"
+                                                        {% if task.status == "IN_PROGRESS" %}
+                                                            selected
+                                                        {% endif %}
+                                                    >
+                                                        In Progress
+                                                    </option>
+
+                                                    <option
+                                                        value="COMPLETED"
+                                                        {% if task.status == "COMPLETED" %}
+                                                            selected
+                                                        {% endif %}
+                                                    >
+                                                        Completed
+                                                    </option>
+
+                                                </select>
+
+
+                                                <button
+                                                    type="submit"
+                                                    class="clean-status-button"
+                                                >
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                    Update Status
+                                                </button>
+
+                                            </form>
+
+
+                                        <!-- OWNER / OTHER MEMBER -->
+
+                                        {% else %}
+
+                                            <div class="clean-status-view">
+
+                                                <span class="clean-status-label">
+                                                    CURRENT STATUS
+                                                </span>
+
+                                                <span class="clean-status-badge">
+                                                    {{ task.get_status_display }}
+                                                </span>
+
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        <!-- OWNER CONTROLS -->
+
+                                        {% if request.user == project.owner %}
+
+                                            <div class="clean-owner-actions">
+
+                                                <a
+                                                    href="{% url 'tasks:edit' task.pk %}"
+                                                    class="clean-edit-button"
+                                                >
+                                                    Edit
+                                                </a>
+
+
+                                                <form
+                                                    method="post"
+                                                    action="{% url 'tasks:delete' task.pk %}"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="clean-delete-button"
+                                                        onclick="
+                                                            return confirm(
+                                                                'Are you sure you want to delete this task?'
+                                                            );
+                                                        "
+                                                    >
+                                                        Delete
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    {% else %}
+
+                        <div class="tasks-empty">
+
+                            <div class="tasks-empty-icon">
+                                <i class="bi bi-clipboard2"></i>
+                            </div>
+
+                            <h3>
+                                No tasks yet
+                            </h3>
+
+
+                            {% if request.user == project.owner %}
+
+                                <p>
+                                    Create the first task for this project.
+                                </p>
+
+                                <a
+                                    href="{% url 'tasks:create' project.pk %}"
+                                    class="project-primary-btn"
+                                >
+                                    <i class="bi bi-plus-lg"></i>
+                                    Create Task
+                                </a>
+
+                            {% else %}
+
+                                <p class="mb-0">
+                                    The project owner has not created any tasks yet.
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ORIGINAL PROBLEM + SELECTED SOLUTION
+        ====================================================== -->
+
+        <div class="row g-4 mt-1">
+
+
+            <!-- ORIGINAL PROBLEM -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="project-card">
+
+                    <div class="project-card-body">
+
+                        <div class="project-card-header">
+
+                            <div
+                                class="project-card-header-icon"
+                                style="color: #ef3340;"
+                            >
+                                <i class="bi bi-question-circle"></i>
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Original Problem
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <h3 class="info-content-title">
+                            {{ project.problem.title }}
+                        </h3>
+
+
+                        <p class="info-content-text">
+                            {{ project.problem.description }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SELECTED SOLUTION -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="project-card">
+
+                    <div class="project-card-body">
+
+                        <div class="project-card-header">
+
+                            <div
+                                class="project-card-header-icon"
+                                style="color: #16a34a;"
+                            >
+                                <i class="bi bi-lightbulb"></i>
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Selected Solution
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <h3 class="info-content-title">
+                            {{ project.selected_solution.title }}
+                        </h3>
+
+
+                        <p class="info-content-text">
+                            {{ project.selected_solution.description }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PROJECT INFORMATION
+        ====================================================== -->
+
+        <div class="project-card project-information">
+
+            <div class="project-card-body">
+
+                <div class="project-card-header">
+
+                    <div
+                        class="project-card-header-icon"
+                        style="color: #1769e0;"
+                    >
+                        <i class="bi bi-info-circle"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Project Information
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="project-info-grid">
+
+
+                    <!-- OWNER -->
+
+                    <div class="project-info-item">
+
+                        <div class="project-info-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <div>
+
+                            <span class="project-info-label">
+                                Owner
+                            </span>
+
+                            <span class="project-info-value">
+                                {{ project.owner.username }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- START DATE -->
+
+                    <div class="project-info-item">
+
+                        <div class="project-info-icon">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+
+                        <div>
+
+                            <span class="project-info-label">
+                                Start Date
+                            </span>
+
+                            <span class="project-info-value">
+
+                                {% if project.start_date %}
+                                    {{ project.start_date|date:"M. j, Y" }}
+                                {% else %}
+                                    Not set
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DEADLINE -->
+
+                    <div class="project-info-item">
+
+                        <div class="project-info-icon">
+                            <i class="bi bi-flag"></i>
+                        </div>
+
+                        <div>
+
+                            <span class="project-info-label">
+                                Deadline
+                            </span>
+
+                            <span class="project-info-value">
+
+                                {% if project.end_date %}
+                                    {{ project.end_date|date:"M. j, Y" }}
+                                {% else %}
+                                    Not set
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PROGRESS -->
+
+                    <div class="project-info-item">
+
+                        <div class="project-info-icon">
+                            <i class="bi bi-circle"></i>
+                        </div>
+
+                        <div>
+
+                            <span class="project-info-label">
+                                Progress
+                            </span>
+
+                            <span class="project-info-value">
+                                {{ project.progress }}%
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CREATED -->
+
+                    <div class="project-info-item">
+
+                        <div class="project-info-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+
+                        <div>
+
+                            <span class="project-info-label">
+                                Created
+                            </span>
+
+                            <span class="project-info-value">
+                                {{ project.created_at|date:"M. j, Y, g:i a" }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 

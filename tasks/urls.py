@@ -32,6 +32,12 @@ urlpatterns = [
     ),
 
     path(
+        "tasks/<int:pk>/status/",
+        views.task_status_update,
+        name="status_update",
+    ),
+
+    path(
         "tasks/<int:pk>/complete/",
         views.task_complete,
         name="complete",
