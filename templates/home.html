@@ -4,1280 +4,1209 @@
     ProblemPool - Where Problems Become Projects
 {% endblock %}
 
-
 {% block content %}
 
 <style>
 
-    /* =========================================================
-       HOMEPAGE
-    ========================================================= */
+/* ============================================================
+   PROBLEMPOOL — SIGNATURE SCROLL EXPERIENCE
+   UI / ANIMATION ONLY
+============================================================ */
 
-    .pp-home {
-        position: relative;
-        overflow: hidden;
-        background: #fbfaff;
+.pp-home {
+    position: relative;
+    overflow: hidden;
+    background: #fbfaff;
+}
+
+
+/* ============================================================
+   GLOBAL SCROLL REVEAL
+============================================================ */
+
+.pp-reveal {
+    opacity: 0;
+    transform: translate3d(0, 70px, 0) scale(.94);
+    filter: blur(12px);
+    transition:
+        opacity .9s cubic-bezier(.16,1,.3,1),
+        transform 1.05s cubic-bezier(.16,1,.3,1),
+        filter .9s cubic-bezier(.16,1,.3,1);
+}
+
+.pp-reveal.pp-active {
+    opacity: 1;
+    transform: translate3d(0,0,0) scale(1);
+    filter: blur(0);
+}
+
+
+/* ============================================================
+   PARALLAX BACKGROUND
+============================================================ */
+
+.pp-scroll-field {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.pp-field-orb {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(113,78,215,.13),
+            rgba(113,78,215,.035) 52%,
+            transparent 72%
+        );
+    filter: blur(4px);
+    transform: translate3d(0,0,0);
+    will-change: transform;
+}
+
+.pp-field-orb.one {
+    top: 8%;
+    left: -230px;
+}
+
+.pp-field-orb.two {
+    top: 52%;
+    right: -240px;
+    width: 360px;
+    height: 360px;
+}
+
+.pp-field-orb.three {
+    top: 82%;
+    left: 30%;
+    width: 240px;
+    height: 240px;
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+.pp-hero {
+    position: relative;
+    z-index: 1;
+    padding: 70px 0 95px;
+}
+
+.pp-hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    align-items: center;
+    gap: 65px;
+}
+
+.pp-hero-content {
+    position: relative;
+    z-index: 5;
+}
+
+
+/* ============================================================
+   HERO TEXT
+============================================================ */
+
+.pp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 13px;
+    border: 1px solid #e3dcf4;
+    border-radius: 999px;
+    background: #f5f1ff;
+    color: #6844d4;
+    font-size: .72rem;
+    font-weight: 850;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.pp-eyebrow-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #7048d9;
+    box-shadow: 0 0 0 5px rgba(112,72,217,.10);
+    animation: pp-dot 2.5s ease-in-out infinite;
+}
+
+
+.pp-hero-title {
+    margin: 23px 0 0;
+    max-width: 720px;
+    color: #171326;
+    font-size: clamp(3.4rem,6vw,6.4rem);
+    line-height: .94;
+    letter-spacing: -.065em;
+    font-weight: 900;
+}
+
+.pp-hero-title .accent {
+    color: #6945d3;
+}
+
+.pp-hero-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px #6945d3;
+}
+
+
+.pp-hero-description {
+    max-width: 610px;
+    margin: 28px 0 0;
+    color: #777184;
+    font-size: 1.06rem;
+    line-height: 1.8;
+}
+
+
+.pp-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+
+.pp-primary-btn,
+.pp-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 14px 21px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 750;
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+.pp-primary-btn {
+    background: #6844d4;
+    color: #fff;
+    box-shadow: 0 15px 30px rgba(104,68,212,.22);
+}
+
+.pp-primary-btn:hover {
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(104,68,212,.30);
+}
+
+.pp-secondary-btn {
+    border: 1px solid #ded8eb;
+    background: rgba(255,255,255,.85);
+    color: #302a3d;
+}
+
+.pp-secondary-btn:hover {
+    color: #6844d4;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(50,35,80,.08);
+}
+
+
+/* ============================================================
+   HERO VISUAL
+============================================================ */
+
+.pp-hero-visual {
+    position: relative;
+    min-height: 520px;
+    isolation: isolate;
+    will-change: transform;
+}
+
+
+/* ============================================================
+   CENTRAL WORLD
+============================================================ */
+
+.pp-visual-orb {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #f1edff,
+            #ddd4fa 45%,
+            #f8f6ff 72%
+        );
+    animation: pp-world 7s ease-in-out infinite;
+}
+
+
+.pp-visual-ring {
+    position: absolute;
+    width: 455px;
+    height: 455px;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px dashed rgba(104,68,212,.22);
+    border-radius: 50%;
+    animation: pp-ring 18s linear infinite;
+}
+
+
+.pp-visual-ring::before,
+.pp-visual-ring::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: #7959db;
+    box-shadow:
+        0 0 0 6px rgba(121,89,219,.08),
+        0 0 20px rgba(121,89,219,.25);
+}
+
+.pp-visual-ring::before {
+    width: 8px;
+    height: 8px;
+    top: 34px;
+    left: 92px;
+}
+
+.pp-visual-ring::after {
+    width: 6px;
+    height: 6px;
+    right: 65px;
+    bottom: 82px;
+}
+
+
+/* ============================================================
+   CENTRAL CORE
+============================================================ */
+
+.pp-visual-center {
+    position: absolute;
+    z-index: 7;
+    top: 170px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 125px;
+    height: 125px;
+    transform: translateX(-50%);
+    border: 10px solid rgba(255,255,255,.65);
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #9275e5,
+            #6844d4 60%,
+            #5631bc
+        );
+    color: white;
+    box-shadow:
+        0 25px 60px rgba(104,68,212,.30);
+    animation: pp-core 5s ease-in-out infinite;
+}
+
+
+.pp-visual-center::before {
+    content: "";
+    position: absolute;
+    inset: -20px;
+    border: 1px solid rgba(104,68,212,.18);
+    border-radius: 50%;
+    animation: pp-pulse 3s ease-out infinite;
+}
+
+.pp-visual-center::after {
+    content: "";
+    position: absolute;
+    inset: -38px;
+    border: 1px dashed rgba(104,68,212,.09);
+    border-radius: 50%;
+    animation: pp-pulse 4s ease-out 1s infinite;
+}
+
+
+.pp-visual-center i {
+    position: relative;
+    z-index: 3;
+    font-size: 2.4rem;
+    animation: pp-star 6s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   CONNECTIONS
+============================================================ */
+
+.pp-connection {
+    position: absolute;
+    z-index: 2;
+    height: 1px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(104,68,212,.5) 0,
+            rgba(104,68,212,.5) 5px,
+            transparent 5px,
+            transparent 11px
+        );
+    transform-origin: left center;
+    animation: pp-flow 2s linear infinite;
+}
+
+.pp-connection.one {
+    width: 150px;
+    top: 160px;
+    left: 190px;
+    transform: rotate(14deg);
+}
+
+.pp-connection.two {
+    width: 150px;
+    top: 275px;
+    right: 180px;
+    transform: rotate(-13deg);
+    animation-delay: .7s;
+}
+
+.pp-connection.three {
+    width: 145px;
+    bottom: 135px;
+    left: 180px;
+    transform: rotate(-17deg);
+    animation-delay: 1.3s;
+}
+
+
+/* ============================================================
+   FLOATING CARDS
+============================================================ */
+
+.pp-floating-card {
+    position: absolute;
+    z-index: 5;
+    width: 235px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 18px;
+    background: rgba(255,255,255,.91);
+    box-shadow: 0 22px 50px rgba(53,36,94,.12);
+    backdrop-filter: blur(14px);
+    will-change: transform;
+    transition:
+        box-shadow .3s ease,
+        filter .3s ease;
+}
+
+.pp-floating-card:hover {
+    z-index: 20;
+    filter: brightness(1.02);
+    box-shadow: 0 30px 70px rgba(53,36,94,.20);
+}
+
+
+.pp-floating-card.problem {
+    top: 65px;
+    left: 0;
+    animation: pp-problem-card 8s ease-in-out infinite;
+}
+
+.pp-floating-card.solution {
+    top: 225px;
+    right: 0;
+    animation: pp-solution-card 9s ease-in-out infinite;
+}
+
+.pp-floating-card.project {
+    bottom: 35px;
+    left: 75px;
+    animation: pp-project-card 8.5s ease-in-out infinite;
+}
+
+
+.pp-mini-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 11px;
+    color: #817b8d;
+    font-size: .69rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+
+.pp-mini-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: #eee9ff;
+    color: #6844d4;
+}
+
+
+.pp-floating-card h3 {
+    margin: 0;
+    color: #272135;
+    font-size: .96rem;
+    line-height: 1.4;
+    font-weight: 800;
+}
+
+.pp-floating-card p {
+    margin: 7px 0 0;
+    color: #858091;
+    font-size: .76rem;
+    line-height: 1.5;
+}
+
+.pp-floating-status {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #edf9f2;
+    color: #2c8a5c;
+    font-size: .65rem;
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   PROCESS
+============================================================ */
+
+.pp-process-section {
+    position: relative;
+    z-index: 2;
+    padding: 30px 0 90px;
+}
+
+
+.pp-process-header {
+    max-width: 650px;
+    margin-bottom: 35px;
+}
+
+
+.pp-kicker {
+    margin-bottom: 8px;
+    color: #6844d4;
+    font-size: .72rem;
+    font-weight: 850;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+}
+
+
+.pp-section-title {
+    margin: 0;
+    color: #201a2e;
+    font-size: clamp(2rem,4vw,3rem);
+    line-height: 1.05;
+    letter-spacing: -.045em;
+    font-weight: 850;
+}
+
+
+.pp-section-subtitle {
+    margin: 12px 0 0;
+    color: #85808f;
+    line-height: 1.7;
+}
+
+
+.pp-process-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 16px;
+}
+
+
+.pp-process-card {
+    position: relative;
+    min-height: 210px;
+    padding: 24px;
+    overflow: hidden;
+    border: 1px solid #ebe7f2;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 15px 40px rgba(42,30,70,.055);
+    transition:
+        transform .35s cubic-bezier(.16,1,.3,1),
+        box-shadow .35s ease;
+}
+
+
+.pp-process-card:hover {
+    transform: translateY(-10px) rotateX(2deg);
+    box-shadow: 0 28px 60px rgba(42,30,70,.11);
+}
+
+
+.pp-process-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 70%;
+    height: 100%;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.75),
+            transparent
+        );
+    transform: skewX(-18deg);
+}
+
+
+.pp-process-card.pp-active::before {
+    animation: pp-card-sweep 1.1s ease .25s;
+}
+
+
+.pp-process-number {
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    color: #f0edf7;
+    font-size: 4rem;
+    line-height: 1;
+    font-weight: 850;
+}
+
+
+.pp-process-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+    background: #f0ebff;
+    color: #6844d4;
+    font-size: 1.2rem;
+}
+
+
+.pp-process-card h3 {
+    position: relative;
+    margin: 0 0 8px;
+    color: #282135;
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.pp-process-card p {
+    position: relative;
+    margin: 0;
+    color: #85808f;
+    font-size: .82rem;
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   TRENDING
+============================================================ */
+
+.pp-trending {
+    position: relative;
+    z-index: 2;
+    padding: 80px 0 105px;
+    background: #f5f2fa;
+}
+
+
+.pp-trending-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+
+.pp-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #6844d4;
+    text-decoration: none;
+    font-size: .86rem;
+    font-weight: 800;
+    transition: transform .25s ease;
+}
+
+.pp-view-all:hover {
+    color: #4e2da9;
+    transform: translateX(5px);
+}
+
+
+.pp-problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 18px;
+}
+
+
+.pp-problem-card {
+    position: relative;
+    min-height: 320px;
+    padding: 25px;
+    overflow: hidden;
+    border: 1px solid #e8e3ef;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 16px 42px rgba(42,30,70,.06);
+    transition:
+        transform .4s cubic-bezier(.16,1,.3,1),
+        box-shadow .35s ease;
+}
+
+
+.pp-problem-card:hover {
+    transform: translateY(-10px) rotateX(1deg);
+    box-shadow: 0 28px 60px rgba(42,30,70,.12);
+}
+
+
+.pp-problem-card::before {
+    content: "";
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    right: -75px;
+    bottom: -75px;
+    border-radius: 50%;
+    background: #f0ebff;
+    transition: transform .5s cubic-bezier(.16,1,.3,1);
+}
+
+
+.pp-problem-card:hover::before {
+    transform: scale(1.45);
+}
+
+
+.pp-problem-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(111,72,216,.055),
+            transparent
+        );
+    transform: skewX(-18deg);
+}
+
+
+.pp-problem-card.pp-active::after {
+    animation: pp-problem-sweep 1.3s ease .25s;
+}
+
+
+.pp-problem-top {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 26px;
+}
+
+
+.pp-category {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #f0ebff;
+    color: #6844d4;
+    font-size: .67rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+
+.pp-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #31855b;
+    font-size: .68rem;
+    font-weight: 800;
+}
+
+.pp-open::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #48ad78;
+}
+
+
+.pp-problem-title {
+    position: relative;
+    z-index: 2;
+    display: block;
+    min-height: 72px;
+    margin-bottom: 12px;
+    color: #241d32;
+    text-decoration: none;
+    font-size: 1.22rem;
+    line-height: 1.35;
+    letter-spacing: -.02em;
+    font-weight: 850;
+}
+
+.pp-problem-title:hover {
+    color: #6844d4;
+}
+
+
+.pp-problem-description {
+    position: relative;
+    z-index: 2;
+    display: -webkit-box;
+    min-height: 72px;
+    overflow: hidden;
+    color: #85808f;
+    font-size: .84rem;
+    line-height: 1.65;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+
+.pp-problem-bottom {
+    position: absolute;
+    z-index: 3;
+    right: 25px;
+    bottom: 22px;
+    left: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 1px solid #efebf3;
+    color: #8b8594;
+    font-size: .7rem;
+}
+
+
+.pp-problem-bottom span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+.pp-empty {
+    grid-column: 1/-1;
+    padding: 60px 30px;
+    text-align: center;
+    border: 1px dashed #d8d0e5;
+    border-radius: 24px;
+    background: #fff;
+}
+
+
+/* ============================================================
+   KEYFRAMES
+============================================================ */
+
+@keyframes pp-dot {
+
+    0%,100% {
+        transform: scale(1);
+        opacity: .6;
     }
 
-
-    /* =========================================================
-       BACKGROUND DECORATION
-    ========================================================= */
-
-    .pp-home::before {
-        content: "";
-        position: absolute;
-        width: 520px;
-        height: 520px;
-        top: -220px;
-        left: -180px;
-        border-radius: 50%;
-        background: rgba(116, 82, 220, 0.10);
-        filter: blur(10px);
-        pointer-events: none;
+    50% {
+        transform: scale(1.4);
+        opacity: 1;
     }
 
+}
 
-    .pp-home::after {
-        content: "";
-        position: absolute;
-        width: 450px;
-        height: 450px;
-        top: 100px;
-        right: -220px;
-        border-radius: 50%;
-        background: rgba(111, 168, 255, 0.10);
-        filter: blur(10px);
-        pointer-events: none;
+
+@keyframes pp-world {
+
+    0%,100% {
+        transform: translateX(-50%) scale(1);
     }
 
-
-    /* =========================================================
-       HERO
-    ========================================================= */
-
-    .pp-hero {
-        position: relative;
-        z-index: 1;
-        padding: 70px 0 85px;
+    50% {
+        transform: translateX(-50%) scale(1.055);
     }
 
+}
+
+
+@keyframes pp-ring {
+
+    from {
+        transform: translateX(-50%) rotate(0deg);
+    }
+
+    to {
+        transform: translateX(-50%) rotate(360deg);
+    }
+
+}
+
+
+@keyframes pp-core {
+
+    0%,100% {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    35% {
+        transform: translateX(-50%) translateY(-9px) scale(1.035);
+    }
+
+    70% {
+        transform: translateX(-50%) translateY(5px) scale(.985);
+    }
+
+}
+
+
+@keyframes pp-pulse {
+
+    0% {
+        transform: scale(.72);
+        opacity: .7;
+    }
+
+    70% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+
+}
+
+
+@keyframes pp-star {
+
+    0%,100% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(-10deg) scale(1.1);
+    }
+
+    50% {
+        transform: rotate(10deg) scale(.94);
+    }
+
+    75% {
+        transform: rotate(-5deg) scale(1.06);
+    }
+
+}
+
+
+@keyframes pp-flow {
+
+    from {
+        background-position: 0 0;
+        opacity: .25;
+    }
+
+    50% {
+        opacity: .85;
+    }
+
+    to {
+        background-position: 42px 0;
+        opacity: .25;
+    }
+
+}
+
+
+/* ============================================================
+   FLOATING CARD MOTION
+============================================================ */
+
+@keyframes pp-problem-card {
+
+    0%,100% {
+        transform: translate3d(0,0,0) rotate(-4deg);
+    }
+
+    25% {
+        transform: translate3d(14px,-14px,0) rotate(-1deg);
+    }
+
+    50% {
+        transform: translate3d(-5px,-24px,0) rotate(-6deg);
+    }
+
+    75% {
+        transform: translate3d(-13px,-7px,0) rotate(-2deg);
+    }
+
+}
+
+
+@keyframes pp-solution-card {
+
+    0%,100% {
+        transform: translate3d(0,0,0) rotate(4deg);
+    }
+
+    25% {
+        transform: translate3d(-13px,-9px,0) rotate(1deg);
+    }
+
+    50% {
+        transform: translate3d(-8px,16px,0) rotate(6deg);
+    }
+
+    75% {
+        transform: translate3d(9px,7px,0) rotate(2deg);
+    }
+
+}
+
+
+@keyframes pp-project-card {
+
+    0%,100% {
+        transform: translate3d(0,0,0) rotate(-2deg);
+    }
+
+    25% {
+        transform: translate3d(13px,-11px,0) rotate(1deg);
+    }
+
+    50% {
+        transform: translate3d(21px,-2px,0) rotate(-4deg);
+    }
+
+    75% {
+        transform: translate3d(7px,14px,0) rotate(-1deg);
+    }
+
+}
+
+
+/* ============================================================
+   CARD REVEAL SWEEPS
+============================================================ */
+
+@keyframes pp-card-sweep {
+
+    0% {
+        left: -120%;
+    }
+
+    100% {
+        left: 150%;
+    }
+
+}
+
+
+@keyframes pp-problem-sweep {
+
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 140%;
+    }
+
+}
+
+
+/* ============================================================
+   PARALLAX CLASS
+============================================================ */
+
+.pp-parallax {
+    will-change: transform;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width:1100px) {
 
     .pp-hero-grid {
-        display: grid;
-        grid-template-columns: 1.05fr 0.95fr;
-        align-items: center;
-        gap: 70px;
+        grid-template-columns: 1fr;
+        gap: 35px;
     }
-
 
     .pp-hero-content {
-        position: relative;
-        z-index: 3;
+        text-align: center;
     }
-
-
-    .pp-eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 9px;
-        padding: 8px 13px;
-        border: 1px solid #e4ddf7;
-        border-radius: 999px;
-        background: #f4f0ff;
-        color: #6541c8;
-        font-size: 0.76rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-    }
-
-
-    .pp-eyebrow-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #7049d8;
-        box-shadow: 0 0 0 5px rgba(112, 73, 216, 0.10);
-    }
-
-
-    .pp-hero-title {
-        margin: 23px 0 0;
-        max-width: 720px;
-        color: #171326;
-        font-size: clamp(3.4rem, 6vw, 6.4rem);
-        line-height: 0.94;
-        letter-spacing: -0.065em;
-        font-weight: 850;
-    }
-
-
-    .pp-hero-title .accent {
-        color: #6a46d5;
-    }
-
-
-    .pp-hero-title .outline {
-        color: transparent;
-        -webkit-text-stroke: 1.5px #6a46d5;
-    }
-
 
     .pp-hero-description {
-        max-width: 610px;
-        margin: 28px 0 0;
-        color: #777184;
-        font-size: 1.08rem;
-        line-height: 1.8;
+        margin-left: auto;
+        margin-right: auto;
     }
-
 
     .pp-hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 32px;
+        justify-content: center;
     }
-
-
-    .pp-primary-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 14px 21px;
-        border-radius: 12px;
-        background: #6844d4;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 750;
-        box-shadow: 0 15px 30px rgba(104, 68, 212, 0.22);
-        transition: all 0.2s ease;
-    }
-
-
-    .pp-primary-btn:hover {
-        color: #fff;
-        transform: translateY(-2px);
-        box-shadow: 0 19px 38px rgba(104, 68, 212, 0.28);
-    }
-
-
-    .pp-secondary-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 14px 21px;
-        border: 1px solid #ded8eb;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.8);
-        color: #302a3d;
-        text-decoration: none;
-        font-weight: 750;
-        transition: all 0.2s ease;
-    }
-
-
-    .pp-secondary-btn:hover {
-        color: #6844d4;
-        border-color: #bdb0df;
-        transform: translateY(-2px);
-    }
-
-
-    /* =========================================================
-       HERO VISUAL
-    ========================================================= */
 
     .pp-hero-visual {
-        position: relative;
-        min-height: 510px;
-        isolation: isolate;
-    }
-
-
-    /* =========================================================
-       UNIQUE HERO MOTION SYSTEM
-       ---------------------------------------------------------
-       The visual behaves like a small living ecosystem:
-       - orb slowly breathes
-       - ring rotates independently
-       - center gently pulls/pushes against the orb
-       - cards follow different "gravitational" paths
-       - connection lines move like flowing data
-    ========================================================= */
-
-
-    .pp-visual-orb {
-        position: absolute;
-        width: 410px;
-        height: 410px;
-        top: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-radius: 50%;
-        background:
-            radial-gradient(
-                circle at 35% 30%,
-                #eee8ff,
-                #ddd3fa 48%,
-                #f8f6ff 72%
-            );
-
-        animation:
-            pp-orb-breathe 7s ease-in-out infinite,
-            pp-orb-shift 13s ease-in-out infinite;
-    }
-
-
-    .pp-visual-ring {
-        position: absolute;
-        width: 440px;
-        height: 440px;
-        top: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        border: 1px dashed rgba(104, 68, 212, 0.22);
-        border-radius: 50%;
-
-        animation:
-            pp-ring-orbit 18s linear infinite,
-            pp-ring-breathe 6s ease-in-out infinite;
-    }
-
-
-    .pp-floating-card {
-        position: absolute;
-        z-index: 3;
-        width: 235px;
-        padding: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.91);
-        box-shadow: 0 22px 50px rgba(53, 36, 94, 0.12);
-        backdrop-filter: blur(14px);
-        transform-origin: center center;
-        will-change: transform;
-    }
-
-
-    /*
-       Each card has its own movement.
-       They don't simply move up/down together.
-    */
-
-    .pp-floating-card.problem {
-        top: 65px;
-        left: 5px;
-
-        animation:
-            pp-card-problem 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-    }
-
-
-    .pp-floating-card.solution {
-        top: 225px;
-        right: 0;
-
-        animation:
-            pp-card-solution 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-    }
-
-
-    .pp-floating-card.project {
-        bottom: 35px;
-        left: 75px;
-
-        animation:
-            pp-card-project 8.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-    }
-
-
-    /* =========================================================
-       CARD MOTION
-       ========================================================= */
-
-    @keyframes pp-card-problem {
-
-        0%,
-        100% {
-            transform:
-                translate3d(0, 0, 0)
-                rotate(-4deg);
-        }
-
-        25% {
-            transform:
-                translate3d(10px, -13px, 0)
-                rotate(-1deg);
-        }
-
-        50% {
-            transform:
-                translate3d(-4px, -21px, 0)
-                rotate(-6deg);
-        }
-
-        75% {
-            transform:
-                translate3d(-12px, -7px, 0)
-                rotate(-2deg);
-        }
-
-    }
-
-
-    @keyframes pp-card-solution {
-
-        0%,
-        100% {
-            transform:
-                translate3d(0, 0, 0)
-                rotate(4deg);
-        }
-
-        25% {
-            transform:
-                translate3d(-12px, -8px, 0)
-                rotate(1deg);
-        }
-
-        50% {
-            transform:
-                translate3d(-7px, 15px, 0)
-                rotate(6deg);
-        }
-
-        75% {
-            transform:
-                translate3d(8px, 7px, 0)
-                rotate(2deg);
-        }
-
-    }
-
-
-    @keyframes pp-card-project {
-
-        0%,
-        100% {
-            transform:
-                translate3d(0, 0, 0)
-                rotate(-2deg);
-        }
-
-        25% {
-            transform:
-                translate3d(12px, -10px, 0)
-                rotate(1deg);
-        }
-
-        50% {
-            transform:
-                translate3d(20px, -2px, 0)
-                rotate(-4deg);
-        }
-
-        75% {
-            transform:
-                translate3d(6px, 13px, 0)
-                rotate(-1deg);
-        }
-
-    }
-
-
-    /* =========================================================
-       CARD HOVER
-       ========================================================= */
-
-    .pp-floating-card:hover {
-        z-index: 10;
-        box-shadow:
-            0 30px 65px rgba(53, 36, 94, 0.18),
-            0 0 0 1px rgba(104, 68, 212, 0.08);
-    }
-
-
-    /* =========================================================
-       CENTER ORB
-       ========================================================= */
-
-    .pp-visual-center {
-        position: absolute;
-        z-index: 5;
-        top: 170px;
-        left: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 125px;
-        height: 125px;
-        transform: translateX(-50%);
-        border: 10px solid rgba(255, 255, 255, 0.65);
-        border-radius: 50%;
-        background: #6844d4;
-        color: #fff;
-        box-shadow:
-            0 25px 55px rgba(104, 68, 212, 0.28),
-            0 0 0 1px rgba(104, 68, 212, 0.1);
-
-        animation:
-            pp-center-float 5.5s ease-in-out infinite,
-            pp-center-glow 4s ease-in-out infinite;
-    }
-
-
-    .pp-visual-center::before {
-        content: "";
-        position: absolute;
-        inset: -18px;
-        border: 1px solid rgba(104, 68, 212, 0.18);
-        border-radius: 50%;
-
-        animation:
-            pp-center-pulse 3.5s ease-out infinite;
-    }
-
-
-    .pp-visual-center::after {
-        content: "";
-        position: absolute;
-        inset: -30px;
-        border: 1px solid rgba(104, 68, 212, 0.08);
-        border-radius: 50%;
-
-        animation:
-            pp-center-pulse 3.5s ease-out 1.2s infinite;
-    }
-
-
-    .pp-visual-center i {
-        position: relative;
-        z-index: 2;
-        font-size: 2.4rem;
-
-        animation:
-            pp-stars-spin 7s ease-in-out infinite;
-    }
-
-
-    /* =========================================================
-       ORB MOTION
-       ========================================================= */
-
-    @keyframes pp-orb-breathe {
-
-        0%,
-        100% {
-            transform: translateX(-50%) scale(1);
-        }
-
-        50% {
-            transform: translateX(-50%) scale(1.045);
-        }
-
-    }
-
-
-    @keyframes pp-orb-shift {
-
-        0%,
-        100% {
-            filter:
-                hue-rotate(0deg)
-                brightness(1);
-        }
-
-        50% {
-            filter:
-                hue-rotate(8deg)
-                brightness(1.035);
-        }
-
-    }
-
-
-    @keyframes pp-ring-orbit {
-
-        from {
-            transform:
-                translateX(-50%)
-                rotate(0deg);
-        }
-
-        to {
-            transform:
-                translateX(-50%)
-                rotate(360deg);
-        }
-
-    }
-
-
-    @keyframes pp-ring-breathe {
-
-        0%,
-        100% {
-            opacity: 0.7;
-        }
-
-        50% {
-            opacity: 1;
-        }
-
-    }
-
-
-    /* =========================================================
-       CENTER MOTION
-       ========================================================= */
-
-    @keyframes pp-center-float {
-
-        0%,
-        100% {
-            transform:
-                translateX(-50%)
-                translateY(0)
-                scale(1);
-        }
-
-        35% {
-            transform:
-                translateX(-50%)
-                translateY(-7px)
-                scale(1.025);
-        }
-
-        70% {
-            transform:
-                translateX(-50%)
-                translateY(5px)
-                scale(0.985);
-        }
-
-    }
-
-
-    @keyframes pp-center-glow {
-
-        0%,
-        100% {
-            box-shadow:
-                0 25px 55px rgba(104, 68, 212, 0.28),
-                0 0 0 1px rgba(104, 68, 212, 0.1);
-        }
-
-        50% {
-            box-shadow:
-                0 30px 70px rgba(104, 68, 212, 0.38),
-                0 0 35px rgba(104, 68, 212, 0.16),
-                0 0 0 1px rgba(104, 68, 212, 0.15);
-        }
-
-    }
-
-
-    @keyframes pp-center-pulse {
-
-        0% {
-            transform: scale(0.72);
-            opacity: 0.75;
-        }
-
-        70% {
-            transform: scale(1.15);
-            opacity: 0;
-        }
-
-        100% {
-            transform: scale(1.15);
-            opacity: 0;
-        }
-
-    }
-
-
-    @keyframes pp-stars-spin {
-
-        0%,
-        100% {
-            transform:
-                rotate(0deg)
-                scale(1);
-        }
-
-        25% {
-            transform:
-                rotate(-8deg)
-                scale(1.08);
-        }
-
-        50% {
-            transform:
-                rotate(8deg)
-                scale(0.94);
-        }
-
-        75% {
-            transform:
-                rotate(-4deg)
-                scale(1.06);
-        }
-
-    }
-
-
-    /* =========================================================
-       CONNECTION LINES
-       ========================================================= */
-
-    .pp-connection {
-        position: absolute;
-        z-index: 1;
-        height: 1px;
-        background: repeating-linear-gradient(
-            90deg,
-            #9b88d5 0,
-            #9b88d5 5px,
-            transparent 5px,
-            transparent 10px
-        );
-        transform-origin: left center;
-        background-size: 20px 100%;
-
-        animation:
-            pp-data-flow 2.2s linear infinite;
-    }
-
-
-    .pp-connection.one {
-        width: 145px;
-        top: 160px;
-        left: 190px;
-        transform: rotate(15deg);
-        animation-delay: 0s;
-    }
-
-
-    .pp-connection.two {
-        width: 145px;
-        top: 270px;
-        right: 180px;
-        transform: rotate(-12deg);
-        animation-delay: 0.7s;
-    }
-
-
-    .pp-connection.three {
-        width: 145px;
-        bottom: 130px;
-        left: 175px;
-        transform: rotate(-17deg);
-        animation-delay: 1.2s;
-    }
-
-
-    @keyframes pp-data-flow {
-
-        from {
-            background-position: 0 0;
-            opacity: 0.35;
-        }
-
-        50% {
-            opacity: 0.8;
-        }
-
-        to {
-            background-position: 40px 0;
-            opacity: 0.35;
-        }
-
-    }
-
-
-    /* =========================================================
-       MICRO FLOATING LIGHT
-       ========================================================= */
-
-    .pp-hero-visual::before,
-    .pp-hero-visual::after {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #8d72e2;
-        box-shadow:
-            0 0 0 6px rgba(141, 114, 226, 0.08),
-            0 0 20px rgba(104, 68, 212, 0.22);
-        pointer-events: none;
-    }
-
-
-    .pp-hero-visual::before {
-        top: 95px;
-        right: 80px;
-
-        animation:
-            pp-particle-one 6s ease-in-out infinite;
-    }
-
-
-    .pp-hero-visual::after {
-        bottom: 85px;
-        right: 190px;
-        width: 5px;
-        height: 5px;
-
-        animation:
-            pp-particle-two 7s ease-in-out infinite;
-    }
-
-
-    @keyframes pp-particle-one {
-
-        0%,
-        100% {
-            transform:
-                translate3d(0, 0, 0)
-                scale(1);
-            opacity: 0.35;
-        }
-
-        50% {
-            transform:
-                translate3d(-25px, 28px, 0)
-                scale(1.6);
-            opacity: 1;
-        }
-
-    }
-
-
-    @keyframes pp-particle-two {
-
-        0%,
-        100% {
-            transform:
-                translate3d(0, 0, 0);
-            opacity: 0.2;
-        }
-
-        40% {
-            transform:
-                translate3d(18px, -25px, 0);
-            opacity: 0.8;
-        }
-
-        80% {
-            transform:
-                translate3d(-12px, -40px, 0);
-            opacity: 0.25;
-        }
-
-    }
-
-
-    .pp-mini-label {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        margin-bottom: 11px;
-        color: #817b8d;
-        font-size: 0.7rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-    }
-
-
-    .pp-mini-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 30px;
-        height: 30px;
-        border-radius: 9px;
-        background: #eee9ff;
-        color: #6844d4;
-    }
-
-
-    .pp-floating-card h3 {
-        margin: 0;
-        color: #272135;
-        font-size: 0.96rem;
-        line-height: 1.4;
-        font-weight: 800;
-    }
-
-
-    .pp-floating-card p {
-        margin: 7px 0 0;
-        color: #858091;
-        font-size: 0.76rem;
-        line-height: 1.5;
-    }
-
-
-    .pp-floating-status {
-        display: inline-block;
-        margin-top: 12px;
-        padding: 5px 9px;
-        border-radius: 999px;
-        background: #edf9f2;
-        color: #2c8a5c;
-        font-size: 0.65rem;
-        font-weight: 800;
-    }
-
-
-    /* =========================================================
-       PROCESS
-    ========================================================= */
-
-    .pp-process-section {
-        position: relative;
-        z-index: 2;
-        padding: 25px 0 80px;
-    }
-
-
-    .pp-process-header {
+        width: 100%;
         max-width: 650px;
-        margin-bottom: 32px;
+        margin: auto;
     }
 
-
-    .pp-kicker {
-        margin-bottom: 8px;
-        color: #6844d4;
-        font-size: 0.72rem;
-        font-weight: 850;
-        letter-spacing: 0.11em;
-        text-transform: uppercase;
-    }
+}
 
 
-    .pp-section-title {
-        margin: 0;
-        color: #201a2e;
-        font-size: clamp(2rem, 4vw, 3rem);
-        line-height: 1.05;
-        letter-spacing: -0.045em;
-        font-weight: 850;
-    }
-
-
-    .pp-section-subtitle {
-        margin: 12px 0 0;
-        color: #85808f;
-        line-height: 1.7;
-    }
-
+@media (max-width:900px) {
 
     .pp-process-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
+        grid-template-columns: repeat(2,1fr);
     }
-
-
-    .pp-process-card {
-        position: relative;
-        min-height: 205px;
-        padding: 24px;
-        overflow: hidden;
-        border: 1px solid #ebe7f2;
-        border-radius: 22px;
-        background: #fff;
-        box-shadow: 0 15px 40px rgba(42, 30, 70, 0.055);
-        transition: 0.22s ease;
-    }
-
-
-    .pp-process-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 22px 50px rgba(42, 30, 70, 0.09);
-    }
-
-
-    .pp-process-number {
-        position: absolute;
-        right: 16px;
-        top: 10px;
-        color: #f0edf7;
-        font-size: 4rem;
-        line-height: 1;
-        font-weight: 850;
-    }
-
-
-    .pp-process-icon {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 46px;
-        height: 46px;
-        margin-bottom: 22px;
-        border-radius: 14px;
-        background: #f0ebff;
-        color: #6844d4;
-        font-size: 1.2rem;
-    }
-
-
-    .pp-process-card h3 {
-        position: relative;
-        margin: 0 0 8px;
-        color: #282135;
-        font-size: 1.05rem;
-        font-weight: 800;
-    }
-
-
-    .pp-process-card p {
-        position: relative;
-        margin: 0;
-        color: #85808f;
-        font-size: 0.82rem;
-        line-height: 1.6;
-    }
-
-
-    /* =========================================================
-       TRENDING PROBLEMS
-    ========================================================= */
-
-    .pp-trending {
-        position: relative;
-        z-index: 2;
-        padding: 75px 0 100px;
-        background: #f5f2fa;
-    }
-
-
-    .pp-trending-header {
-        display: flex;
-        align-items: end;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 30px;
-    }
-
-
-    .pp-view-all {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        color: #6844d4;
-        text-decoration: none;
-        font-size: 0.86rem;
-        font-weight: 800;
-    }
-
-
-    .pp-view-all:hover {
-        color: #4e2da9;
-    }
-
 
     .pp-problem-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
+        grid-template-columns: 1fr;
     }
 
+}
 
-    .pp-problem-card {
-        position: relative;
-        min-height: 320px;
-        padding: 25px;
-        overflow: hidden;
-        border: 1px solid #e8e3ef;
-        border-radius: 24px;
-        background: #fff;
-        box-shadow: 0 16px 42px rgba(42, 30, 70, 0.06);
-        transition: 0.22s ease;
+
+@media (max-width:600px) {
+
+    .pp-hero {
+        padding: 45px 0 60px;
     }
 
-
-    .pp-problem-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 25px 55px rgba(42, 30, 70, 0.10);
+    .pp-hero-title {
+        font-size: 3.15rem;
     }
 
-
-    .pp-problem-card::after {
-        content: "";
-        position: absolute;
-        width: 130px;
-        height: 130px;
-        right: -50px;
-        bottom: -50px;
-        border-radius: 50%;
-        background: #f0ebff;
+    .pp-hero-description {
+        font-size: .92rem;
     }
 
-
-    .pp-problem-top {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 26px;
+    .pp-hero-visual {
+        min-height: 450px;
     }
 
-
-    .pp-category {
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: #f0ebff;
-        color: #6844d4;
-        font-size: 0.67rem;
-        font-weight: 850;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+    .pp-visual-orb {
+        width: 300px;
+        height: 300px;
     }
 
-
-    .pp-open {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        color: #31855b;
-        font-size: 0.68rem;
-        font-weight: 800;
+    .pp-visual-ring {
+        width: 330px;
+        height: 330px;
     }
 
-
-    .pp-open::before {
-        content: "";
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #48ad78;
+    .pp-visual-center {
+        top: 145px;
+        width: 95px;
+        height: 95px;
     }
 
-
-    .pp-problem-title {
-        position: relative;
-        z-index: 2;
-        display: block;
-        min-height: 72px;
-        margin-bottom: 12px;
-        color: #241d32;
-        text-decoration: none;
-        font-size: 1.22rem;
-        line-height: 1.35;
-        letter-spacing: -0.02em;
-        font-weight: 850;
+    .pp-floating-card {
+        width: 190px;
     }
 
-
-    .pp-problem-title:hover {
-        color: #6844d4;
+    .pp-floating-card.problem {
+        left: 0;
     }
 
-
-    .pp-problem-description {
-        position: relative;
-        z-index: 2;
-        display: -webkit-box;
-        min-height: 72px;
-        overflow: hidden;
-        color: #85808f;
-        font-size: 0.84rem;
-        line-height: 1.65;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
+    .pp-floating-card.solution {
+        top: 205px;
+        right: 0;
     }
 
-
-    .pp-problem-bottom {
-        position: absolute;
-        z-index: 3;
-        right: 25px;
-        bottom: 22px;
-        left: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 15px;
-        border-top: 1px solid #efebf3;
-        color: #8b8594;
-        font-size: 0.7rem;
+    .pp-floating-card.project {
+        left: 30px;
+        bottom: 15px;
     }
 
-
-    .pp-problem-bottom span {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
+    .pp-connection {
+        display: none;
     }
 
-
-    .pp-empty {
-        grid-column: 1 / -1;
-        padding: 60px 30px;
-        text-align: center;
-        border: 1px dashed #d8d0e5;
-        border-radius: 24px;
-        background: #fff;
+    .pp-process-grid {
+        grid-template-columns: 1fr;
     }
 
-
-    /* =========================================================
-       ACCESSIBILITY
-    ========================================================= */
-
-    .pp-floating-card:focus-within,
-    .pp-visual-center:focus-within {
-        outline: 3px solid rgba(104, 68, 212, 0.35);
-        outline-offset: 5px;
+    .pp-trending-header {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
+}
 
-    /* =========================================================
-       REDUCED MOTION
-       ========================================================= */
 
-    @media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
 
-        .pp-visual-orb,
-        .pp-visual-ring,
-        .pp-floating-card,
-        .pp-visual-center,
-        .pp-visual-center::before,
-        .pp-visual-center::after,
-        .pp-visual-center i,
-        .pp-connection,
-        .pp-hero-visual::before,
-        .pp-hero-visual::after {
-            animation: none !important;
-        }
-
+    .pp-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
     }
 
-
-    /* =========================================================
-       TABLET
-    ========================================================= */
-
-    @media (max-width: 1100px) {
-
-        .pp-hero-grid {
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        .pp-hero-content {
-            text-align: center;
-        }
-
-        .pp-hero-description {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .pp-hero-actions {
-            justify-content: center;
-        }
-
-        .pp-hero-visual {
-            max-width: 650px;
-            width: 100%;
-            margin: auto;
-        }
-
+    .pp-scroll-field,
+    .pp-visual-orb,
+    .pp-visual-ring,
+    .pp-visual-center,
+    .pp-visual-center::before,
+    .pp-visual-center::after,
+    .pp-visual-center i,
+    .pp-floating-card,
+    .pp-connection,
+    .pp-eyebrow-dot {
+        animation: none !important;
     }
 
-
-    @media (max-width: 900px) {
-
-        .pp-process-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .pp-problem-grid {
-            grid-template-columns: 1fr;
-        }
-
-    }
-
-
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
-    @media (max-width: 600px) {
-
-        .pp-hero {
-            padding: 45px 0 55px;
-        }
-
-        .pp-hero-title {
-            font-size: 3.15rem;
-        }
-
-        .pp-hero-visual {
-            min-height: 440px;
-        }
-
-        .pp-visual-orb {
-            width: 300px;
-            height: 300px;
-        }
-
-        .pp-visual-ring {
-            width: 330px;
-            height: 330px;
-        }
-
-        .pp-visual-center {
-            top: 145px;
-            width: 95px;
-            height: 95px;
-        }
-
-        .pp-floating-card {
-            width: 190px;
-        }
-
-        .pp-floating-card.problem {
-            left: 0;
-        }
-
-        .pp-floating-card.solution {
-            right: 0;
-            top: 205px;
-        }
-
-        .pp-floating-card.project {
-            left: 30px;
-            bottom: 15px;
-        }
-
-        .pp-connection {
-            display: none;
-        }
-
-        .pp-process-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .pp-trending-header {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-    }
+}
 
 </style>
 
@@ -1285,9 +1214,22 @@
 <div class="pp-home">
 
 
-    <!-- =====================================================
+    <!-- ========================================================
+         MOVING BACKGROUND FIELD
+    ========================================================= -->
+
+    <div class="pp-scroll-field" aria-hidden="true">
+
+        <div class="pp-field-orb one pp-parallax"></div>
+        <div class="pp-field-orb two pp-parallax"></div>
+        <div class="pp-field-orb three pp-parallax"></div>
+
+    </div>
+
+
+    <!-- ========================================================
          HERO
-    ====================================================== -->
+    ========================================================= -->
 
     <section class="pp-hero">
 
@@ -1296,17 +1238,24 @@
             <div class="pp-hero-grid">
 
 
-                <!-- HERO CONTENT -->
-
                 <div class="pp-hero-content">
 
-                    <span class="pp-eyebrow">
+                    <span
+                        class="pp-eyebrow pp-reveal"
+                        style="--pp-delay:80ms;"
+                    >
+
                         <span class="pp-eyebrow-dot"></span>
+
                         Community powered problem solving
+
                     </span>
 
 
-                    <h1 class="pp-hero-title">
+                    <h1
+                        class="pp-hero-title pp-reveal"
+                        style="--pp-delay:180ms;"
+                    >
 
                         Real Problems.
 
@@ -1323,17 +1272,21 @@
                     </h1>
 
 
-                    <p class="pp-hero-description">
-
+                    <p
+                        class="pp-hero-description pp-reveal"
+                        style="--pp-delay:300ms;"
+                    >
                         ProblemPool brings together people who see
                         problems and people who want to solve them.
                         Discover challenges, share ideas, build teams,
                         and turn meaningful solutions into real projects.
-
                     </p>
 
 
-                    <div class="pp-hero-actions">
+                    <div
+                        class="pp-hero-actions pp-reveal"
+                        style="--pp-delay:420ms;"
+                    >
 
                         <a
                             href="{% url 'problems:list' %}"
@@ -1371,9 +1324,14 @@
                 </div>
 
 
-                <!-- HERO VISUAL -->
+                <!-- =================================================
+                     HERO VISUAL
+                ================================================== -->
 
-                <div class="pp-hero-visual">
+                <div
+                    class="pp-hero-visual pp-reveal pp-parallax"
+                    style="--pp-delay:260ms;"
+                >
 
                     <div class="pp-visual-orb"></div>
 
@@ -1392,7 +1350,7 @@
                     </div>
 
 
-                    <!-- PROBLEM CARD -->
+                    <!-- PROBLEM -->
 
                     <div class="pp-floating-card problem">
 
@@ -1426,7 +1384,7 @@
                     </div>
 
 
-                    <!-- SOLUTION CARD -->
+                    <!-- SOLUTION -->
 
                     <div class="pp-floating-card solution">
 
@@ -1455,7 +1413,7 @@
                     </div>
 
 
-                    <!-- PROJECT CARD -->
+                    <!-- PROJECT -->
 
                     <div class="pp-floating-card project">
 
@@ -1492,15 +1450,19 @@
     </section>
 
 
-    <!-- =====================================================
+    <!-- ========================================================
          PROCESS
-    ====================================================== -->
+    ========================================================= -->
 
     <section class="pp-process-section">
 
         <div class="container">
 
-            <div class="pp-process-header">
+
+            <div
+                class="pp-process-header pp-reveal"
+                style="--pp-delay:80ms;"
+            >
 
                 <div class="pp-kicker">
                     How ProblemPool works
@@ -1521,7 +1483,10 @@
             <div class="pp-process-grid">
 
 
-                <article class="pp-process-card">
+                <article
+                    class="pp-process-card pp-reveal"
+                    style="--pp-delay:80ms;"
+                >
 
                     <span class="pp-process-number">
                         01
@@ -1543,7 +1508,10 @@
                 </article>
 
 
-                <article class="pp-process-card">
+                <article
+                    class="pp-process-card pp-reveal"
+                    style="--pp-delay:180ms;"
+                >
 
                     <span class="pp-process-number">
                         02
@@ -1565,7 +1533,10 @@
                 </article>
 
 
-                <article class="pp-process-card">
+                <article
+                    class="pp-process-card pp-reveal"
+                    style="--pp-delay:280ms;"
+                >
 
                     <span class="pp-process-number">
                         03
@@ -1587,7 +1558,10 @@
                 </article>
 
 
-                <article class="pp-process-card">
+                <article
+                    class="pp-process-card pp-reveal"
+                    style="--pp-delay:380ms;"
+                >
 
                     <span class="pp-process-number">
                         04
@@ -1615,15 +1589,19 @@
     </section>
 
 
-    <!-- =====================================================
+    <!-- ========================================================
          TRENDING PROBLEMS
-    ====================================================== -->
+    ========================================================= -->
 
     <section class="pp-trending">
 
         <div class="container">
 
-            <div class="pp-trending-header">
+
+            <div
+                class="pp-trending-header pp-reveal"
+                style="--pp-delay:80ms;"
+            >
 
                 <div>
 
@@ -1654,7 +1632,10 @@
 
                 {% for problem in trending_problems %}
 
-                    <article class="pp-problem-card">
+                    <article
+                        class="pp-problem-card pp-reveal"
+                        style="--pp-delay:{{ forloop.counter0 }}00ms;"
+                    >
 
 
                         <div class="pp-problem-top">
@@ -1732,6 +1713,7 @@
 
                 {% empty %}
 
+
                     <div class="pp-empty">
 
                         <i class="bi bi-inbox fs-1 text-muted"></i>
@@ -1767,8 +1749,8 @@
 
                     </div>
 
-                {% endfor %}
 
+                {% endfor %}
 
             </div>
 
@@ -1778,5 +1760,320 @@
 
 
 </div>
+
+
+<!-- ============================================================
+     SIGNATURE SCROLL ENGINE
+============================================================ -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const revealElements = document.querySelectorAll(".pp-reveal");
+
+    const parallaxElements = document.querySelectorAll(".pp-parallax");
+
+
+    /* ----------------------------------------------------------
+       REVEAL OBSERVER
+    ---------------------------------------------------------- */
+
+    const revealObserver = new IntersectionObserver(
+        function (entries) {
+
+            entries.forEach(function (entry) {
+
+                if (entry.isIntersecting) {
+
+                    const element = entry.target;
+
+                    const delay = element.style.getPropertyValue(
+                        "--pp-delay"
+                    );
+
+                    if (delay) {
+                        element.style.transitionDelay = delay;
+                    }
+
+                    element.classList.add("pp-active");
+
+                    /*
+                        Trigger a second visual event for cards.
+                    */
+
+                    if (
+                        element.classList.contains(
+                            "pp-process-card"
+                        ) ||
+                        element.classList.contains(
+                            "pp-problem-card"
+                        )
+                    ) {
+
+                        setTimeout(function () {
+
+                            element.classList.add("pp-active");
+
+                        }, 80);
+
+                    }
+
+                } else {
+
+                    /*
+                        Remove the state when leaving the viewport.
+                        This allows the animation to happen again
+                        when scrolling back upward.
+                    */
+
+                    entry.target.classList.remove("pp-active");
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.14,
+            rootMargin: "0px 0px -60px 0px"
+        }
+    );
+
+
+    revealElements.forEach(function (element) {
+
+        revealObserver.observe(element);
+
+    });
+
+
+    /* ----------------------------------------------------------
+       SCROLL PARALLAX
+    ---------------------------------------------------------- */
+
+    let ticking = false;
+
+
+    function updateParallax() {
+
+        const scrollY = window.scrollY;
+
+
+        parallaxElements.forEach(function (element) {
+
+            const rect = element.getBoundingClientRect();
+
+            const elementCenter =
+                rect.top + rect.height / 2;
+
+            const viewportCenter =
+                window.innerHeight / 2;
+
+            const distance =
+                elementCenter - viewportCenter;
+
+
+            /*
+                Gentle depth movement.
+                It deliberately stays small so the page remains
+                comfortable to use.
+            */
+
+            const speed =
+                element.classList.contains("pp-field-orb")
+                    ? 0.055
+                    : 0.035;
+
+
+            const movement =
+                distance * speed;
+
+
+            if (
+                element.classList.contains(
+                    "pp-field-orb"
+                )
+            ) {
+
+                const direction =
+                    element.classList.contains("two")
+                        ? -1
+                        : 1;
+
+
+                element.style.transform =
+                    "translate3d(" +
+                    (movement * direction) +
+                    "px," +
+                    (distance * speed) +
+                    "px,0)";
+
+            }
+
+        });
+
+
+        ticking = false;
+
+    }
+
+
+    function requestParallax() {
+
+        if (!ticking) {
+
+            window.requestAnimationFrame(
+                updateParallax
+            );
+
+            ticking = true;
+
+        }
+
+    }
+
+
+    window.addEventListener(
+        "scroll",
+        requestParallax,
+        {
+            passive: true
+        }
+    );
+
+
+    updateParallax();
+
+
+    /* ----------------------------------------------------------
+       HERO DEPTH RESPONSE
+    ---------------------------------------------------------- */
+
+    const heroVisual =
+        document.querySelector(".pp-hero-visual");
+
+
+    function updateHeroDepth() {
+
+        if (!heroVisual) {
+            return;
+        }
+
+
+        if (
+            window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches
+        ) {
+            return;
+        }
+
+
+        const rect =
+            heroVisual.getBoundingClientRect();
+
+
+        const viewportCenter =
+            window.innerHeight / 2;
+
+
+        const distance =
+            rect.top + rect.height / 2 -
+            viewportCenter;
+
+
+        const rotate =
+            Math.max(
+                -2,
+                Math.min(
+                    2,
+                    distance * 0.002
+                )
+            );
+
+
+        const translate =
+            Math.max(
+                -14,
+                Math.min(
+                    14,
+                    distance * -0.018
+                )
+            );
+
+
+        /*
+            Only a tiny additional movement is applied.
+            The cards and orb retain their own animations.
+        */
+
+        heroVisual.style.transform =
+            "translate3d(0," +
+            translate +
+            "px,0) rotateX(" +
+            rotate +
+            "deg)";
+
+    }
+
+
+    let heroTicking = false;
+
+
+    function requestHeroDepth() {
+
+        if (!heroTicking) {
+
+            window.requestAnimationFrame(
+                function () {
+
+                    updateHeroDepth();
+
+                    heroTicking = false;
+
+                }
+            );
+
+            heroTicking = true;
+
+        }
+
+    }
+
+
+    window.addEventListener(
+        "scroll",
+        requestHeroDepth,
+        {
+            passive: true
+        }
+    );
+
+
+    updateHeroDepth();
+
+
+    /* ----------------------------------------------------------
+       CLEANUP FOR REDUCED MOTION
+    ---------------------------------------------------------- */
+
+    if (
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches
+    ) {
+
+        revealElements.forEach(function (element) {
+
+            element.classList.add("pp-active");
+
+        });
+
+    }
+
+});
+
+</script>
 
 {% endblock %}
