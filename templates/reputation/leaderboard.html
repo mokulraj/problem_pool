@@ -8,7 +8,6 @@
 
 .leaderboard-page {
     min-height: calc(100vh - 80px);
-
     padding: 50px 0 70px;
 
     background:
@@ -37,7 +36,6 @@
 
 .leaderboard-header {
     text-align: center;
-
     margin-bottom: 40px;
 }
 
@@ -110,7 +108,6 @@
 
 .current-position-label {
     color: #64748b;
-
     font-size: 13px;
 }
 
@@ -288,6 +285,11 @@
     text-overflow: ellipsis;
 }
 
+.leaderboard-username:hover {
+    color: #5732d7;
+    text-decoration: underline;
+}
+
 .leaderboard-level {
     margin-top: 3px;
 
@@ -454,9 +456,17 @@
             </div>
 
             <div class="current-position-user">
-                {{ current_user.username }}
+
+                <a
+                    href="{% url 'accounts:public_profile' current_user.username %}"
+                    class="text-decoration-none"
+                >
+                    {{ current_user.username }}
+                </a>
+
                 ·
                 {{ current_user.points }} points
+
             </div>
 
         </div>
@@ -517,13 +527,21 @@
                         >
 
                             {% if user.leaderboard_rank == 1 %}
+
                                 🥇
+
                             {% elif user.leaderboard_rank == 2 %}
+
                                 🥈
+
                             {% elif user.leaderboard_rank == 3 %}
+
                                 🥉
+
                             {% else %}
+
                                 #{{ user.leaderboard_rank }}
+
                             {% endif %}
 
                         </div>
@@ -552,9 +570,12 @@
 
                             <div>
 
-                                <div class="leaderboard-username">
+                                <a
+                                    href="{% url 'accounts:public_profile' user.username %}"
+                                    class="leaderboard-username text-decoration-none"
+                                >
                                     {{ user.username }}
-                                </div>
+                                </a>
 
                                 <div class="leaderboard-level">
                                     {{ user.level }}

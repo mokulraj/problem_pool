@@ -10,7 +10,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-lg-9">
+        <div class="col-lg-10">
 
             <!-- Profile Header -->
             <div class="card border-0 shadow-sm mb-4">
@@ -75,17 +75,21 @@
                                 </div>
 
 
-                                <div>
+                                {% if request.user == profile_user %}
 
-                                    <a
-                                        href="{% url 'accounts:edit_profile' %}"
-                                        class="btn btn-primary"
-                                    >
-                                        <i class="bi bi-pencil-square"></i>
-                                        Edit Profile
-                                    </a>
+                                    <div>
 
-                                </div>
+                                        <a
+                                            href="{% url 'accounts:edit_profile' %}"
+                                            class="btn btn-primary"
+                                        >
+                                            <i class="bi bi-pencil-square"></i>
+                                            Edit Profile
+                                        </a>
+
+                                    </div>
+
+                                {% endif %}
 
                             </div>
 
@@ -110,7 +114,7 @@
                         </h2>
 
                         <p class="text-muted mb-0">
-                            Your contribution to the ProblemPool community
+                            {{ profile_user.username }}'s contribution to the ProblemPool community
                         </p>
 
                     </div>
@@ -118,9 +122,9 @@
 
                     <div class="row g-4">
 
-                        <div class="col-md-6">
+                        <div class="col-6 col-md-3">
 
-                            <div class="p-4 bg-light rounded text-center">
+                            <div class="p-4 bg-light rounded text-center h-100">
 
                                 <div class="text-muted small mb-2">
                                     Points
@@ -135,15 +139,15 @@
                         </div>
 
 
-                        <div class="col-md-6">
+                        <div class="col-6 col-md-3">
 
-                            <div class="p-4 bg-light rounded text-center">
+                            <div class="p-4 bg-light rounded text-center h-100">
 
                                 <div class="text-muted small mb-2">
                                     Level
                                 </div>
 
-                                <div class="fs-4 fw-bold">
+                                <div class="fs-5 fw-bold">
                                     {{ profile_user.level }}
                                 </div>
 
@@ -151,7 +155,396 @@
 
                         </div>
 
+
+                        <div class="col-6 col-md-3">
+
+                            <div class="p-4 bg-light rounded text-center h-100">
+
+                                <div class="text-muted small mb-2">
+                                    Problems
+                                </div>
+
+                                <div class="fs-2 fw-bold">
+                                    {{ problems_count }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-3">
+
+                            <div class="p-4 bg-light rounded text-center h-100">
+
+                                <div class="text-muted small mb-2">
+                                    Solutions
+                                </div>
+
+                                <div class="fs-2 fw-bold">
+                                    {{ solutions_count }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Activity Statistics -->
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <h2 class="h4 mb-4">
+                        Activity
+                    </h2>
+
+                    <div class="row g-3">
+
+                        <div class="col-6 col-md-4">
+
+                            <div class="p-3 bg-light rounded text-center h-100">
+
+                                <div class="text-muted small mb-1">
+                                    Problems Created
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ problems_count }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-4">
+
+                            <div class="p-3 bg-light rounded text-center h-100">
+
+                                <div class="text-muted small mb-1">
+                                    Solutions Submitted
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ solutions_count }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-4">
+
+                            <div class="p-3 bg-light rounded text-center h-100">
+
+                                <div class="text-muted small mb-1">
+                                    Projects Owned
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ projects_count }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-4">
+
+                            <div class="p-3 bg-light rounded text-center h-100">
+
+                                <div class="text-muted small mb-1">
+                                    Completed Projects
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ completed_projects_count }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-4">
+
+                            <div class="p-3 bg-light rounded text-center h-100">
+
+                                <div class="text-muted small mb-1">
+                                    Completed Tasks
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ completed_tasks_count|default:"0" }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- User Problems -->
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <div>
+
+                            <h2 class="h4 mb-1">
+                                Problems
+                            </h2>
+
+                            <p class="text-muted mb-0">
+                                Problems created by {{ profile_user.username }}
+                            </p>
+
+                        </div>
+
+                        <span class="badge bg-light text-dark border">
+                            {{ problems_count }}
+                        </span>
+
+                    </div>
+
+
+                    {% if problems %}
+
+                        <div class="list-group list-group-flush">
+
+                            {% for problem in problems %}
+
+                                <a
+                                    href="{% url 'problems:detail' problem.pk %}"
+                                    class="list-group-item list-group-item-action px-0 py-3"
+                                >
+
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+
+                                        <div>
+
+                                            <h3 class="h6 mb-1">
+                                                {{ problem.title }}
+                                            </h3>
+
+                                            <small class="text-muted">
+                                                {{ problem.created_at|date:"d M Y" }}
+                                            </small>
+
+                                        </div>
+
+                                        <i class="bi bi-arrow-right text-muted"></i>
+
+                                    </div>
+
+                                </a>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-center py-4">
+
+                            <i class="bi bi-lightbulb fs-2 text-muted"></i>
+
+                            <p class="text-muted mb-0 mt-2">
+                                No problems created yet.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- User Solutions -->
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <div>
+
+                            <h2 class="h4 mb-1">
+                                Solutions
+                            </h2>
+
+                            <p class="text-muted mb-0">
+                                Solutions submitted by {{ profile_user.username }}
+                            </p>
+
+                        </div>
+
+                        <span class="badge bg-light text-dark border">
+                            {{ solutions_count }}
+                        </span>
+
+                    </div>
+
+
+                    {% if solutions %}
+
+                        <div class="list-group list-group-flush">
+
+                            {% for solution in solutions %}
+
+                                <a
+                                    href="{% url 'solutions:detail' solution.pk %}"
+                                    class="list-group-item list-group-item-action px-0 py-3"
+                                >
+
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+
+                                        <div>
+
+                                            <h3 class="h6 mb-1">
+                                                Solution for:
+                                                {{ solution.problem.title }}
+                                            </h3>
+
+                                            <small class="text-muted">
+                                                {{ solution.created_at|date:"d M Y" }}
+                                            </small>
+
+                                        </div>
+
+                                        <i class="bi bi-arrow-right text-muted"></i>
+
+                                    </div>
+
+                                </a>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-center py-4">
+
+                            <i class="bi bi-check2-circle fs-2 text-muted"></i>
+
+                            <p class="text-muted mb-0 mt-2">
+                                No solutions submitted yet.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- User Projects -->
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <div>
+
+                            <h2 class="h4 mb-1">
+                                Projects
+                            </h2>
+
+                            <p class="text-muted mb-0">
+                                Projects owned by {{ profile_user.username }}
+                            </p>
+
+                        </div>
+
+                        <span class="badge bg-light text-dark border">
+                            {{ projects_count }}
+                        </span>
+
+                    </div>
+
+
+                    {% if projects %}
+
+                        <div class="list-group list-group-flush">
+
+                            {% for project in projects %}
+
+                                <a
+                                    href="{% url 'projects:detail' project.pk %}"
+                                    class="list-group-item list-group-item-action px-0 py-3"
+                                >
+
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+
+                                        <div>
+
+                                            <h3 class="h6 mb-1">
+                                                {{ project.title }}
+                                            </h3>
+
+                                            <div class="d-flex flex-wrap gap-2 mt-2">
+
+                                                {% if project.status %}
+
+                                                    <span class="badge bg-light text-dark border">
+                                                        {{ project.get_status_display }}
+                                                    </span>
+
+                                                {% endif %}
+
+                                                <small class="text-muted">
+                                                    {{ project.created_at|date:"d M Y" }}
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                        <i class="bi bi-arrow-right text-muted"></i>
+
+                                    </div>
+
+                                </a>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-center py-4">
+
+                            <i class="bi bi-folder2-open fs-2 text-muted"></i>
+
+                            <p class="text-muted mb-0 mt-2">
+                                No projects owned yet.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
 
                 </div>
 
@@ -166,11 +559,11 @@
                     <div class="mb-4">
 
                         <h2 class="h4 mb-1">
-                            Profile
+                            Profile Information
                         </h2>
 
                         <p class="text-muted mb-0">
-                            Your ProblemPool community profile
+                            {{ profile_user.username }}'s ProblemPool profile
                         </p>
 
                     </div>
@@ -212,21 +605,25 @@
                         </div>
 
 
-                        <div class="col-md-6">
+                        {% if request.user == profile_user %}
 
-                            <div class="p-3 bg-light rounded">
+                            <div class="col-md-6">
 
-                                <small class="text-muted d-block mb-1">
-                                    Email
-                                </small>
+                                <div class="p-3 bg-light rounded">
 
-                                <strong>
-                                    {{ profile_user.email }}
-                                </strong>
+                                    <small class="text-muted d-block mb-1">
+                                        Email
+                                    </small>
+
+                                    <strong>
+                                        {{ profile_user.email }}
+                                    </strong>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        {% endif %}
 
 
                         <div class="col-md-6">
@@ -256,23 +653,6 @@
 
                                 <strong>
                                     {{ profile_user.location|default:"Not provided" }}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-md-6">
-
-                            <div class="p-3 bg-light rounded">
-
-                                <small class="text-muted d-block mb-1">
-                                    Points
-                                </small>
-
-                                <strong>
-                                    {{ profile_user.points }}
                                 </strong>
 
                             </div>
@@ -317,11 +697,11 @@
                             Skills
                         </h3>
 
-                        {% if profile_user.skills %}
+                        {% if profile_user.skill_list %}
 
                             <div class="d-flex flex-wrap gap-2">
 
-                                {% for skill in profile_user.skills.split|default:"" %}
+                                {% for skill in profile_user.skill_list %}
 
                                     <span class="badge bg-light text-dark border">
                                         {{ skill }}

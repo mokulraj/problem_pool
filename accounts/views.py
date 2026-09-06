@@ -1,13 +1,19 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+
+from problems.models import Problem
+from projects.models import Project
+from solutions.models import Solution
+from tasks.models import Task
 
 from .forms import (
     LoginForm,
     ProfileForm,
     RegisterForm,
 )
+from .models import User
 
 
 def register_view(request):
@@ -111,13 +117,58 @@ def logout_view(request):
 
 
 @login_required
-def profile_view(request):
+def profile_view(request, username=None):
+    if username:
+        profile_user = get_object_or_404(
+            User,
+            username=username,
+            is_active=True,
+        )
+    else:
+        profile_user = request.user
+
+    problems = (
+        Problem.objects
+        .filter(created_by=profile_user)
+        .order_by("-created_at")
+    )
+
+    solutions = (
+        Solution.objects
+        .filter(proposed_by=profile_user)
+        .select_related("problem")
+        .order_by("-created_at")
+    )
+
+    projects = (
+        Project.objects
+        .filter(owner=profile_user)
+        .order_by("-created_at")
+    )
+
+    completed_tasks_count = Task.objects.filter(
+        assigned_to=profile_user,
+        status=Task.Status.COMPLETED,
+    ).count()
+
+    context = {
+        "profile_user": profile_user,
+        "problems": problems,
+        "solutions": solutions,
+        "projects": projects,
+        "problems_count": problems.count(),
+        "solutions_count": solutions.count(),
+        "projects_count": projects.count(),
+        "completed_projects_count": projects.filter(
+            status=Project.Status.COMPLETED,
+        ).count(),
+        "completed_tasks_count": completed_tasks_count,
+    }
+
     return render(
         request,
         "accounts/profile.html",
-        {
-            "profile_user": request.user,
-        },
+        context,
     )
 
 
