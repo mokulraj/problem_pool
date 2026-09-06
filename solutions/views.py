@@ -1,16 +1,16 @@
 from django.contrib import messages
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import F
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from problems.models import Problem
 from notifications.models import Notification
+from problems.models import Problem
+from reputation.services import award_points
 
 from .forms import SolutionForm
-from .models import Solution
-from .models import Vote
+from .models import Solution, Vote
 
 
 def solution_detail(request, pk):
@@ -121,6 +121,16 @@ def solution_create(request):
                 )
 
                 # -------------------------------------------------
+                # REPUTATION: +10 SOLUTION PROPOSED
+                # -------------------------------------------------
+
+                award_points(
+                    request.user,
+                    "SOLUTION_PROPOSED",
+                    solution.pk,
+                )
+
+                # -------------------------------------------------
                 # NOTIFY PROBLEM OWNER
                 # -------------------------------------------------
 
@@ -142,7 +152,7 @@ def solution_create(request):
 
             messages.success(
                 request,
-                "Solution submitted successfully.",
+                "Solution submitted successfully. You earned 10 reputation points!",
             )
 
             return redirect(
@@ -357,6 +367,8 @@ def vote_solution(request, pk):
         )
 
     notify_solution_owner = False
+    award_upvote_reward = False
+    upvote_reward_reference_id = None
 
     with transaction.atomic():
 
@@ -447,9 +459,15 @@ def vote_solution(request, pk):
 
                 action = "changed"
 
+                # -------------------------------------------------
                 # DOWN -> UP
+                # -------------------------------------------------
+
                 if vote_type == Vote.VoteType.UP:
+
                     notify_solution_owner = True
+                    award_upvote_reward = True
+                    upvote_reward_reference_id = vote.pk
 
         # =====================================================
         # NEW VOTE
@@ -457,7 +475,7 @@ def vote_solution(request, pk):
 
         else:
 
-            Vote.objects.create(
+            vote = Vote.objects.create(
                 user=request.user,
                 solution=solution,
                 vote_type=vote_type,
@@ -472,6 +490,8 @@ def vote_solution(request, pk):
                 )
 
                 notify_solution_owner = True
+                award_upvote_reward = True
+                upvote_reward_reference_id = vote.pk
 
             else:
 
@@ -499,6 +519,18 @@ def vote_solution(request, pk):
                 "score"
             ]
         )
+
+        # =====================================================
+        # REPUTATION: +2 UPVOTE RECEIVED
+        # =====================================================
+
+        if award_upvote_reward:
+
+            award_points(
+                solution.proposed_by,
+                "UPVOTE_RECEIVED",
+                upvote_reward_reference_id,
+            )
 
         # =====================================================
         # CREATE UPVOTE NOTIFICATION
@@ -665,6 +697,16 @@ def select_solution(request, pk):
         )
 
         # -----------------------------------------------------
+        # REPUTATION: +25 SOLUTION SELECTED
+        # -----------------------------------------------------
+
+        award_points(
+            solution.proposed_by,
+            "SOLUTION_SELECTED",
+            solution.pk,
+        )
+
+        # -----------------------------------------------------
         # NOTIFY SOLUTION AUTHOR
         # -----------------------------------------------------
 
@@ -697,7 +739,7 @@ def select_solution(request, pk):
 
     messages.success(
         request,
-        "Solution selected successfully. You can now convert it into a project.",
+        "Solution selected successfully. The author earned 25 reputation points.",
     )
 
     return redirect(

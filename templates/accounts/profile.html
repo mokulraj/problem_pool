@@ -69,7 +69,7 @@
                                     </p>
 
                                     <span class="badge bg-primary">
-                                        Newcomer
+                                        {{ profile_user.level }}
                                     </span>
 
                                 </div>
@@ -85,6 +85,66 @@
                                         Edit Profile
                                     </a>
 
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Reputation -->
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="mb-4">
+
+                        <h2 class="h4 mb-1">
+                            Reputation
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Your contribution to the ProblemPool community
+                        </p>
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="p-4 bg-light rounded text-center">
+
+                                <div class="text-muted small mb-2">
+                                    Points
+                                </div>
+
+                                <div class="fs-2 fw-bold">
+                                    {{ profile_user.points }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="p-4 bg-light rounded text-center">
+
+                                <div class="text-muted small mb-2">
+                                    Level
+                                </div>
+
+                                <div class="fs-4 fw-bold">
+                                    {{ profile_user.level }}
                                 </div>
 
                             </div>
@@ -212,7 +272,7 @@
                                 </small>
 
                                 <strong>
-                                    {{ profile_user.points|default:"0" }}
+                                    {{ profile_user.points }}
                                 </strong>
 
                             </div>

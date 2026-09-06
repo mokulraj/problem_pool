@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from notifications.models import Notification
 from projects.models import Project
+from reputation.services import award_points
 from teams.models import TeamMembership
 
 from .forms import TaskForm
@@ -343,6 +344,24 @@ def task_status_update(request, pk):
         ],
     )
 
+    # ---------------------------------------------------------
+    # REPUTATION: +5 TASK COMPLETED
+    # ---------------------------------------------------------
+
+    if (
+        new_status == Task.Status.COMPLETED
+        and old_status != Task.Status.COMPLETED
+    ):
+        award_points(
+            request.user,
+            "TASK_COMPLETED",
+            task.pk,
+        )
+
+    # ---------------------------------------------------------
+    # NOTIFY PROJECT OWNER
+    # ---------------------------------------------------------
+
     if project.owner_id != request.user.id:
 
         Notification.objects.create(
@@ -430,6 +449,16 @@ def task_complete(request, pk):
         ],
     )
 
+    # ---------------------------------------------------------
+    # REPUTATION: +5 TASK COMPLETED
+    # ---------------------------------------------------------
+
+    award_points(
+        request.user,
+        "TASK_COMPLETED",
+        task.pk,
+    )
+
     Notification.objects.create(
         recipient=project.owner,
         message=(
@@ -444,7 +473,7 @@ def task_complete(request, pk):
 
     messages.success(
         request,
-        "Task marked as completed.",
+        "Task marked as completed. You earned 5 reputation points!",
     )
 
     return redirect(

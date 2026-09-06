@@ -165,6 +165,11 @@
     color: #ea8500;
 }
 
+.stat-icon-gold {
+    background: #fff7df;
+    color: #d48a00;
+}
+
 
 .stat-label {
     color: #334155;
@@ -183,6 +188,16 @@
     line-height: 1;
 
     font-weight: 750;
+}
+
+
+.stat-level {
+    margin-top: 7px;
+
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 600;
 }
 
 
@@ -958,25 +973,29 @@
         </div>
 
 
-        <!-- PROJECTS JOINED -->
+        <!-- REPUTATION -->
         <div class="col-12 col-md-6 col-xl-3">
 
             <div class="dashboard-stat-card">
 
                 <div class="stat-top">
 
-                    <div class="stat-icon stat-icon-orange">
-                        <i class="bi bi-people"></i>
+                    <div class="stat-icon stat-icon-gold">
+                        <i class="bi bi-star-fill"></i>
                     </div>
 
                     <div>
 
                         <div class="stat-label">
-                            Projects Joined
+                            Reputation
                         </div>
 
                         <div class="stat-number">
-                            {{ projects_joined }}
+                            {{ reputation_points }}
+                        </div>
+
+                        <div class="stat-level">
+                            {{ reputation_level }}
                         </div>
 
                     </div>
@@ -984,10 +1003,10 @@
                 </div>
 
                 <a
-                    href="{% url 'projects:list' %}"
+                    href="{% url 'accounts:profile' %}"
                     class="stat-link"
                 >
-                    View Memberships
+                    View Profile
                     <i class="bi bi-arrow-right"></i>
                 </a>
 
@@ -1006,7 +1025,7 @@
 
         <div class="row align-items-center">
 
-            <!-- MEMBERSHIPS -->
+            <!-- PROJECTS JOINED -->
             <div class="col-12 col-md-6 col-lg-3">
 
                 <div class="secondary-stat">

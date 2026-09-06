@@ -109,6 +109,10 @@ def dashboard(request):
         "recent_solutions": recent_solutions,
         "pending_requests_for_owner": pending_requests_for_owner,
         "recent_comments": recent_comments,
+
+        # Reputation
+        "reputation_points": user.points,
+        "reputation_level": user.level,
     }
 
     return render(

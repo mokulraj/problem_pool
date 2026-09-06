@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import F, Q
 from django.shortcuts import get_object_or_404, redirect, render
+
+from reputation.services import award_points
+from solutions.models import Solution
 
 from .forms import ProblemForm
 from .models import Problem
-from django.db.models import F
-from solutions.models import Solution
 
 
 def problem_list(request):
@@ -40,7 +41,6 @@ def problem_list(request):
         "newest"
     )
 
-
     # --------------------------------------------------------
     # SEARCH
     # --------------------------------------------------------
@@ -53,7 +53,6 @@ def problem_list(request):
             | Q(category__icontains=search_query)
             | Q(location__icontains=search_query)
         )
-
 
     # --------------------------------------------------------
     # FILTERS
@@ -73,7 +72,6 @@ def problem_list(request):
         problems = problems.filter(
             priority=priority
         )
-
 
     # --------------------------------------------------------
     # SORTING
@@ -98,7 +96,6 @@ def problem_list(request):
         problems = problems.order_by(
             "-created_at"
         )
-
 
     context = {
         "problems": problems,
@@ -143,7 +140,6 @@ def problem_detail(request, pk):
         .order_by("created_at")
     )
 
-
     Problem.objects.filter(
         pk=problem.pk
     ).update(
@@ -154,7 +150,6 @@ def problem_detail(request, pk):
         fields=["views"]
     )
 
-
     return render(
         request,
         "problems/problem_detail.html",
@@ -164,6 +159,7 @@ def problem_detail(request, pk):
             "comments": comments,
         },
     )
+
 
 @login_required
 def problem_create(request):
@@ -182,9 +178,15 @@ def problem_create(request):
 
             problem.save()
 
+            award_points(
+                request.user,
+                "PROBLEM_CREATED",
+                problem.pk,
+            )
+
             messages.success(
                 request,
-                "Problem created successfully."
+                "Problem created successfully. You earned 5 reputation points!"
             )
 
             return redirect(
@@ -195,7 +197,6 @@ def problem_create(request):
     else:
 
         form = ProblemForm()
-
 
     return render(
         request,
@@ -216,7 +217,6 @@ def problem_edit(request, pk):
         pk=pk
     )
 
-
     if problem.created_by != request.user:
 
         messages.error(
@@ -228,7 +228,6 @@ def problem_edit(request, pk):
             "problems:detail",
             pk=problem.pk
         )
-
 
     if request.method == "POST":
 
@@ -257,7 +256,6 @@ def problem_edit(request, pk):
             instance=problem
         )
 
-
     return render(
         request,
         "problems/problem_form.html",
@@ -278,7 +276,6 @@ def problem_delete(request, pk):
         pk=pk
     )
 
-
     if problem.created_by != request.user:
 
         messages.error(
@@ -290,7 +287,6 @@ def problem_delete(request, pk):
             "problems:detail",
             pk=problem.pk
         )
-
 
     if request.method == "POST":
 
@@ -304,7 +300,6 @@ def problem_delete(request, pk):
         return redirect(
             "problems:list"
         )
-
 
     return render(
         request,
