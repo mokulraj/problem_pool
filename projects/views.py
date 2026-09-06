@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from reputation.services import award_points
@@ -85,14 +86,8 @@ def project_create(request, solution_id):
     problem = solution.problem
 
     if problem.created_by != request.user:
-        messages.error(
-            request,
-            "Only the problem owner can create this project.",
-        )
-
-        return redirect(
-            "solutions:detail",
-            pk=solution.pk,
+        return HttpResponseForbidden(
+            "Only the problem owner can create this project."
         )
 
     if solution.status != Solution.Status.SELECTED:
@@ -173,14 +168,8 @@ def project_edit(request, pk):
     )
 
     if project.owner != request.user:
-        messages.error(
-            request,
-            "You do not have permission to edit this project.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "You do not have permission to edit this project."
         )
 
     if request.method == "POST":

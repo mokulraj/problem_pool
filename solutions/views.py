@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import F
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from notifications.models import Notification
@@ -120,19 +120,11 @@ def solution_create(request):
                     solution_count=F("solution_count") + 1
                 )
 
-                # -------------------------------------------------
-                # REPUTATION: +10 SOLUTION PROPOSED
-                # -------------------------------------------------
-
                 award_points(
                     request.user,
                     "SOLUTION_PROPOSED",
                     solution.pk,
                 )
-
-                # -------------------------------------------------
-                # NOTIFY PROBLEM OWNER
-                # -------------------------------------------------
 
                 if problem.created_by != request.user:
 
@@ -186,14 +178,8 @@ def solution_edit(request, pk):
 
     if solution.proposed_by != request.user:
 
-        messages.error(
-            request,
-            "You do not have permission to edit this solution.",
-        )
-
-        return redirect(
-            "solutions:detail",
-            pk=solution.pk,
+        return HttpResponseForbidden(
+            "You do not have permission to edit this solution."
         )
 
     if solution.status == Solution.Status.SELECTED:
@@ -258,14 +244,8 @@ def solution_delete(request, pk):
 
     if solution.proposed_by != request.user:
 
-        messages.error(
-            request,
-            "You do not have permission to delete this solution.",
-        )
-
-        return redirect(
-            "solutions:detail",
-            pk=solution.pk,
+        return HttpResponseForbidden(
+            "You do not have permission to delete this solution."
         )
 
     if solution.status == Solution.Status.SELECTED:
@@ -333,10 +313,6 @@ def vote_solution(request, pk):
         pk=pk,
     )
 
-    # ---------------------------------------------------------
-    # USER CANNOT VOTE ON OWN SOLUTION
-    # ---------------------------------------------------------
-
     if solution.proposed_by == request.user:
 
         return JsonResponse(
@@ -377,15 +353,7 @@ def vote_solution(request, pk):
             solution=solution,
         ).first()
 
-        # =====================================================
-        # EXISTING VOTE
-        # =====================================================
-
         if vote:
-
-            # -------------------------------------------------
-            # SAME VOTE = REMOVE
-            # -------------------------------------------------
 
             if vote.vote_type == vote_type:
 
@@ -410,10 +378,6 @@ def vote_solution(request, pk):
                     )
 
                 action = "removed"
-
-            # -------------------------------------------------
-            # OPPOSITE VOTE = CHANGE
-            # -------------------------------------------------
 
             else:
 
@@ -459,19 +423,11 @@ def vote_solution(request, pk):
 
                 action = "changed"
 
-                # -------------------------------------------------
-                # DOWN -> UP
-                # -------------------------------------------------
-
                 if vote_type == Vote.VoteType.UP:
 
                     notify_solution_owner = True
                     award_upvote_reward = True
                     upvote_reward_reference_id = vote.pk
-
-        # =====================================================
-        # NEW VOTE
-        # =====================================================
 
         else:
 
@@ -503,10 +459,6 @@ def vote_solution(request, pk):
 
             action = "added"
 
-        # =====================================================
-        # REFRESH SOLUTION VALUES
-        # =====================================================
-
         solution.refresh_from_db()
 
         solution.score = (
@@ -520,10 +472,6 @@ def vote_solution(request, pk):
             ]
         )
 
-        # =====================================================
-        # REPUTATION: +2 UPVOTE RECEIVED
-        # =====================================================
-
         if award_upvote_reward:
 
             award_points(
@@ -531,10 +479,6 @@ def vote_solution(request, pk):
                 "UPVOTE_RECEIVED",
                 upvote_reward_reference_id,
             )
-
-        # =====================================================
-        # CREATE UPVOTE NOTIFICATION
-        # =====================================================
 
         if notify_solution_owner:
 
@@ -564,10 +508,6 @@ def vote_solution(request, pk):
                     related_solution=solution,
                     related_problem=solution.problem,
                 )
-
-    # =========================================================
-    # CURRENT USER VOTE
-    # =========================================================
 
     current_vote = (
         Vote.objects
@@ -599,14 +539,8 @@ def select_solution(request, pk):
 
     if request.method != "POST":
 
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "solutions:detail",
-            pk=pk,
+        return HttpResponseForbidden(
+            "Solution selection requires a POST request."
         )
 
     solution = get_object_or_404(
@@ -621,14 +555,8 @@ def select_solution(request, pk):
 
     if problem.created_by != request.user:
 
-        messages.error(
-            request,
-            "Only the problem owner can select a solution.",
-        )
-
-        return redirect(
-            "solutions:detail",
-            pk=solution.pk,
+        return HttpResponseForbidden(
+            "Only the problem owner can select a solution."
         )
 
     if solution.status == Solution.Status.REJECTED:
@@ -657,10 +585,6 @@ def select_solution(request, pk):
 
     with transaction.atomic():
 
-        # -----------------------------------------------------
-        # PREVIOUS SELECTED SOLUTION
-        # -----------------------------------------------------
-
         Solution.objects.filter(
             problem=problem,
             status=Solution.Status.SELECTED,
@@ -669,10 +593,6 @@ def select_solution(request, pk):
         ).update(
             status=Solution.Status.SHORTLISTED,
         )
-
-        # -----------------------------------------------------
-        # SELECT CURRENT SOLUTION
-        # -----------------------------------------------------
 
         solution.status = Solution.Status.SELECTED
 
@@ -683,10 +603,6 @@ def select_solution(request, pk):
             ]
         )
 
-        # -----------------------------------------------------
-        # UPDATE PROBLEM
-        # -----------------------------------------------------
-
         problem.status = Problem.Status.IN_PROGRESS
 
         problem.save(
@@ -696,19 +612,11 @@ def select_solution(request, pk):
             ]
         )
 
-        # -----------------------------------------------------
-        # REPUTATION: +25 SOLUTION SELECTED
-        # -----------------------------------------------------
-
         award_points(
             solution.proposed_by,
             "SOLUTION_SELECTED",
             solution.pk,
         )
-
-        # -----------------------------------------------------
-        # NOTIFY SOLUTION AUTHOR
-        # -----------------------------------------------------
 
         if solution.proposed_by != request.user:
 
@@ -750,10 +658,6 @@ def select_solution(request, pk):
 
 def solution_list(request):
 
-    # =========================================================
-    # GET FILTER VALUES
-    # =========================================================
-
     selected_category = request.GET.get(
         "category",
         "",
@@ -769,10 +673,6 @@ def solution_list(request):
         "newest",
     )
 
-    # =========================================================
-    # BASE QUERY
-    # =========================================================
-
     solutions = (
         Solution.objects
         .select_related(
@@ -781,29 +681,17 @@ def solution_list(request):
         )
     )
 
-    # =========================================================
-    # CATEGORY FILTER
-    # =========================================================
-
     if selected_category:
 
         solutions = solutions.filter(
             problem__category=selected_category
         )
 
-    # =========================================================
-    # STATUS FILTER
-    # =========================================================
-
     if selected_status:
 
         solutions = solutions.filter(
             status=selected_status
         )
-
-    # =========================================================
-    # SORTING
-    # =========================================================
 
     if selected_sort == "most_votes":
 
@@ -825,15 +713,7 @@ def solution_list(request):
             "-created_at",
         )
 
-    # =========================================================
-    # CATEGORY OPTIONS
-    # =========================================================
-
     categories = Problem.Category.choices
-
-    # =========================================================
-    # STATUS OPTIONS
-    # =========================================================
 
     statuses = Solution.Status.choices
 

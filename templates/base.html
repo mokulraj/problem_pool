@@ -296,12 +296,22 @@
 
                     <!-- LOGOUT -->
 
-                    <a
-                        href="{% url 'accounts:logout' %}"
-                        class="btn pp-btn-outline"
+                   <!-- LOGOUT -->
+
+                    <form
+                        method="post"
+                        action="{% url 'accounts:logout' %}"
+                        class="d-inline"
                     >
-                        Logout
-                    </a>
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn pp-btn-outline"
+                        >
+                            Logout
+                        </button>
+                    </form>
 
 
                 {% else %}

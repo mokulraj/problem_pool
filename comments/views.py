@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from solutions.models import Solution
@@ -12,7 +13,6 @@ from .models import Comment
 def comment_create(request):
 
     if request.method != "POST":
-
         messages.error(
             request,
             "Invalid request.",
@@ -31,7 +31,6 @@ def comment_create(request):
     )
 
     if problem_id and solution_id:
-
         messages.error(
             request,
             "Invalid comment target.",
@@ -126,15 +125,11 @@ def comment_edit(request, pk):
         pk=pk,
     )
 
-
     if comment.user != request.user:
 
-        messages.error(
-            request,
-            "You do not have permission to edit this comment.",
+        return HttpResponseForbidden(
+            "You do not have permission to edit this comment."
         )
-
-        return comment_redirect(comment)
 
     if request.method == "POST":
 
@@ -144,7 +139,7 @@ def comment_edit(request, pk):
         )
 
         if form.is_valid():
-    
+
             form.save()
 
             messages.success(
@@ -159,7 +154,6 @@ def comment_edit(request, pk):
         form = CommentForm(
             instance=comment,
         )
-
 
     return render(
         request,
@@ -181,43 +175,34 @@ def comment_delete(request, pk):
         pk=pk,
     )
 
-
     if comment.user != request.user:
 
-        messages.error(
-            request,
-            "You do not have permission to delete this comment.",
+        return HttpResponseForbidden(
+            "You do not have permission to delete this comment."
         )
 
-        return comment_redirect(comment)
+    if request.method != "POST":
 
-
-    if request.method == "POST":
-
-        target = comment_redirect(
-            comment
+        return HttpResponseForbidden(
+            "Comment deletion requires a POST request."
         )
 
-        comment.delete()
-
-        messages.success(
-            request,
-            "Comment deleted successfully.",
-        )
-
-        return target
-
-    return render(
-        request,
-        "comments/comment_confirm_delete.html",
-        {
-            "comment": comment,
-        },
+    target = comment_redirect(
+        comment
     )
+
+    comment.delete()
+
+    messages.success(
+        request,
+        "Comment deleted successfully.",
+    )
+
+    return target
 
 
 def comment_redirect(comment):
-    
+
     if comment.solution_id:
 
         return redirect(

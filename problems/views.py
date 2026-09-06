@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Q
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from reputation.services import award_points
@@ -219,14 +220,8 @@ def problem_edit(request, pk):
 
     if problem.created_by != request.user:
 
-        messages.error(
-            request,
+        return HttpResponseForbidden(
             "You do not have permission to edit this problem."
-        )
-
-        return redirect(
-            "problems:detail",
-            pk=problem.pk
         )
 
     if request.method == "POST":
@@ -278,14 +273,8 @@ def problem_delete(request, pk):
 
     if problem.created_by != request.user:
 
-        messages.error(
-            request,
+        return HttpResponseForbidden(
             "You do not have permission to delete this problem."
-        )
-
-        return redirect(
-            "problems:detail",
-            pk=problem.pk
         )
 
     if request.method == "POST":

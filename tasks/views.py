@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from notifications.models import Notification
@@ -33,14 +34,8 @@ def task_list(request, project_id):
     )
 
     if not user_is_project_member(request.user, project):
-        messages.error(
-            request,
-            "You must be a member of the project to view its tasks.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "You must be a member of the project to view its tasks."
         )
 
     tasks = (
@@ -67,14 +62,8 @@ def task_create(request, project_id):
     )
 
     if not user_is_project_owner(request.user, project):
-        messages.error(
-            request,
-            "Only the project owner can create tasks.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can create tasks."
         )
 
     if request.method == "POST":
@@ -145,14 +134,8 @@ def task_edit(request, pk):
     project = task.project
 
     if not user_is_project_owner(request.user, project):
-        messages.error(
-            request,
-            "Only the project owner can edit tasks.",
-        )
-
-        return redirect(
-            "tasks:list",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can edit tasks."
         )
 
     if request.method == "POST":
@@ -228,25 +211,13 @@ def task_delete(request, pk):
     project = task.project
 
     if not user_is_project_owner(request.user, project):
-        messages.error(
-            request,
-            "Only the project owner can delete tasks.",
-        )
-
-        return redirect(
-            "tasks:list",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can delete tasks."
         )
 
     if request.method != "POST":
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "tasks:list",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Task deletion requires a POST request."
         )
 
     task.delete()
@@ -282,25 +253,13 @@ def task_status_update(request, pk):
     project = task.project
 
     if task.assigned_to != request.user:
-        messages.error(
-            request,
-            "Only the member assigned to this task can update its status.",
-        )
-
-        return redirect(
-            "tasks:list",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Only the member assigned to this task can update its status."
         )
 
     if request.method != "POST":
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "tasks:list",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Task status updates require a POST request."
         )
 
     new_status = request.POST.get("status")
@@ -344,10 +303,6 @@ def task_status_update(request, pk):
         ],
     )
 
-    # ---------------------------------------------------------
-    # REPUTATION: +5 TASK COMPLETED
-    # ---------------------------------------------------------
-
     if (
         new_status == Task.Status.COMPLETED
         and old_status != Task.Status.COMPLETED
@@ -357,10 +312,6 @@ def task_status_update(request, pk):
             "TASK_COMPLETED",
             task.pk,
         )
-
-    # ---------------------------------------------------------
-    # NOTIFY PROJECT OWNER
-    # ---------------------------------------------------------
 
     if project.owner_id != request.user.id:
 
@@ -406,25 +357,13 @@ def task_complete(request, pk):
     project = task.project
 
     if task.assigned_to != request.user:
-        messages.error(
-            request,
-            "Only the assigned member can complete this task.",
-        )
-
-        return redirect(
-            "tasks:list",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Only the assigned member can complete this task."
         )
 
     if request.method != "POST":
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "tasks:list",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Task completion requires a POST request."
         )
 
     old_status = task.status
@@ -448,10 +387,6 @@ def task_complete(request, pk):
             "updated_at",
         ],
     )
-
-    # ---------------------------------------------------------
-    # REPUTATION: +5 TASK COMPLETED
-    # ---------------------------------------------------------
 
     award_points(
         request.user,

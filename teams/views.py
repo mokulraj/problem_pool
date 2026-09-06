@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from notifications.models import Notification
@@ -48,7 +49,6 @@ def join_project(request, project_id):
         pk=project_id,
     )
 
-    # Owner is automatically part of the project.
     if user_is_project_owner(request.user, project):
 
         messages.info(
@@ -61,7 +61,6 @@ def join_project(request, project_id):
             pk=project.pk,
         )
 
-    # Already a member.
     if TeamMembership.objects.filter(
         project=project,
         user=request.user,
@@ -77,7 +76,6 @@ def join_project(request, project_id):
             pk=project.pk,
         )
 
-    # Existing pending request.
     existing_request = JoinRequest.objects.filter(
         project=project,
         user=request.user,
@@ -189,14 +187,8 @@ def cancel_join_request(request, request_id):
 
     if join_request.user != request.user:
 
-        messages.error(
-            request,
-            "You do not have permission to cancel this request.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "You do not have permission to cancel this request."
         )
 
     if join_request.status != JoinRequest.Status.PENDING:
@@ -213,14 +205,8 @@ def cancel_join_request(request, request_id):
 
     if request.method != "POST":
 
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Join request cancellation requires a POST request."
         )
 
     join_request.delete()
@@ -250,14 +236,8 @@ def project_join_requests(request, project_id):
 
     if not user_is_project_owner(request.user, project):
 
-        messages.error(
-            request,
-            "Only the project owner can manage join requests.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can manage join requests."
         )
 
     join_requests = (
@@ -293,13 +273,8 @@ def approve_join_request(request, request_id):
 
     if request.method != "POST":
 
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "projects:list",
+        return HttpResponseForbidden(
+            "Approving a join request requires a POST request."
         )
 
     join_request = get_object_or_404(
@@ -314,14 +289,8 @@ def approve_join_request(request, request_id):
 
     if not user_is_project_owner(request.user, project):
 
-        messages.error(
-            request,
-            "Only the project owner can approve join requests.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can approve join requests."
         )
 
     if join_request.status != JoinRequest.Status.PENDING:
@@ -415,13 +384,8 @@ def reject_join_request(request, request_id):
 
     if request.method != "POST":
 
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "projects:list",
+        return HttpResponseForbidden(
+            "Rejecting a join request requires a POST request."
         )
 
     join_request = get_object_or_404(
@@ -436,14 +400,8 @@ def reject_join_request(request, request_id):
 
     if not user_is_project_owner(request.user, project):
 
-        messages.error(
-            request,
-            "Only the project owner can reject join requests.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can reject join requests."
         )
 
     if join_request.status != JoinRequest.Status.PENDING:
@@ -492,26 +450,14 @@ def change_member_role(request, project_id, user_id):
 
     if not user_is_project_owner(request.user, project):
 
-        messages.error(
-            request,
-            "Only the project owner can change member roles.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can change member roles."
         )
 
     if request.method != "POST":
 
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "teams:join_requests",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Changing member roles requires a POST request."
         )
 
     membership = get_object_or_404(
@@ -584,26 +530,14 @@ def remove_member(request, project_id, user_id):
 
     if not user_is_project_owner(request.user, project):
 
-        messages.error(
-            request,
-            "Only the project owner can remove members.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Only the project owner can remove members."
         )
 
     if request.method != "POST":
 
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "teams:join_requests",
-            project_id=project.pk,
+        return HttpResponseForbidden(
+            "Removing a member requires a POST request."
         )
 
     membership = get_object_or_404(
@@ -652,14 +586,8 @@ def leave_project(request, project_id):
 
     if request.method != "POST":
 
-        messages.error(
-            request,
-            "Invalid request.",
-        )
-
-        return redirect(
-            "projects:detail",
-            pk=project.pk,
+        return HttpResponseForbidden(
+            "Leaving a project requires a POST request."
         )
 
     if user_is_project_owner(request.user, project):
