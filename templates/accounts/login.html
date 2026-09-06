@@ -4,38 +4,1123 @@
     Login - ProblemPool
 {% endblock %}
 
-
 {% block content %}
 
-<section class="auth-section">
+<style>
 
-    <div class="container">
+    /* =========================================================
+       PROBLEMPOOL LOGIN
+       UI ONLY — FUNCTIONALITY UNCHANGED
+    ========================================================= */
 
-        <div class="row justify-content-center">
+    .pp-login-page {
+        position: relative;
+        min-height: calc(100vh - 70px);
+        overflow: hidden;
+        background: #faf9fd;
+    }
 
-            <div class="col-md-6 col-lg-4">
+    .pp-login-page::before {
+        content: "";
+        position: absolute;
+        width: 650px;
+        height: 650px;
+        top: -390px;
+        left: -250px;
+        border-radius: 50%;
+        background: rgba(105, 67, 211, 0.075);
+        pointer-events: none;
+    }
 
-                <div class="auth-card">
+    .pp-login-page::after {
+        content: "";
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        right: -280px;
+        bottom: -300px;
+        border-radius: 50%;
+        background: rgba(105, 67, 211, 0.06);
+        pointer-events: none;
+    }
 
-                    <div class="auth-icon">
-                        <i class="bi bi-lock-fill"></i>
+
+    /* =========================================================
+       MAIN LAYOUT
+    ========================================================= */
+
+    .pp-login-container {
+        position: relative;
+        z-index: 2;
+        width: min(1120px, calc(100% - 48px));
+        min-height: calc(100vh - 70px);
+        margin: 0 auto;
+        padding: 42px 0;
+    }
+
+    .pp-login-layout {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 430px;
+        gap: 75px;
+        align-items: start;
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       LEFT SIDE
+    ========================================================= */
+
+    .pp-login-intro {
+        position: relative;
+        min-width: 0;
+        min-height: 650px;
+        padding-top: 45px;
+    }
+
+
+    /* =========================================================
+       LEFT TEXT
+    ========================================================= */
+
+    .pp-login-copy {
+        position: relative;
+        z-index: 8;
+        width: 500px;
+        max-width: 100%;
+        margin-top: 0;
+    }
+
+    .pp-login-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 18px;
+        color: #7657c8;
+        font-size: 0.67rem;
+        font-weight: 850;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+    }
+
+    .pp-login-eyebrow-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #7048d9;
+        box-shadow:
+            0 0 0 5px rgba(112, 72, 217, 0.09);
+        animation: loginDotPulse 2.5s ease-in-out infinite;
+    }
+
+    .pp-login-copy h1 {
+        margin: 0;
+        color: #181329;
+        font-size: clamp(3.4rem, 5.8vw, 5.5rem);
+        line-height: 0.91;
+        letter-spacing: -0.075em;
+        font-weight: 900;
+    }
+
+    .pp-login-copy h1 span {
+        color: #6740d0;
+    }
+
+    .pp-login-copy p {
+        width: 395px;
+        max-width: 100%;
+        margin: 27px 0 0;
+        color: #777184;
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================================
+       SMALL FEATURE PILLS
+    ========================================================= */
+
+    .pp-login-points {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 29px;
+    }
+
+    .pp-login-point {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 12px;
+        border: 1px solid #e7e1ef;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        color: #625b70;
+        font-size: 0.66rem;
+        font-weight: 750;
+        box-shadow:
+            0 7px 20px rgba(48, 36, 78, 0.035);
+    }
+
+    .pp-login-point i {
+        color: #7048d9;
+    }
+
+
+    /* =========================================================
+       ANIMATED ORBIT
+    ========================================================= */
+
+    .pp-orbit {
+        position: absolute;
+        z-index: 2;
+        right: -20px;
+        bottom: -30px;
+        width: 400px;
+        height: 400px;
+        pointer-events: none;
+    }
+
+    .pp-orbit-glow {
+        position: absolute;
+        left: 100px;
+        top: 100px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background:
+            radial-gradient(
+                circle,
+                rgba(117, 78, 222, 0.24),
+                rgba(117, 78, 222, 0.07) 48%,
+                transparent 73%
+            );
+        filter: blur(7px);
+        animation: loginGlow 5s ease-in-out infinite;
+    }
+
+    .pp-orbit-ring {
+        position: absolute;
+        border: 1px solid rgba(105, 67, 211, 0.12);
+        border-radius: 50%;
+    }
+
+    .pp-orbit-ring.one {
+        inset: 48px;
+        animation: loginRotate 18s linear infinite;
+    }
+
+    .pp-orbit-ring.two {
+        inset: 88px;
+        border-style: dashed;
+        border-color: rgba(105, 67, 211, 0.11);
+        animation: loginRotateReverse 24s linear infinite;
+    }
+
+    .pp-orbit-ring.three {
+        inset: 18px;
+        border-color: rgba(105, 67, 211, 0.065);
+        animation: loginRotate 30s linear infinite;
+    }
+
+
+    /* =========================================================
+       ORBIT CORE
+    ========================================================= */
+
+    .pp-orbit-core {
+        position: absolute;
+        left: 150px;
+        top: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background:
+            radial-gradient(
+                circle at 35% 28%,
+                #a78cf0,
+                #7449da 55%,
+                #5933c2 100%
+            );
+        color: #fff;
+        font-size: 1.9rem;
+        box-shadow:
+            0 25px 50px rgba(91, 51, 194, 0.25),
+            0 0 0 12px rgba(104, 66, 210, 0.07);
+        animation: loginCore 4.8s ease-in-out infinite;
+    }
+
+    .pp-orbit-core::before {
+        content: "";
+        position: absolute;
+        inset: -23px;
+        border: 1px solid rgba(104, 66, 210, 0.12);
+        border-radius: 50%;
+        animation: loginPulse 3.5s ease-out infinite;
+    }
+
+    .pp-orbit-core::after {
+        content: "";
+        position: absolute;
+        inset: -42px;
+        border: 1px dashed rgba(104, 66, 210, 0.08);
+        border-radius: 50%;
+    }
+
+
+    /* =========================================================
+       ORBIT NODES
+    ========================================================= */
+
+    .pp-orbit-node {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border: 1px solid rgba(255, 255, 255, 0.85);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.88);
+        color: #7048d9;
+        box-shadow:
+            0 12px 30px rgba(56, 40, 91, 0.10);
+        backdrop-filter: blur(10px);
+    }
+
+    .pp-orbit-node.one {
+        top: 47px;
+        left: 178px;
+        animation: loginNodeOne 6s ease-in-out infinite;
+    }
+
+    .pp-orbit-node.two {
+        top: 178px;
+        right: 28px;
+        animation: loginNodeTwo 7s ease-in-out infinite;
+    }
+
+    .pp-orbit-node.three {
+        bottom: 40px;
+        left: 82px;
+        animation: loginNodeThree 6.5s ease-in-out infinite;
+    }
+
+
+    /* =========================================================
+       PARTICLES
+    ========================================================= */
+
+    .pp-particle {
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #8060d8;
+        opacity: 0.35;
+    }
+
+    .pp-particle.one {
+        top: 50px;
+        right: 4px;
+        animation: loginParticleOne 6s ease-in-out infinite;
+    }
+
+    .pp-particle.two {
+        bottom: 58px;
+        right: 65px;
+        animation: loginParticleTwo 7s ease-in-out infinite;
+    }
+
+    .pp-particle.three {
+        top: 208px;
+        left: 3px;
+        width: 5px;
+        height: 5px;
+        animation: loginParticleThree 5s ease-in-out infinite;
+    }
+
+
+    /* =========================================================
+       LOGIN CARD
+    ========================================================= */
+
+    .pp-login-form-area {
+        position: relative;
+        z-index: 20;
+        width: 100%;
+    }
+
+    .pp-login-card {
+        width: 100%;
+        padding: 43px 42px 34px;
+        border: 1px solid #e4dfee;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow:
+            0 28px 70px rgba(47, 34, 79, 0.09),
+            0 5px 20px rgba(47, 34, 79, 0.035);
+        backdrop-filter: blur(15px);
+    }
+
+    .pp-lock {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 54px;
+        height: 54px;
+        margin-bottom: 21px;
+        border-radius: 15px;
+        background:
+            linear-gradient(
+                145deg,
+                #7048d9,
+                #5931c1
+            );
+        color: #fff;
+        font-size: 1.18rem;
+        box-shadow:
+            0 14px 28px rgba(94, 53, 199, 0.22);
+    }
+
+    .pp-login-card h2 {
+        margin: 0;
+        color: #19142a;
+        font-size: 1.95rem;
+        line-height: 1.1;
+        letter-spacing: -0.045em;
+        font-weight: 900;
+    }
+
+    .pp-login-subtitle {
+        margin: 8px 0 28px;
+        color: #8a8392;
+        font-size: 0.79rem;
+        line-height: 1.5;
+    }
+
+
+    /* =========================================================
+       ALERTS
+    ========================================================= */
+
+    .pp-login-card .alert {
+        margin-bottom: 18px;
+        border-radius: 11px;
+        font-size: 0.77rem;
+    }
+
+
+    /* =========================================================
+       FORM LABELS
+    ========================================================= */
+
+    .pp-login-card .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #30283d;
+        font-size: 0.74rem;
+        font-weight: 850;
+    }
+
+
+    /* =========================================================
+       INPUTS
+    ========================================================= */
+
+    .pp-login-card input[type="email"],
+    .pp-login-card input[type="password"] {
+        display: block;
+        width: 100%;
+        height: 50px;
+        padding: 0 14px;
+        border: 1px solid #e1dce9;
+        border-radius: 11px;
+        outline: none;
+        background: #fdfcff;
+        color: #292236;
+        font-size: 0.82rem;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease;
+    }
+
+    .pp-login-card input[type="email"]::placeholder,
+    .pp-login-card input[type="password"]::placeholder {
+        color: #aaa3b2;
+    }
+
+    .pp-login-card input[type="email"]:hover,
+    .pp-login-card input[type="password"]:hover {
+        border-color: #d0c6df;
+        background: #fff;
+    }
+
+    .pp-login-card input[type="email"]:focus,
+    .pp-login-card input[type="password"]:focus {
+        border-color: #7048d9;
+        background: #fff;
+        box-shadow:
+            0 0 0 4px rgba(112, 72, 217, 0.09);
+    }
+
+
+    /* =========================================================
+       ERRORS
+    ========================================================= */
+
+    .pp-login-card .form-error {
+        margin-top: 6px;
+        color: #c33d3d;
+        font-size: 0.69rem;
+        line-height: 1.4;
+    }
+
+
+    /* =========================================================
+       REMEMBER ME
+    ========================================================= */
+
+    .pp-remember {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 19px 0 24px;
+    }
+
+    .pp-remember input {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        accent-color: #6844d4;
+        cursor: pointer;
+    }
+
+    .pp-remember label {
+        color: #6d6675;
+        font-size: 0.74rem;
+        cursor: pointer;
+    }
+
+
+    /* =========================================================
+       LOGIN BUTTON
+    ========================================================= */
+
+    .pp-login-button {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 50px;
+        overflow: hidden;
+        border: 0;
+        border-radius: 11px;
+        background:
+            linear-gradient(
+                105deg,
+                #5730bd,
+                #7448dc,
+                #5d36ca
+            );
+        color: #fff;
+        font-size: 0.82rem;
+        font-weight: 850;
+        box-shadow:
+            0 14px 30px rgba(91, 51, 194, 0.22);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .pp-login-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -80%;
+        width: 45%;
+        height: 100%;
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.22),
+                transparent
+            );
+        transform: skewX(-20deg);
+        transition: left 0.55s ease;
+    }
+
+    .pp-login-button:hover {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow:
+            0 19px 38px rgba(91, 51, 194, 0.29);
+    }
+
+    .pp-login-button:hover::before {
+        left: 140%;
+    }
+
+    .pp-login-button:focus-visible {
+        outline: 3px solid rgba(104, 68, 212, 0.23);
+        outline-offset: 3px;
+    }
+
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    .pp-login-footer {
+        margin-top: 23px;
+        padding-top: 20px;
+        border-top: 1px solid #eeeaf3;
+        color: #8b8492;
+        text-align: center;
+        font-size: 0.73rem;
+    }
+
+    .pp-login-footer a {
+        color: #6844d4;
+        text-decoration: none;
+        font-weight: 850;
+    }
+
+    .pp-login-footer a:hover {
+        color: #4d2ca9;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+
+    /* =========================================================
+       ANIMATIONS
+    ========================================================= */
+
+    @keyframes loginGlow {
+
+        0%,
+        100% {
+            transform: scale(0.95);
+            opacity: 0.7;
+        }
+
+        50% {
+            transform: scale(1.08);
+            opacity: 1;
+        }
+
+    }
+
+    @keyframes loginRotate {
+
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+
+    }
+
+    @keyframes loginRotateReverse {
+
+        from {
+            transform: rotate(360deg);
+        }
+
+        to {
+            transform: rotate(0deg);
+        }
+
+    }
+
+    @keyframes loginCore {
+
+        0%,
+        100% {
+            transform: translateY(0) scale(1);
+        }
+
+        40% {
+            transform: translateY(-9px) scale(1.035);
+        }
+
+        70% {
+            transform: translateY(5px) scale(0.98);
+        }
+
+    }
+
+    @keyframes loginPulse {
+
+        0% {
+            transform: scale(0.7);
+            opacity: 0.65;
+        }
+
+        70% {
+            transform: scale(1.18);
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 0;
+        }
+
+    }
+
+    @keyframes loginNodeOne {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+        }
+
+        50% {
+            transform: translate(13px, -9px);
+        }
+
+    }
+
+    @keyframes loginNodeTwo {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+        }
+
+        50% {
+            transform: translate(-11px, 13px);
+        }
+
+    }
+
+    @keyframes loginNodeThree {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+        }
+
+        50% {
+            transform: translate(10px, -13px);
+        }
+
+    }
+
+    @keyframes loginDotPulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 0.55;
+        }
+
+        50% {
+            transform: scale(1.35);
+            opacity: 1;
+        }
+
+    }
+
+    @keyframes loginParticleOne {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+            opacity: 0.25;
+        }
+
+        50% {
+            transform: translate(-18px, 15px);
+            opacity: 0.8;
+        }
+
+    }
+
+    @keyframes loginParticleTwo {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+            opacity: 0.2;
+        }
+
+        50% {
+            transform: translate(15px, -20px);
+            opacity: 0.75;
+        }
+
+    }
+
+    @keyframes loginParticleThree {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+        }
+
+        50% {
+            transform: translate(12px, -15px);
+        }
+
+    }
+
+
+    /* =========================================================
+       ACCESSIBILITY
+    ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .pp-login-page *,
+        .pp-login-page *::before,
+        .pp-login-page *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+
+    }
+
+
+    /* =========================================================
+       TABLET
+    ========================================================= */
+
+    @media (max-width: 1000px) {
+
+        .pp-login-layout {
+            grid-template-columns: minmax(0, 1fr) 400px;
+            gap: 35px;
+        }
+
+        .pp-login-copy h1 {
+            font-size: 4rem;
+        }
+
+        .pp-orbit {
+            right: -90px;
+            bottom: -25px;
+            transform: scale(0.82);
+            transform-origin: bottom right;
+        }
+
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media (max-width: 800px) {
+
+        .pp-login-container {
+            width: min(100% - 28px, 500px);
+            padding: 30px 0 45px;
+        }
+
+        .pp-login-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        .pp-login-intro {
+            width: 100%;
+            min-height: 400px;
+            padding-top: 20px;
+        }
+
+        .pp-login-copy {
+            width: 100%;
+            margin-top: 0;
+        }
+
+        .pp-login-copy h1 {
+            font-size: 3.6rem;
+        }
+
+        .pp-login-copy p {
+            width: 350px;
+        }
+
+        .pp-orbit {
+            right: -50px;
+            bottom: -110px;
+            transform: scale(0.58);
+            transform-origin: bottom right;
+            opacity: 0.7;
+        }
+
+        .pp-login-form-area {
+            width: 100%;
+        }
+
+        .pp-login-card {
+            max-width: 500px;
+            margin: auto;
+        }
+
+    }
+
+
+    /* =========================================================
+       SMALL MOBILE
+    ========================================================= */
+
+    @media (max-width: 500px) {
+
+        .pp-login-container {
+            width: calc(100% - 22px);
+        }
+
+        .pp-login-intro {
+            min-height: 350px;
+        }
+
+        .pp-login-copy h1 {
+            font-size: 3rem;
+        }
+
+        .pp-login-copy p {
+            width: 100%;
+            margin-top: 20px;
+            font-size: 0.81rem;
+        }
+
+        .pp-login-points {
+            display: none;
+        }
+
+        .pp-orbit {
+            right: -130px;
+            bottom: -130px;
+            opacity: 0.5;
+        }
+
+        .pp-login-card {
+            padding: 34px 24px 29px;
+            border-radius: 21px;
+        }
+
+        .pp-login-card h2 {
+            font-size: 1.75rem;
+        }
+
+    }
+
+</style>
+
+
+<section class="pp-login-page">
+
+    <div class="pp-login-container">
+
+        <div class="pp-login-layout">
+
+
+            <!-- =================================================
+                 LEFT CONTENT
+
+                 NOTE:
+                 The ProblemPool logo/brand is intentionally
+                 removed here because base.html already provides
+                 the main navbar and brand.
+            ================================================== -->
+
+            <div class="pp-login-intro">
+
+
+                <div class="pp-login-copy">
+
+
+                    <div class="pp-login-eyebrow">
+
+                        <span class="pp-login-eyebrow-dot"></span>
+
+                        Welcome back
+
                     </div>
 
+
                     <h1>
-                        Welcome Back!
+
+                        Good to
+
+                        <br>
+
+                        <span>
+                            see you
+                        </span>
+
+                        <br>
+
+                        again.
+
                     </h1>
 
-                    <p class="auth-subtitle">
-                        Login to your account
+
+                    <p>
+                        Continue exploring meaningful problems,
+                        sharing solutions, meeting collaborators,
+                        and turning great ideas into real projects.
                     </p>
 
+
+                    <div class="pp-login-points">
+
+
+                        <div class="pp-login-point">
+
+                            <i
+                                class="bi bi-lightbulb"
+                                aria-hidden="true"
+                            ></i>
+
+                            Discover problems
+
+                        </div>
+
+
+                        <div class="pp-login-point">
+
+                            <i
+                                class="bi bi-people"
+                                aria-hidden="true"
+                            ></i>
+
+                            Find collaborators
+
+                        </div>
+
+
+                        <div class="pp-login-point">
+
+                            <i
+                                class="bi bi-rocket-takeoff"
+                                aria-hidden="true"
+                            ></i>
+
+                            Build projects
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ANIMATED ORBIT
+                ================================================== -->
+
+                <div
+                    class="pp-orbit"
+                    aria-hidden="true"
+                >
+
+                    <div class="pp-orbit-glow"></div>
+
+                    <div class="pp-orbit-ring one"></div>
+
+                    <div class="pp-orbit-ring two"></div>
+
+                    <div class="pp-orbit-ring three"></div>
+
+
+                    <div class="pp-orbit-core">
+
+                        <i class="bi bi-stars"></i>
+
+                    </div>
+
+
+                    <div class="pp-orbit-node one">
+
+                        <i class="bi bi-lightbulb"></i>
+
+                    </div>
+
+
+                    <div class="pp-orbit-node two">
+
+                        <i class="bi bi-people"></i>
+
+                    </div>
+
+
+                    <div class="pp-orbit-node three">
+
+                        <i class="bi bi-rocket-takeoff"></i>
+
+                    </div>
+
+
+                    <span class="pp-particle one"></span>
+
+                    <span class="pp-particle two"></span>
+
+                    <span class="pp-particle three"></span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOGIN FORM
+            ================================================== -->
+
+            <div class="pp-login-form-area">
+
+                <div class="pp-login-card">
+
+
+                    <div
+                        class="pp-lock"
+                        aria-hidden="true"
+                    >
+
+                        <i class="bi bi-lock-fill"></i>
+
+                    </div>
+
+
+                    <h2>
+                        Welcome back!
+                    </h2>
+
+
+                    <p class="pp-login-subtitle">
+                        Login to your ProblemPool account
+                    </p>
+
+
                     {% if messages %}
+
                         {% for message in messages %}
-                            <div class="alert alert-danger" role="alert">
+
+                            <div
+                                class="alert alert-danger"
+                                role="alert"
+                            >
                                 {{ message }}
                             </div>
+
                         {% endfor %}
+
                     {% endif %}
+
 
                     <form method="post">
 
@@ -44,12 +1129,17 @@
 
                         {% if form.non_field_errors %}
 
-                            <div class="alert alert-danger">
+                            <div
+                                class="alert alert-danger"
+                                role="alert"
+                            >
                                 {{ form.non_field_errors }}
                             </div>
 
                         {% endif %}
 
+
+                        <!-- EMAIL -->
 
                         <div class="mb-3">
 
@@ -62,14 +1152,19 @@
 
                             {{ form.email }}
 
+
                             {% for error in form.email.errors %}
+
                                 <div class="form-error">
                                     {{ error }}
                                 </div>
+
                             {% endfor %}
 
                         </div>
 
+
+                        <!-- PASSWORD -->
 
                         <div class="mb-3">
 
@@ -82,16 +1177,21 @@
 
                             {{ form.password }}
 
+
                             {% for error in form.password.errors %}
+
                                 <div class="form-error">
                                     {{ error }}
                                 </div>
+
                             {% endfor %}
 
                         </div>
 
 
-                        <div class="form-check mb-4">
+                        <!-- REMEMBER ME -->
+
+                        <div class="pp-remember">
 
                             <input
                                 class="form-check-input"
@@ -109,17 +1209,28 @@
                         </div>
 
 
+                        <!-- LOGIN -->
+
                         <button
                             type="submit"
-                            class="btn pp-btn-primary w-100"
+                            class="pp-login-button"
                         >
+
+                            <i
+                                class="bi bi-box-arrow-in-right me-2"
+                                aria-hidden="true"
+                            ></i>
+
                             Login
+
                         </button>
 
                     </form>
 
 
-                    <div class="auth-footer">
+                    <!-- REGISTER -->
+
+                    <div class="pp-login-footer">
 
                         Don't have an account?
 
@@ -128,6 +1239,7 @@
                         </a>
 
                     </div>
+
 
                 </div>
 

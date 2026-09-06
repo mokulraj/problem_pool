@@ -192,7 +192,20 @@
     .pp-hero-visual {
         position: relative;
         min-height: 510px;
+        isolation: isolate;
     }
+
+
+    /* =========================================================
+       UNIQUE HERO MOTION SYSTEM
+       ---------------------------------------------------------
+       The visual behaves like a small living ecosystem:
+       - orb slowly breathes
+       - ring rotates independently
+       - center gently pulls/pushes against the orb
+       - cards follow different "gravitational" paths
+       - connection lines move like flowing data
+    ========================================================= */
 
 
     .pp-visual-orb {
@@ -210,6 +223,10 @@
                 #ddd3fa 48%,
                 #f8f6ff 72%
             );
+
+        animation:
+            pp-orb-breathe 7s ease-in-out infinite,
+            pp-orb-shift 13s ease-in-out infinite;
     }
 
 
@@ -222,6 +239,10 @@
         transform: translateX(-50%);
         border: 1px dashed rgba(104, 68, 212, 0.22);
         border-radius: 50%;
+
+        animation:
+            pp-ring-orbit 18s linear infinite,
+            pp-ring-breathe 6s ease-in-out infinite;
     }
 
 
@@ -235,27 +256,529 @@
         background: rgba(255, 255, 255, 0.91);
         box-shadow: 0 22px 50px rgba(53, 36, 94, 0.12);
         backdrop-filter: blur(14px);
+        transform-origin: center center;
+        will-change: transform;
     }
 
+
+    /*
+       Each card has its own movement.
+       They don't simply move up/down together.
+    */
 
     .pp-floating-card.problem {
         top: 65px;
         left: 5px;
-        transform: rotate(-4deg);
+
+        animation:
+            pp-card-problem 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
     }
 
 
     .pp-floating-card.solution {
         top: 225px;
         right: 0;
-        transform: rotate(4deg);
+
+        animation:
+            pp-card-solution 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
     }
 
 
     .pp-floating-card.project {
         bottom: 35px;
         left: 75px;
-        transform: rotate(-2deg);
+
+        animation:
+            pp-card-project 8.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+
+
+    /* =========================================================
+       CARD MOTION
+       ========================================================= */
+
+    @keyframes pp-card-problem {
+
+        0%,
+        100% {
+            transform:
+                translate3d(0, 0, 0)
+                rotate(-4deg);
+        }
+
+        25% {
+            transform:
+                translate3d(10px, -13px, 0)
+                rotate(-1deg);
+        }
+
+        50% {
+            transform:
+                translate3d(-4px, -21px, 0)
+                rotate(-6deg);
+        }
+
+        75% {
+            transform:
+                translate3d(-12px, -7px, 0)
+                rotate(-2deg);
+        }
+
+    }
+
+
+    @keyframes pp-card-solution {
+
+        0%,
+        100% {
+            transform:
+                translate3d(0, 0, 0)
+                rotate(4deg);
+        }
+
+        25% {
+            transform:
+                translate3d(-12px, -8px, 0)
+                rotate(1deg);
+        }
+
+        50% {
+            transform:
+                translate3d(-7px, 15px, 0)
+                rotate(6deg);
+        }
+
+        75% {
+            transform:
+                translate3d(8px, 7px, 0)
+                rotate(2deg);
+        }
+
+    }
+
+
+    @keyframes pp-card-project {
+
+        0%,
+        100% {
+            transform:
+                translate3d(0, 0, 0)
+                rotate(-2deg);
+        }
+
+        25% {
+            transform:
+                translate3d(12px, -10px, 0)
+                rotate(1deg);
+        }
+
+        50% {
+            transform:
+                translate3d(20px, -2px, 0)
+                rotate(-4deg);
+        }
+
+        75% {
+            transform:
+                translate3d(6px, 13px, 0)
+                rotate(-1deg);
+        }
+
+    }
+
+
+    /* =========================================================
+       CARD HOVER
+       ========================================================= */
+
+    .pp-floating-card:hover {
+        z-index: 10;
+        box-shadow:
+            0 30px 65px rgba(53, 36, 94, 0.18),
+            0 0 0 1px rgba(104, 68, 212, 0.08);
+    }
+
+
+    /* =========================================================
+       CENTER ORB
+       ========================================================= */
+
+    .pp-visual-center {
+        position: absolute;
+        z-index: 5;
+        top: 170px;
+        left: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 125px;
+        height: 125px;
+        transform: translateX(-50%);
+        border: 10px solid rgba(255, 255, 255, 0.65);
+        border-radius: 50%;
+        background: #6844d4;
+        color: #fff;
+        box-shadow:
+            0 25px 55px rgba(104, 68, 212, 0.28),
+            0 0 0 1px rgba(104, 68, 212, 0.1);
+
+        animation:
+            pp-center-float 5.5s ease-in-out infinite,
+            pp-center-glow 4s ease-in-out infinite;
+    }
+
+
+    .pp-visual-center::before {
+        content: "";
+        position: absolute;
+        inset: -18px;
+        border: 1px solid rgba(104, 68, 212, 0.18);
+        border-radius: 50%;
+
+        animation:
+            pp-center-pulse 3.5s ease-out infinite;
+    }
+
+
+    .pp-visual-center::after {
+        content: "";
+        position: absolute;
+        inset: -30px;
+        border: 1px solid rgba(104, 68, 212, 0.08);
+        border-radius: 50%;
+
+        animation:
+            pp-center-pulse 3.5s ease-out 1.2s infinite;
+    }
+
+
+    .pp-visual-center i {
+        position: relative;
+        z-index: 2;
+        font-size: 2.4rem;
+
+        animation:
+            pp-stars-spin 7s ease-in-out infinite;
+    }
+
+
+    /* =========================================================
+       ORB MOTION
+       ========================================================= */
+
+    @keyframes pp-orb-breathe {
+
+        0%,
+        100% {
+            transform: translateX(-50%) scale(1);
+        }
+
+        50% {
+            transform: translateX(-50%) scale(1.045);
+        }
+
+    }
+
+
+    @keyframes pp-orb-shift {
+
+        0%,
+        100% {
+            filter:
+                hue-rotate(0deg)
+                brightness(1);
+        }
+
+        50% {
+            filter:
+                hue-rotate(8deg)
+                brightness(1.035);
+        }
+
+    }
+
+
+    @keyframes pp-ring-orbit {
+
+        from {
+            transform:
+                translateX(-50%)
+                rotate(0deg);
+        }
+
+        to {
+            transform:
+                translateX(-50%)
+                rotate(360deg);
+        }
+
+    }
+
+
+    @keyframes pp-ring-breathe {
+
+        0%,
+        100% {
+            opacity: 0.7;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+    }
+
+
+    /* =========================================================
+       CENTER MOTION
+       ========================================================= */
+
+    @keyframes pp-center-float {
+
+        0%,
+        100% {
+            transform:
+                translateX(-50%)
+                translateY(0)
+                scale(1);
+        }
+
+        35% {
+            transform:
+                translateX(-50%)
+                translateY(-7px)
+                scale(1.025);
+        }
+
+        70% {
+            transform:
+                translateX(-50%)
+                translateY(5px)
+                scale(0.985);
+        }
+
+    }
+
+
+    @keyframes pp-center-glow {
+
+        0%,
+        100% {
+            box-shadow:
+                0 25px 55px rgba(104, 68, 212, 0.28),
+                0 0 0 1px rgba(104, 68, 212, 0.1);
+        }
+
+        50% {
+            box-shadow:
+                0 30px 70px rgba(104, 68, 212, 0.38),
+                0 0 35px rgba(104, 68, 212, 0.16),
+                0 0 0 1px rgba(104, 68, 212, 0.15);
+        }
+
+    }
+
+
+    @keyframes pp-center-pulse {
+
+        0% {
+            transform: scale(0.72);
+            opacity: 0.75;
+        }
+
+        70% {
+            transform: scale(1.15);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1.15);
+            opacity: 0;
+        }
+
+    }
+
+
+    @keyframes pp-stars-spin {
+
+        0%,
+        100% {
+            transform:
+                rotate(0deg)
+                scale(1);
+        }
+
+        25% {
+            transform:
+                rotate(-8deg)
+                scale(1.08);
+        }
+
+        50% {
+            transform:
+                rotate(8deg)
+                scale(0.94);
+        }
+
+        75% {
+            transform:
+                rotate(-4deg)
+                scale(1.06);
+        }
+
+    }
+
+
+    /* =========================================================
+       CONNECTION LINES
+       ========================================================= */
+
+    .pp-connection {
+        position: absolute;
+        z-index: 1;
+        height: 1px;
+        background: repeating-linear-gradient(
+            90deg,
+            #9b88d5 0,
+            #9b88d5 5px,
+            transparent 5px,
+            transparent 10px
+        );
+        transform-origin: left center;
+        background-size: 20px 100%;
+
+        animation:
+            pp-data-flow 2.2s linear infinite;
+    }
+
+
+    .pp-connection.one {
+        width: 145px;
+        top: 160px;
+        left: 190px;
+        transform: rotate(15deg);
+        animation-delay: 0s;
+    }
+
+
+    .pp-connection.two {
+        width: 145px;
+        top: 270px;
+        right: 180px;
+        transform: rotate(-12deg);
+        animation-delay: 0.7s;
+    }
+
+
+    .pp-connection.three {
+        width: 145px;
+        bottom: 130px;
+        left: 175px;
+        transform: rotate(-17deg);
+        animation-delay: 1.2s;
+    }
+
+
+    @keyframes pp-data-flow {
+
+        from {
+            background-position: 0 0;
+            opacity: 0.35;
+        }
+
+        50% {
+            opacity: 0.8;
+        }
+
+        to {
+            background-position: 40px 0;
+            opacity: 0.35;
+        }
+
+    }
+
+
+    /* =========================================================
+       MICRO FLOATING LIGHT
+       ========================================================= */
+
+    .pp-hero-visual::before,
+    .pp-hero-visual::after {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #8d72e2;
+        box-shadow:
+            0 0 0 6px rgba(141, 114, 226, 0.08),
+            0 0 20px rgba(104, 68, 212, 0.22);
+        pointer-events: none;
+    }
+
+
+    .pp-hero-visual::before {
+        top: 95px;
+        right: 80px;
+
+        animation:
+            pp-particle-one 6s ease-in-out infinite;
+    }
+
+
+    .pp-hero-visual::after {
+        bottom: 85px;
+        right: 190px;
+        width: 5px;
+        height: 5px;
+
+        animation:
+            pp-particle-two 7s ease-in-out infinite;
+    }
+
+
+    @keyframes pp-particle-one {
+
+        0%,
+        100% {
+            transform:
+                translate3d(0, 0, 0)
+                scale(1);
+            opacity: 0.35;
+        }
+
+        50% {
+            transform:
+                translate3d(-25px, 28px, 0)
+                scale(1.6);
+            opacity: 1;
+        }
+
+    }
+
+
+    @keyframes pp-particle-two {
+
+        0%,
+        100% {
+            transform:
+                translate3d(0, 0, 0);
+            opacity: 0.2;
+        }
+
+        40% {
+            transform:
+                translate3d(18px, -25px, 0);
+            opacity: 0.8;
+        }
+
+        80% {
+            transform:
+                translate3d(-12px, -40px, 0);
+            opacity: 0.25;
+        }
+
     }
 
 
@@ -310,71 +833,6 @@
         color: #2c8a5c;
         font-size: 0.65rem;
         font-weight: 800;
-    }
-
-
-    .pp-visual-center {
-        position: absolute;
-        z-index: 2;
-        top: 170px;
-        left: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 125px;
-        height: 125px;
-        transform: translateX(-50%);
-        border: 10px solid rgba(255, 255, 255, 0.65);
-        border-radius: 50%;
-        background: #6844d4;
-        color: #fff;
-        box-shadow:
-            0 25px 55px rgba(104, 68, 212, 0.28),
-            0 0 0 1px rgba(104, 68, 212, 0.1);
-    }
-
-
-    .pp-visual-center i {
-        font-size: 2.4rem;
-    }
-
-
-    .pp-connection {
-        position: absolute;
-        z-index: 1;
-        height: 1px;
-        background: repeating-linear-gradient(
-            90deg,
-            #9b88d5 0,
-            #9b88d5 5px,
-            transparent 5px,
-            transparent 10px
-        );
-        transform-origin: left center;
-    }
-
-
-    .pp-connection.one {
-        width: 145px;
-        top: 160px;
-        left: 190px;
-        transform: rotate(15deg);
-    }
-
-
-    .pp-connection.two {
-        width: 145px;
-        top: 270px;
-        right: 180px;
-        transform: rotate(-12deg);
-    }
-
-
-    .pp-connection.three {
-        width: 145px;
-        bottom: 130px;
-        left: 175px;
-        transform: rotate(-17deg);
     }
 
 
@@ -676,7 +1134,40 @@
 
 
     /* =========================================================
-       MOBILE
+       ACCESSIBILITY
+    ========================================================= */
+
+    .pp-floating-card:focus-within,
+    .pp-visual-center:focus-within {
+        outline: 3px solid rgba(104, 68, 212, 0.35);
+        outline-offset: 5px;
+    }
+
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .pp-visual-orb,
+        .pp-visual-ring,
+        .pp-floating-card,
+        .pp-visual-center,
+        .pp-visual-center::before,
+        .pp-visual-center::after,
+        .pp-visual-center i,
+        .pp-connection,
+        .pp-hero-visual::before,
+        .pp-hero-visual::after {
+            animation: none !important;
+        }
+
+    }
+
+
+    /* =========================================================
+       TABLET
     ========================================================= */
 
     @media (max-width: 1100px) {
@@ -720,6 +1211,10 @@
 
     }
 
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
 
     @media (max-width: 600px) {
 
