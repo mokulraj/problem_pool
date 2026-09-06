@@ -163,6 +163,21 @@
                 </li>
 
 
+                <!-- LEADERBOARD -->
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="{% url 'reputation:leaderboard' %}"
+                    >
+                        <i class="bi bi-trophy me-1"></i>
+                        Leaderboard
+                    </a>
+
+                </li>
+
+
                 <!-- DASHBOARD -->
 
                 {% if user.is_authenticated %}

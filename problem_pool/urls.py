@@ -5,37 +5,76 @@ from django.urls import include, path
 
 
 urlpatterns = [
-    path("admin/",admin.site.urls,),
+    path(
+        "admin/",
+        admin.site.urls,
+    ),
 
     # Public home page
-    path("",include("core.urls"),),
+    path(
+        "",
+        include("core.urls"),
+    ),
 
     # Dashboard
-    path("",include("dashboard.urls"),),
+    path(
+        "",
+        include("dashboard.urls"),
+    ),
 
     # Accounts
-    path("",include("accounts.urls"),),
+    path(
+        "",
+        include("accounts.urls"),
+    ),
 
     # Problems
-    path("",include("problems.urls"),),
+    path(
+        "",
+        include("problems.urls"),
+    ),
 
     # Solutions
-    path("",include("solutions.urls"),),
+    path(
+        "",
+        include("solutions.urls"),
+    ),
 
     # Comments
-    path("",include("comments.urls"),),
+    path(
+        "",
+        include("comments.urls"),
+    ),
 
     # Projects
-    path("",include("projects.urls"),),
+    path(
+        "",
+        include("projects.urls"),
+    ),
 
     # Teams
-    path("",include("teams.urls"),),
+    path(
+        "",
+        include("teams.urls"),
+    ),
 
     # Tasks
-    path("",include("tasks.urls"),),
-    
+    path(
+        "",
+        include("tasks.urls"),
+    ),
+
     # Notifications
-    path("", include("notifications.urls")),
+    path(
+        "",
+        include("notifications.urls"),
+    ),
+
+    # Reputation / Leaderboard
+    path(
+        "",
+        include("reputation.urls"),
+    ),
 ]
 
 
