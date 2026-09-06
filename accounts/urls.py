@@ -33,16 +33,17 @@ urlpatterns = [
         name="profile",
     ),
 
+    # Profile editing
+    path(
+        "profile/edit/",
+        views.edit_profile_view,
+        name="edit_profile",
+    ),
+
     # Public profile for another user
     path(
         "profile/<str:username>/",
         views.profile_view,
         name="public_profile",
-    ),
-
-    path(
-        "profile/edit/",
-        views.edit_profile_view,
-        name="edit_profile",
     ),
 ]
