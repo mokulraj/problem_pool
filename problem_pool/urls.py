@@ -75,6 +75,12 @@ urlpatterns = [
         "",
         include("reputation.urls"),
     ),
+
+    # Global Search
+    path(
+        "",
+        include("search.urls"),
+    ),
 ]
 
 

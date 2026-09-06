@@ -1,0 +1,520 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Search | ProblemPool
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pp-section">
+
+    <div class="container">
+
+        <!-- ================================================= -->
+        <!-- SEARCH HEADER -->
+        <!-- ================================================= -->
+
+        <div class="text-center mb-5">
+
+            <div class="empty-state-icon mb-3">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h1 class="pp-section-title">
+                Global Search
+            </h1>
+
+            <p class="pp-section-subtitle mb-0">
+                Search problems, solutions, projects, and users
+                across ProblemPool.
+            </p>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SEARCH FORM -->
+        <!-- ================================================= -->
+
+        <div class="row justify-content-center mb-5">
+
+            <div class="col-lg-8">
+
+                <form
+                    method="get"
+                    action="{% url 'search:global_search' %}"
+                >
+
+                    <div class="input-group">
+
+                        <input
+                            type="search"
+                            name="q"
+                            value="{{ query }}"
+                            class="form-control"
+                            placeholder="Search ProblemPool..."
+                            aria-label="Search ProblemPool"
+                            autofocus
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn pp-btn-primary"
+                        >
+                            <i class="bi bi-search me-1"></i>
+                            Search
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        {% if query %}
+
+            <!-- ================================================= -->
+            <!-- SEARCH SUMMARY -->
+            <!-- ================================================= -->
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+
+                    <h2 class="h5 fw-bold mb-1">
+                        Search results
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Results for
+                        <strong>"{{ query }}"</strong>
+                    </p>
+
+                </div>
+
+                <span class="pp-badge pp-badge-purple">
+                    {{ total_results }} result{{ total_results|pluralize }}
+                </span>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PROBLEMS -->
+            <!-- ================================================= -->
+
+            {% if problems %}
+
+                <div class="mb-5">
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+
+                        <i class="bi bi-exclamation-circle text-primary"></i>
+
+                        <h2 class="h5 fw-bold mb-0">
+                            Problems
+                        </h2>
+
+                    </div>
+
+
+                    <div class="d-flex flex-column gap-3">
+
+                        {% for problem in problems %}
+
+                            <div class="problem-card">
+
+                                <div class="problem-card-main">
+
+                                    <div class="problem-card-icon">
+                                        <i class="bi bi-exclamation-circle"></i>
+                                    </div>
+
+                                    <div>
+
+                                        <h3 class="problem-card-title">
+
+                                            <a
+                                                href="{% url 'problems:detail' problem.pk %}"
+                                            >
+                                                {{ problem.title }}
+                                            </a>
+
+                                        </h3>
+
+                                        <p class="problem-card-description">
+                                            {{ problem.description|truncatewords:25 }}
+                                        </p>
+
+                                        <div class="problem-card-meta">
+
+                                            <span>
+                                                <i class="bi bi-person"></i>
+                                                {{ problem.created_by.username }}
+                                            </span>
+
+                                            <span>
+                                                <i class="bi bi-tag"></i>
+                                                {{ problem.get_category_display }}
+                                            </span>
+
+                                            <span>
+                                                <i class="bi bi-clock"></i>
+                                                {{ problem.created_at|date:"M d, Y" }}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="problem-card-stats">
+
+                                    <div>
+                                        <strong>{{ problem.solution_count }}</strong>
+                                        <span>Solutions</span>
+                                    </div>
+
+                                    <div>
+                                        <strong>{{ problem.views }}</strong>
+                                        <span>Views</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- SOLUTIONS -->
+            <!-- ================================================= -->
+
+            {% if solutions %}
+
+                <div class="mb-5">
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+
+                        <i class="bi bi-lightbulb text-primary"></i>
+
+                        <h2 class="h5 fw-bold mb-0">
+                            Solutions
+                        </h2>
+
+                    </div>
+
+
+                    <div class="solution-list">
+
+                        {% for solution in solutions %}
+
+                            <div class="solution-card">
+
+                                <div class="solution-card-icon">
+                                    <i class="bi bi-lightbulb"></i>
+                                </div>
+
+                                <div class="flex-grow-1">
+
+                                    <h3 class="solution-card-title">
+
+                                        <a
+                                            href="{% url 'solutions:detail' solution.pk %}"
+                                        >
+                                            {{ solution.title }}
+                                        </a>
+
+                                    </h3>
+
+                                    <p class="solution-card-description">
+                                        {{ solution.description|truncatewords:25 }}
+                                    </p>
+
+                                    <div class="solution-card-meta">
+
+                                        <span>
+                                            <i class="bi bi-person"></i>
+                                            {{ solution.proposed_by.username }}
+                                        </span>
+
+                                        <span>
+                                            <i class="bi bi-exclamation-circle"></i>
+                                            {{ solution.problem.title|truncatewords:8 }}
+                                        </span>
+
+                                        <span>
+                                            <i class="bi bi-clock"></i>
+                                            {{ solution.created_at|date:"M d, Y" }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="solution-score">
+
+                                    <strong>
+                                        {{ solution.score }}
+                                    </strong>
+
+                                    <span>
+                                        Score
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- PROJECTS -->
+            <!-- ================================================= -->
+
+            {% if projects %}
+
+                <div class="mb-5">
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+
+                        <i class="bi bi-kanban text-primary"></i>
+
+                        <h2 class="h5 fw-bold mb-0">
+                            Projects
+                        </h2>
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+                        {% for project in projects %}
+
+                            <div class="col-md-6">
+
+                                <div class="pp-card h-100 p-4">
+
+                                    <div class="d-flex align-items-start gap-3">
+
+                                        <div class="problem-card-icon">
+                                            <i class="bi bi-kanban"></i>
+                                        </div>
+
+                                        <div class="flex-grow-1">
+
+                                            <h3 class="h6 fw-bold mb-2">
+
+                                                <a
+                                                    href="{% url 'projects:detail' project.pk %}"
+                                                    class="text-dark"
+                                                >
+                                                    {{ project.name }}
+                                                </a>
+
+                                            </h3>
+
+                                            <p class="text-muted small mb-3">
+                                                {{ project.description|truncatewords:25 }}
+                                            </p>
+
+                                            <div class="d-flex flex-wrap gap-2">
+
+                                                <span class="pp-badge pp-badge-purple">
+                                                    {{ project.get_status_display }}
+                                                </span>
+
+                                                <span class="text-muted small">
+                                                    <i class="bi bi-person me-1"></i>
+                                                    {{ project.owner.username }}
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- USERS -->
+            <!-- ================================================= -->
+
+            {% if users %}
+
+                <div class="mb-5">
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+
+                        <i class="bi bi-people text-primary"></i>
+
+                        <h2 class="h5 fw-bold mb-0">
+                            Users
+                        </h2>
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+                        {% for profile_user in users %}
+
+                            <div class="col-md-6 col-lg-4">
+
+                                <a
+                                    href="{% url 'accounts:public_profile' profile_user.username %}"
+                                    class="text-decoration-none"
+                                >
+
+                                    <div class="pp-card h-100 p-4">
+
+                                        <div class="d-flex align-items-center gap-3">
+
+                                            {% if profile_user.profile_image %}
+
+                                                <img
+                                                    src="{{ profile_user.profile_image.url }}"
+                                                    alt="{{ profile_user.username }}"
+                                                    class="nav-avatar"
+                                                >
+
+                                            {% else %}
+
+                                                <span class="nav-avatar-placeholder">
+
+                                                    {{ profile_user.first_name|first|default:profile_user.username|first|upper }}
+
+                                                </span>
+
+                                            {% endif %}
+
+
+                                            <div class="min-width-0">
+
+                                                <h3 class="h6 fw-bold text-dark mb-1">
+                                                    {{ profile_user.username }}
+                                                </h3>
+
+                                                <div class="text-muted small mb-1">
+                                                    {{ profile_user.level }}
+                                                </div>
+
+                                                <div class="text-muted small">
+                                                    <i class="bi bi-trophy me-1"></i>
+                                                    {{ profile_user.points }} points
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </a>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ================================================= -->
+            <!-- NO RESULTS -->
+            <!-- ================================================= -->
+
+            {% if not problems and not solutions and not projects and not users %}
+
+                <div class="pp-card empty-state">
+
+                    <div class="empty-state-icon">
+
+                        <i class="bi bi-search"></i>
+
+                    </div>
+
+                    <h2>
+                        No results found
+                    </h2>
+
+                    <p>
+                        We couldn't find anything matching
+                        <strong>"{{ query }}"</strong>.
+                    </p>
+
+                    <p class="mb-0">
+                        Try a different keyword or search phrase.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+        {% else %}
+
+            <!-- ================================================= -->
+            <!-- INITIAL SEARCH STATE -->
+            <!-- ================================================= -->
+
+            <div class="pp-card empty-state">
+
+                <div class="empty-state-icon">
+
+                    <i class="bi bi-search"></i>
+
+                </div>
+
+                <h2>
+                    Search ProblemPool
+                </h2>
+
+                <p>
+                    Find problems, solutions, projects,
+                    and community members.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "comments",
     "tasks",
     "reputation",
+    "search",
 ]
 
 
@@ -172,6 +173,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ============================================================
 # AUTHENTICATION
 # ============================================================
+
 AUTH_USER_MODEL = "accounts.User"
 
 AUTHENTICATION_BACKENDS = [
