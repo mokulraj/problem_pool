@@ -181,17 +181,34 @@
    TEAM
 ========================================================= */
 
+.team-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .team-member-card {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 13px;
 
-    padding: 17px;
+    padding: 14px;
 
     border: 1px solid #e4e7ed;
-    border-radius: 10px;
+    border-radius: 11px;
 
     background: #ffffff;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.team-member-card:hover {
+    border-color: #d9d3ef;
+
+    box-shadow:
+        0 5px 15px rgba(15, 23, 42, 0.04);
 }
 
 .team-avatar,
@@ -225,11 +242,26 @@
     flex: 1;
 }
 
+.team-member-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
 .team-member-name {
     color: #111827;
 
     font-size: 14px;
-    font-weight: 650;
+    font-weight: 700;
+}
+
+.team-member-username {
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 11px;
 }
 
 .team-member-note {
@@ -240,19 +272,173 @@
     font-size: 11px;
 }
 
+
+/* =========================================================
+   OWNER BADGE
+========================================================= */
+
 .owner-badge {
     display: inline-flex;
+    align-items: center;
+    gap: 4px;
 
-    margin-left: 10px;
-    padding: 5px 9px;
+    padding: 4px 8px;
 
     border-radius: 6px;
 
     background: #eeeaff;
     color: #5a32df;
 
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MEMBER ROLE BADGE
+========================================================= */
+
+.member-role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 92px;
+
+    padding: 6px 10px;
+
+    border-radius: 7px;
+
+    background: #f5f3ff;
+    color: #5a32df;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MEMBER ACTIONS
+========================================================= */
+
+.team-member-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    flex-shrink: 0;
+}
+
+.team-role-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.team-role-select {
+    min-width: 145px;
+
+    height: 34px;
+
+    padding: 5px 28px 5px 9px;
+
+    border: 1px solid #dfe3ea;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #475569;
+
     font-size: 11px;
     font-weight: 600;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.team-role-select:focus {
+    border-color: #6338e8;
+
+    box-shadow:
+        0 0 0 3px rgba(99, 56, 232, 0.08);
+}
+
+.team-role-button {
+    height: 34px;
+
+    padding: 5px 10px;
+
+    border: 1px solid #6338e8;
+    border-radius: 7px;
+
+    background: #6338e8;
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.team-role-button:hover {
+    background: #5128d0;
+}
+
+.team-remove-button {
+    height: 34px;
+
+    padding: 5px 10px;
+
+    border: 1px solid #fecaca;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #dc2626;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.team-remove-button:hover {
+    background: #fff5f5;
+}
+
+
+/* =========================================================
+   TEAM EMPTY
+========================================================= */
+
+.team-empty {
+    padding: 24px 15px;
+
+    border: 1px dashed #dfe2e8;
+    border-radius: 10px;
+
+    background: #fafbfc;
+
+    text-align: center;
+}
+
+.team-empty i {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #a8aeba;
+
+    font-size: 25px;
+}
+
+.team-empty p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 12px;
 }
 
 
@@ -563,7 +749,7 @@
 
 
 /* =========================================================
-   OWNER ACTIONS
+   OWNER TASK ACTIONS
 ========================================================= */
 
 .clean-owner-actions {
@@ -837,6 +1023,16 @@
         align-items: flex-start;
     }
 
+    .team-member-card {
+        flex-wrap: wrap;
+    }
+
+    .team-member-actions {
+        width: 100%;
+
+        margin-left: 56px;
+    }
+
 }
 
 
@@ -877,14 +1073,33 @@
 
     .team-member-card {
         align-items: flex-start;
+
+        padding: 13px;
     }
 
-    .owner-badge {
-        display: block;
+    .team-member-actions {
+        width: 100%;
 
-        width: fit-content;
+        margin-left: 0;
 
-        margin: 5px 0 0;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .team-role-form {
+        width: 100%;
+
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .team-role-select {
+        width: 100%;
+    }
+
+    .team-role-button,
+    .team-remove-button {
+        width: 100%;
     }
 
     .clean-task-item {
@@ -962,7 +1177,9 @@
         <div class="row g-4">
 
 
-            <!-- TEAM -->
+            <!-- =================================================
+                 TEAM
+            ================================================== -->
 
             <div class="col-12 col-lg-6">
 
@@ -991,60 +1208,220 @@
                         </div>
 
 
-                        <div class="team-member-card">
-
-                            {% if project.owner.profile_image %}
-
-                                <img
-                                    src="{{ project.owner.profile_image.url }}"
-                                    alt="{{ project.owner.username }}"
-                                    class="team-avatar"
-                                >
-
-                            {% else %}
-
-                                <div class="team-avatar-placeholder">
-                                    {{ project.owner.username|first|upper }}
-                                </div>
-
-                            {% endif %}
+                        <div class="team-list">
 
 
-                            <div class="team-member-info">
+                            <!-- =================================
+                                 PROJECT OWNER
+                            ================================== -->
 
-                                <div>
+                            <div class="team-member-card">
 
-                                    <span class="team-member-name">
-                                        {{ project.owner.username }}
-                                    </span>
+                                {% if project.owner.profile_image %}
 
-                                    <span class="owner-badge">
-                                        Project Owner
-                                    </span>
+                                    <img
+                                        src="{{ project.owner.profile_image.url }}"
+                                        alt="{{ project.owner.username }}"
+                                        class="team-avatar"
+                                    >
 
-                                </div>
+                                {% else %}
 
-
-                                {% if request.user == project.owner %}
-
-                                    <div class="team-member-note">
-                                        You are the owner of this project.
-                                    </div>
-
-                                {% elif is_team_member %}
-
-                                    <div class="team-member-note">
-                                        You are a member of this project.
+                                    <div class="team-avatar-placeholder">
+                                        {{ project.owner.username|first|upper }}
                                     </div>
 
                                 {% endif %}
 
+
+                                <div class="team-member-info">
+
+                                    <div class="team-member-name-row">
+
+                                        <span class="team-member-name">
+                                            {{ project.owner.username }}
+                                        </span>
+
+                                        <span class="owner-badge">
+                                            <i class="bi bi-shield-check"></i>
+                                            Project Owner
+                                        </span>
+
+                                    </div>
+
+                                    <div class="team-member-username">
+                                        Project Owner
+                                    </div>
+
+                                </div>
+
                             </div>
+
+
+                            <!-- =================================
+                                 TEAM MEMBERS
+                            ================================== -->
+
+                            {% for membership in memberships %}
+
+                                <div class="team-member-card">
+
+                                    {% if membership.user.profile_image %}
+
+                                        <img
+                                            src="{{ membership.user.profile_image.url }}"
+                                            alt="{{ membership.user.username }}"
+                                            class="team-avatar"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="team-avatar-placeholder">
+                                            {{ membership.user.username|first|upper }}
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <div class="team-member-info">
+
+                                        <div class="team-member-name-row">
+
+                                            <span class="team-member-name">
+                                                {{ membership.user.username }}
+                                            </span>
+
+                                            <span class="member-role-badge">
+                                                {{ membership.get_role_display }}
+                                            </span>
+
+                                        </div>
+
+                                        <div class="team-member-username">
+
+                                            {% if membership.user.first_name %}
+
+                                                {{ membership.user.first_name }}
+
+                                                {% if membership.user.last_name %}
+                                                    {{ membership.user.last_name }}
+                                                {% endif %}
+
+                                                ·
+                                            {% endif %}
+
+                                            Team Member
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- =================================
+                                         OWNER CONTROLS
+                                    ================================== -->
+
+                                    {% if request.user == project.owner %}
+
+                                        <div class="team-member-actions">
+
+
+                                            <!-- CHANGE ROLE -->
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'teams:change_member_role' project.pk membership.user.pk %}"
+                                                class="team-role-form"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <select
+                                                    name="role"
+                                                    class="team-role-select"
+                                                    aria-label="Change role for {{ membership.user.username }}"
+                                                >
+
+                                                    {% for value, label in role_choices %}
+
+                                                        <option
+                                                            value="{{ value }}"
+                                                            {% if membership.role == value %}
+                                                                selected
+                                                            {% endif %}
+                                                        >
+                                                            {{ label }}
+                                                        </option>
+
+                                                    {% endfor %}
+
+                                                </select>
+
+
+                                                <button
+                                                    type="submit"
+                                                    class="team-role-button"
+                                                >
+                                                    <i class="bi bi-check2"></i>
+                                                    Update Role
+                                                </button>
+
+                                            </form>
+
+
+                                            <!-- REMOVE MEMBER -->
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'teams:remove_member' project.pk membership.user.pk %}"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="team-remove-button"
+                                                    onclick="
+                                                        return confirm(
+                                                            'Are you sure you want to remove {{ membership.user.username }} from this project?'
+                                                        );
+                                                    "
+                                                >
+                                                    <i class="bi bi-person-x"></i>
+                                                    Remove
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% empty %}
+
+                                <div class="team-empty">
+
+                                    <i class="bi bi-person-plus"></i>
+
+                                    <p>
+                                        No team members have joined this project yet.
+                                    </p>
+
+                                </div>
+
+                            {% endfor %}
 
                         </div>
 
 
+                        <!-- =====================================
+                             TEAM ACTION AREA
+                        ====================================== -->
+
                         <div class="team-action-area">
+
 
                             {% if request.user == project.owner %}
 
@@ -1055,8 +1432,8 @@
                                     </h5>
 
                                     <p>
-                                        Manage your project team and approve
-                                        new members.
+                                        Approve requests, assign roles,
+                                        change member roles, or remove members.
                                     </p>
 
                                 </div>
@@ -1065,7 +1442,7 @@
                                     href="{% url 'teams:join_requests' project.pk %}"
                                     class="project-primary-btn"
                                 >
-                                    <i class="bi bi-people"></i>
+                                    <i class="bi bi-person-plus"></i>
                                     Manage Join Requests
                                 </a>
 
@@ -1079,7 +1456,25 @@
                                     </h5>
 
                                     <p>
-                                        You are a member of this project.
+
+                                        {% for membership in memberships %}
+
+                                            {% if membership.user == request.user %}
+
+                                                You are a
+                                                <strong>
+                                                    {{ membership.get_role_display }}
+                                                </strong>
+                                                on this project.
+
+                                            {% endif %}
+
+                                        {% empty %}
+
+                                            You are a member of this project.
+
+                                        {% endfor %}
+
                                     </p>
 
                                 </div>
@@ -1094,6 +1489,11 @@
                                     <button
                                         type="submit"
                                         class="btn btn-outline-danger btn-sm"
+                                        onclick="
+                                            return confirm(
+                                                'Are you sure you want to leave this project?'
+                                            );
+                                        "
                                     >
                                         <i class="bi bi-box-arrow-left"></i>
                                         Leave Project
@@ -1151,7 +1551,9 @@
             </div>
 
 
-            <!-- PROGRESS -->
+            <!-- =================================================
+                 PROGRESS
+            ================================================== -->
 
             <div class="col-12 col-lg-6">
 
@@ -1327,8 +1729,6 @@
                                     <div class="clean-task-right">
 
 
-                                        <!-- ASSIGNED MEMBER -->
-
                                         {% if task.assigned_to == request.user %}
 
                                             <form
@@ -1385,8 +1785,6 @@
                                             </form>
 
 
-                                        <!-- OWNER / OTHER MEMBER -->
-
                                         {% else %}
 
                                             <div class="clean-status-view">
@@ -1403,8 +1801,6 @@
 
                                         {% endif %}
 
-
-                                        <!-- OWNER CONTROLS -->
 
                                         {% if request.user == project.owner %}
 

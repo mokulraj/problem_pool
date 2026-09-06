@@ -7,11 +7,20 @@ app_name = "teams"
 
 
 urlpatterns = [
+    # =========================================================
+    # JOIN PROJECT
+    # =========================================================
+
     path(
         "projects/<int:project_id>/join/",
         views.join_project,
         name="join",
     ),
+
+
+    # =========================================================
+    # JOIN REQUESTS
+    # =========================================================
 
     path(
         "projects/<int:project_id>/join-requests/",
@@ -36,6 +45,28 @@ urlpatterns = [
         views.cancel_join_request,
         name="cancel",
     ),
+
+
+    # =========================================================
+    # MEMBER MANAGEMENT
+    # =========================================================
+
+    path(
+        "projects/<int:project_id>/members/<int:user_id>/role/",
+        views.change_member_role,
+        name="change_member_role",
+    ),
+
+    path(
+        "projects/<int:project_id>/members/<int:user_id>/remove/",
+        views.remove_member,
+        name="remove_member",
+    ),
+
+
+    # =========================================================
+    # LEAVE PROJECT
+    # =========================================================
 
     path(
         "projects/<int:project_id>/leave/",

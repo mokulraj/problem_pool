@@ -4,6 +4,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
 from solutions.models import Solution
+from teams.models import TeamMembership
 
 from .forms import ProjectForm
 from .models import Project
@@ -42,9 +43,27 @@ def project_detail(request, pk):
         pk=pk,
     )
 
-    is_team_member = project.team_memberships.filter(
+    # ---------------------------------------------------------
+    # TEAM MEMBERS
+    # ---------------------------------------------------------
+
+    memberships = (
+        TeamMembership.objects
+        .filter(project=project)
+        .select_related("user")
+    )
+
+    # ---------------------------------------------------------
+    # CURRENT USER MEMBERSHIP
+    # ---------------------------------------------------------
+
+    is_team_member = memberships.filter(
         user=request.user,
     ).exists()
+
+    # ---------------------------------------------------------
+    # PENDING JOIN REQUEST
+    # ---------------------------------------------------------
 
     pending_join_request = project.join_requests.filter(
         user=request.user,
@@ -58,6 +77,8 @@ def project_detail(request, pk):
             "project": project,
             "is_team_member": is_team_member,
             "pending_join_request": pending_join_request,
+            "memberships": memberships,
+            "role_choices": TeamMembership.Role.choices,
         },
     )
 

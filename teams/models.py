@@ -4,8 +4,14 @@ from django.db import models
 
 
 class TeamMembership(models.Model):
+
     class Role(models.TextChoices):
-        MEMBER = "MEMBER", "Member"
+        PROJECT_MANAGER = "PROJECT_MANAGER", "Project Manager"
+        DEVELOPER = "DEVELOPER", "Developer"
+        DESIGNER = "DESIGNER", "Designer"
+        RESEARCHER = "RESEARCHER", "Researcher"
+        TESTER = "TESTER", "Tester"
+        OTHER = "OTHER", "Other"
 
     project = models.ForeignKey(
         "projects.Project",
@@ -22,7 +28,7 @@ class TeamMembership(models.Model):
     role = models.CharField(
         max_length=20,
         choices=Role.choices,
-        default=Role.MEMBER,
+        default=Role.OTHER,
     )
 
     joined_at = models.DateTimeField(
@@ -47,13 +53,21 @@ class TeamMembership(models.Model):
             models.Index(
                 fields=["user", "joined_at"],
             ),
+            models.Index(
+                fields=["project", "role"],
+            ),
         ]
 
     def __str__(self):
-        return f"{self.user.username} - {self.project.name}"
+        return (
+            f"{self.user.username} - "
+            f"{self.get_role_display()} - "
+            f"{self.project.name}"
+        )
 
 
 class JoinRequest(models.Model):
+
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
         APPROVED = "APPROVED", "Approved"
@@ -96,10 +110,18 @@ class JoinRequest(models.Model):
 
         indexes = [
             models.Index(
-                fields=["project", "status", "created_at"],
+                fields=[
+                    "project",
+                    "status",
+                    "created_at",
+                ],
             ),
             models.Index(
-                fields=["user", "status", "created_at"],
+                fields=[
+                    "user",
+                    "status",
+                    "created_at",
+                ],
             ),
         ]
 
@@ -121,4 +143,7 @@ class JoinRequest(models.Model):
             )
 
     def __str__(self):
-        return f"{self.user.username} → {self.project.name}"
+        return (
+            f"{self.user.username} → "
+            f"{self.project.name}"
+        )

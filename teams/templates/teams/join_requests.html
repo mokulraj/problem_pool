@@ -7,7 +7,7 @@
 <style>
 
 /* =========================================================
-   JOIN REQUESTS PAGE
+   PAGE
 ========================================================= */
 
 .join-requests-page {
@@ -44,7 +44,7 @@
     align-items: center;
     gap: 10px;
 
-    margin-bottom: 38px;
+    margin-bottom: 36px;
 
     color: #4f2bd7;
 
@@ -64,20 +64,20 @@
 
 
 /* =========================================================
-   PAGE HEADER
+   HEADER
 ========================================================= */
 
 .join-header {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 24px;
 
-    margin-bottom: 45px;
+    margin-bottom: 38px;
 }
 
 .join-header-icon {
-    width: 82px;
-    height: 82px;
+    width: 72px;
+    height: 72px;
 
     display: flex;
     align-items: center;
@@ -85,21 +85,21 @@
 
     flex-shrink: 0;
 
-    border-radius: 50%;
+    border-radius: 20px;
 
     background: #f0edff;
 
     color: #5a32df;
 
-    font-size: 38px;
+    font-size: 32px;
 }
 
 .join-header-content h1 {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
 
     color: #111827;
 
-    font-size: clamp(38px, 5vw, 50px);
+    font-size: clamp(34px, 5vw, 46px);
 
     line-height: 1.1;
 
@@ -111,16 +111,15 @@
 .join-header-content p {
     margin: 0;
 
-    color: #526079;
+    color: #64748b;
 
-    font-size: 18px;
+    font-size: 17px;
 
     line-height: 1.5;
 }
 
 .join-project-name {
     color: #5130d8;
-
     font-weight: 700;
 }
 
@@ -130,23 +129,20 @@
 ========================================================= */
 
 .join-request-card {
-    position: relative;
-
     display: flex;
     align-items: flex-start;
+    gap: 24px;
 
-    gap: 28px;
+    padding: 30px;
 
-    padding: 42px 48px;
+    background: #ffffff;
 
-    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid #e7e9ef;
 
-    border: 1px solid #e8eaf0;
-
-    border-radius: 13px;
+    border-radius: 16px;
 
     box-shadow:
-        0 5px 18px rgba(15, 23, 42, 0.06);
+        0 5px 18px rgba(15, 23, 42, 0.05);
 
     transition:
         transform 0.2s ease,
@@ -154,18 +150,21 @@
 }
 
 .join-request-card:hover {
+    transform: translateY(-2px);
+
     box-shadow:
         0 12px 30px rgba(15, 23, 42, 0.08);
 }
 
 
 /* =========================================================
-   USER AVATAR
+   AVATAR
 ========================================================= */
 
-.request-avatar {
-    width: 88px;
-    height: 88px;
+.request-avatar,
+.request-avatar-placeholder {
+    width: 70px;
+    height: 70px;
 
     display: flex;
     align-items: center;
@@ -174,114 +173,236 @@
     flex-shrink: 0;
 
     border-radius: 50%;
+}
 
+.request-avatar {
     object-fit: cover;
-
-    background: #f0edff;
-
-    color: #5730d5;
-
-    font-size: 39px;
-
-    font-weight: 500;
 }
 
 .request-avatar-placeholder {
-    width: 88px;
-    height: 88px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
     background: #f0edff;
 
     color: #5730d5;
 
-    font-size: 39px;
+    font-size: 28px;
 
-    font-weight: 500;
+    font-weight: 700;
 }
 
 
 /* =========================================================
-   REQUEST CONTENT
+   CONTENT
 ========================================================= */
 
 .request-content {
     flex: 1;
-
     min-width: 0;
 }
 
 .request-user-name {
-    margin: 0 0 5px;
+    margin: 0 0 3px;
 
     color: #111827;
 
-    font-size: 25px;
+    font-size: 21px;
 
     line-height: 1.3;
 
-    font-weight: 650;
+    font-weight: 700;
 }
 
 .request-username {
     display: block;
 
-    margin-bottom: 18px;
+    margin-bottom: 15px;
 
     color: #64748b;
 
-    font-size: 17px;
+    font-size: 14px;
 }
 
 
 /* =========================================================
-   REQUEST MESSAGE
+   MESSAGE
 ========================================================= */
 
 .request-message {
-    display: inline-block;
+    display: block;
 
     max-width: 100%;
 
-    margin-bottom: 22px;
+    margin-bottom: 15px;
 
-    padding: 12px 20px;
+    padding: 11px 15px;
 
-    border-radius: 12px;
+    border-radius: 10px;
 
-    background: #f5f3ff;
+    background: #f8f7ff;
+
+    border: 1px solid #eeeaff;
 
     color: #475569;
 
-    font-size: 16px;
+    font-size: 14px;
 
     line-height: 1.5;
 }
 
 
 /* =========================================================
-   REQUEST DATE
+   DATE
 ========================================================= */
 
 .request-date {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
 
     color: #64748b;
 
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .request-date i {
-    font-size: 21px;
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   ACTION AREA
+========================================================= */
+
+.request-actions {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   ROLE SELECT
+========================================================= */
+
+.role-select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.role-select-label {
+    color: #475569;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+}
+
+.role-select {
+    min-width: 190px;
+
+    padding: 10px 36px 10px 13px;
+
+    border: 1px solid #dfe3ea;
+
+    border-radius: 9px;
+
+    background-color: #ffffff;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.role-select:focus {
+    border-color: #7657e8;
+
+    box-shadow:
+        0 0 0 3px rgba(118, 87, 232, 0.12);
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.request-approve,
+.request-reject {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding: 9px 15px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.request-approve:hover,
+.request-reject:hover {
+    transform: translateY(-1px);
+}
+
+
+/* APPROVE */
+
+.request-approve {
+    border: 1px solid #198754;
+
+    background: #198754;
+
+    color: #ffffff;
+}
+
+.request-approve:hover {
+    background: #157347;
+
+    color: #ffffff;
+}
+
+
+/* REJECT */
+
+.request-reject {
+    border: 1px solid #dc3545;
+
+    background: #ffffff;
+
+    color: #dc3545;
+}
+
+.request-reject:hover {
+    background: #fff1f2;
 }
 
 
@@ -292,8 +413,6 @@
 .request-status-area {
     flex-shrink: 0;
 
-    min-width: 145px;
-
     display: flex;
     justify-content: flex-end;
 }
@@ -301,97 +420,30 @@
 .request-status {
     display: inline-flex;
     align-items: center;
-    gap: 9px;
+    gap: 7px;
 
-    padding: 15px 20px;
+    padding: 9px 13px;
 
-    border-radius: 15px;
+    border-radius: 999px;
 
-    font-size: 16px;
+    font-size: 13px;
 
-    font-weight: 600;
+    font-weight: 650;
 }
 
 .request-status.approved {
     background: #e9f8ed;
-
     color: #159447;
 }
 
 .request-status.pending {
     background: #fff5df;
-
-    color: #d47a00;
+    color: #c87500;
 }
 
 .request-status.rejected {
     background: #fff0f1;
-
     color: #dc3545;
-}
-
-.request-status.cancelled {
-    background: #f1f3f5;
-
-    color: #64748b;
-}
-
-
-/* =========================================================
-   ACTION BUTTONS
-========================================================= */
-
-.request-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    margin-top: 22px;
-}
-
-.request-approve {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 9px 16px;
-
-    border: 0;
-    border-radius: 7px;
-
-    background: #198754;
-
-    color: white;
-
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.request-approve:hover {
-    background: #157347;
-    color: white;
-}
-
-.request-reject {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 9px 16px;
-
-    border: 1px solid #dc3545;
-    border-radius: 7px;
-
-    background: white;
-
-    color: #dc3545;
-
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.request-reject:hover {
-    background: #fff0f1;
 }
 
 
@@ -400,29 +452,29 @@
 ========================================================= */
 
 .join-empty {
-    padding: 90px 30px;
+    padding: 80px 30px;
 
     text-align: center;
 
-    background: white;
+    background: #ffffff;
 
-    border: 1px solid #e8eaf0;
+    border: 1px solid #e7e9ef;
 
-    border-radius: 13px;
+    border-radius: 16px;
 
     box-shadow:
         0 5px 18px rgba(15, 23, 42, 0.05);
 }
 
 .join-empty-icon {
-    width: 90px;
-    height: 90px;
+    width: 82px;
+    height: 82px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    margin: 0 auto 20px;
+    margin: 0 auto 18px;
 
     border-radius: 50%;
 
@@ -430,15 +482,15 @@
 
     color: #b2a0f3;
 
-    font-size: 42px;
+    font-size: 38px;
 }
 
 .join-empty h3 {
-    margin-bottom: 8px;
+    margin: 0 0 8px;
 
     color: #111827;
 
-    font-size: 22px;
+    font-size: 21px;
 
     font-weight: 700;
 }
@@ -453,68 +505,52 @@
 
 
 /* =========================================================
-   RESPONSIVE
+   MOBILE
 ========================================================= */
 
 @media (max-width: 767px) {
 
     .join-requests-page {
-        padding-top: 30px;
-    }
-
-    .back-project {
-        margin-bottom: 28px;
+        padding: 30px 0 60px;
     }
 
     .join-header {
         align-items: flex-start;
 
-        gap: 17px;
+        gap: 15px;
 
-        margin-bottom: 30px;
+        margin-bottom: 28px;
     }
 
     .join-header-icon {
-        width: 62px;
-        height: 62px;
+        width: 58px;
+        height: 58px;
 
-        font-size: 28px;
+        border-radius: 16px;
+
+        font-size: 26px;
     }
 
     .join-header-content h1 {
-        font-size: 34px;
+        font-size: 32px;
     }
 
     .join-header-content p {
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .join-request-card {
         flex-direction: column;
 
-        padding: 28px 22px;
+        gap: 18px;
 
-        gap: 20px;
+        padding: 24px 20px;
     }
 
     .request-avatar,
     .request-avatar-placeholder {
-        width: 68px;
-        height: 68px;
-
-        font-size: 30px;
-    }
-
-    .request-user-name {
-        font-size: 21px;
-    }
-
-    .request-username {
-        font-size: 14px;
-    }
-
-    .request-message {
-        font-size: 14px;
+        width: 62px;
+        height: 62px;
     }
 
     .request-status-area {
@@ -523,6 +559,21 @@
         justify-content: flex-start;
     }
 
+    .request-actions {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .role-select-wrapper,
+    .role-select {
+        width: 100%;
+    }
+
+    .request-approve,
+    .request-reject {
+        width: 100%;
+    }
 }
 
 </style>
@@ -534,162 +585,212 @@
 
 <div class="join-requests-page">
 
-<div class="container">
+    <div class="container">
+
+        <!-- =================================================
+             BACK TO PROJECT
+        ================================================== -->
+
+        <a
+            href="{% url 'projects:detail' project.pk %}"
+            class="back-project"
+        >
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Project
+        </a>
 
 
-    <!-- =====================================================
-         BACK TO PROJECT
-    ====================================================== -->
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
 
-    <a
-        href="{% url 'projects:detail' project.pk %}"
-        class="back-project"
-    >
-        <i class="bi bi-arrow-left"></i>
-        Back to Project
-    </a>
+        <div class="join-header">
 
+            <div class="join-header-icon">
+                <i class="bi bi-people"></i>
+            </div>
 
-    <!-- =====================================================
-         PAGE HEADER
-    ====================================================== -->
+            <div class="join-header-content">
 
-    <div class="join-header">
+                <h1>
+                    Join Requests
+                </h1>
 
-        <div class="join-header-icon">
-            <i class="bi bi-people"></i>
+                <p>
+                    Manage requests to join
+                    <span class="join-project-name">
+                        {{ project.name }}
+                    </span>.
+                </p>
+
+            </div>
+
         </div>
 
-        <div class="join-header-content">
 
-            <h1>
-                Join Requests
-            </h1>
+        <!-- =================================================
+             REQUESTS
+        ================================================== -->
 
-            <p>
-                Manage requests to join
-                <span class="join-project-name">
-                    {{ project.name }}
-                </span>.
-            </p>
+        {% if join_requests %}
 
-        </div>
+            {% for join_request in join_requests %}
 
-    </div>
+                <div class="join-request-card mb-4">
 
+                    <!-- =====================================
+                         USER AVATAR
+                    ====================================== -->
 
-    <!-- =====================================================
-         REQUESTS
-    ====================================================== -->
+                    {% if join_request.user.profile_image %}
 
-    {% if join_requests %}
+                        <img
+                            src="{{ join_request.user.profile_image.url }}"
+                            alt="{{ join_request.user.username }}"
+                            class="request-avatar"
+                        >
 
-        {% for join_request in join_requests %}
+                    {% else %}
 
-            <div class="join-request-card mb-4">
+                        <div class="request-avatar-placeholder">
 
-
-                <!-- USER AVATAR -->
-
-                {% if join_request.user.profile_image %}
-
-                    <img
-                        src="{{ join_request.user.profile_image.url }}"
-                        alt="{{ join_request.user.username }}"
-                        class="request-avatar"
-                    >
-
-                {% else %}
-
-                    <div class="request-avatar-placeholder">
-
-                        {{ join_request.user.username|first|upper }}
-
-                    </div>
-
-                {% endif %}
-
-
-                <!-- REQUEST CONTENT -->
-
-                <div class="request-content">
-
-                    <h2 class="request-user-name">
-
-                        {% if join_request.user.first_name %}
-
-                            {{ join_request.user.first_name }}
-
-                            {% if join_request.user.last_name %}
-                                {{ join_request.user.last_name }}
-                            {% endif %}
-
-                        {% else %}
-
-                            {{ join_request.user.username }}
-
-                        {% endif %}
-
-                    </h2>
-
-
-                    <span class="request-username">
-
-                        {{ join_request.user.username }}
-
-                    </span>
-
-
-                    {% if join_request.message %}
-
-                        <div class="request-message">
-
-                            {{ join_request.message }}
+                            {{ join_request.user.username|first|upper }}
 
                         </div>
 
                     {% endif %}
 
 
-                    <div class="request-date">
+                    <!-- =====================================
+                         REQUEST CONTENT
+                    ====================================== -->
 
-                        <i class="bi bi-clock"></i>
+                    <div class="request-content">
 
-                        Requested
-                        {{ join_request.created_at|date:"d M Y, H:i" }}
+                        <h2 class="request-user-name">
 
-                    </div>
+                            {% if join_request.user.first_name %}
+
+                                {{ join_request.user.first_name }}
+
+                                {% if join_request.user.last_name %}
+
+                                    {{ join_request.user.last_name }}
+
+                                {% endif %}
+
+                            {% else %}
+
+                                {{ join_request.user.username }}
+
+                            {% endif %}
+
+                        </h2>
 
 
-                    <!-- PENDING ACTIONS -->
+                        <span class="request-username">
 
-                    {% if join_request.status == "PENDING" %}
+                            @{{ join_request.user.username }}
 
-                        <div class="request-actions">
+                        </span>
+
+
+                        {% if join_request.message %}
+
+                            <div class="request-message">
+
+                                {{ join_request.message }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="request-date">
+
+                            <i class="bi bi-clock"></i>
+
+                            Requested
+                            {{ join_request.created_at|date:"d M Y, H:i" }}
+
+                        </div>
+
+
+                        <!-- =================================
+                             PENDING ACTIONS
+                        ================================== -->
+
+                        {% if join_request.status == "PENDING" %}
 
                             <form
                                 method="post"
                                 action="{% url 'teams:approve' join_request.pk %}"
-                                class="d-inline"
+                                class="request-actions"
                             >
 
                                 {% csrf_token %}
+
+
+                                <!-- ROLE -->
+
+                                <div class="role-select-wrapper">
+
+                                    <label
+                                        for="role-{{ join_request.pk }}"
+                                        class="role-select-label"
+                                    >
+                                        Role
+                                    </label>
+
+                                    <select
+                                        id="role-{{ join_request.pk }}"
+                                        name="role"
+                                        class="role-select"
+                                        required
+                                    >
+
+                                        {% for value, label in role_choices %}
+
+                                            <option
+                                                value="{{ value }}"
+                                                {% if value == "OTHER" %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                {{ label }}
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- APPROVE -->
 
                                 <button
                                     type="submit"
                                     class="request-approve"
                                 >
+
                                     <i class="bi bi-check-lg"></i>
+
                                     Approve
+
                                 </button>
 
                             </form>
 
 
+                            <!-- REJECT -->
+
                             <form
                                 method="post"
                                 action="{% url 'teams:reject' join_request.pk %}"
-                                class="d-inline"
+                                class="request-actions"
+                                style="margin-top: 10px;"
                             >
 
                                 {% csrf_token %}
@@ -698,103 +799,94 @@
                                     type="submit"
                                     class="request-reject"
                                 >
+
                                     <i class="bi bi-x-lg"></i>
+
                                     Reject
+
                                 </button>
 
                             </form>
 
-                        </div>
+                        {% endif %}
 
-                    {% endif %}
-
-                </div>
+                    </div>
 
 
-                <!-- STATUS -->
+                    <!-- =====================================
+                         STATUS
+                    ====================================== -->
 
-                <div class="request-status-area">
+                    <div class="request-status-area">
 
-                    {% if join_request.status == "APPROVED" %}
+                        {% if join_request.status == "APPROVED" %}
 
-                        <span class="request-status approved">
+                            <span class="request-status approved">
 
-                            <i class="bi bi-check-lg"></i>
+                                <i class="bi bi-check-lg"></i>
 
-                            Approved
+                                Approved
 
-                        </span>
-
-
-                    {% elif join_request.status == "REJECTED" %}
-
-                        <span class="request-status rejected">
-
-                            <i class="bi bi-x-lg"></i>
-
-                            Rejected
-
-                        </span>
+                            </span>
 
 
-                    {% elif join_request.status == "CANCELLED" %}
+                        {% elif join_request.status == "REJECTED" %}
 
-                        <span class="request-status cancelled">
+                            <span class="request-status rejected">
 
-                            <i class="bi bi-dash-circle"></i>
+                                <i class="bi bi-x-lg"></i>
 
-                            Cancelled
+                                Rejected
 
-                        </span>
+                            </span>
 
 
-                    {% else %}
+                        {% else %}
 
-                        <span class="request-status pending">
+                            <span class="request-status pending">
 
-                            <i class="bi bi-clock"></i>
+                                <i class="bi bi-clock"></i>
 
-                            Pending
+                                Pending
 
-                        </span>
+                            </span>
 
-                    {% endif %}
+                        {% endif %}
+
+                    </div>
 
                 </div>
 
+            {% endfor %}
+
+
+        {% else %}
+
+            <!-- =============================================
+                 EMPTY STATE
+            ============================================== -->
+
+            <div class="join-empty">
+
+                <div class="join-empty-icon">
+
+                    <i class="bi bi-inbox"></i>
+
+                </div>
+
+                <h3>
+                    No join requests
+                </h3>
+
+                <p>
+                    There are currently no requests to join this project.
+                </p>
+
             </div>
 
-        {% endfor %}
+        {% endif %}
 
-
-    {% else %}
-
-        <!-- =================================================
-             EMPTY STATE
-        ================================================== -->
-
-        <div class="join-empty">
-
-            <div class="join-empty-icon">
-
-                <i class="bi bi-inbox"></i>
-
-            </div>
-
-            <h3>
-                No join requests
-            </h3>
-
-            <p>
-                There are currently no requests to join this project.
-            </p>
-
-        </div>
-
-    {% endif %}
-
-
-</div>
+    </div>
 
 </div>
 

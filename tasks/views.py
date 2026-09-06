@@ -11,7 +11,7 @@ from .models import Task
 
 
 def user_is_project_member(user, project):
-    if project.owner == user:
+    if project.owner_id == user.id:
         return True
 
     return TeamMembership.objects.filter(
@@ -21,7 +21,7 @@ def user_is_project_member(user, project):
 
 
 def user_is_project_owner(user, project):
-    return project.owner == user
+    return project.owner_id == user.id
 
 
 @login_required
@@ -86,14 +86,11 @@ def task_create(request, project_id):
             task = form.save(commit=False)
 
             task.project = project
-
-            # New tasks always start as To Do.
             task.status = Task.Status.TODO
 
             task.full_clean()
             task.save()
 
-            # Notify assigned member that a task was assigned.
             if task.assigned_to:
                 Notification.objects.create(
                     recipient=task.assigned_to,
@@ -146,7 +143,6 @@ def task_edit(request, pk):
 
     project = task.project
 
-    # Only the project owner can edit task details.
     if not user_is_project_owner(request.user, project):
         messages.error(
             request,
@@ -171,13 +167,11 @@ def task_edit(request, pk):
 
             task = form.save(commit=False)
 
-            # Owner cannot modify status.
             task.status = current_status
 
             task.full_clean()
             task.save()
 
-            # Notify a newly assigned member.
             if (
                 task.assigned_to
                 and task.assigned_to != old_assigned_to
@@ -286,8 +280,6 @@ def task_status_update(request, pk):
 
     project = task.project
 
-    # SECURITY:
-    # Only the assigned member may change the status.
     if task.assigned_to != request.user:
         messages.error(
             request,
@@ -348,14 +340,10 @@ def task_status_update(request, pk):
         update_fields=[
             "status",
             "updated_at",
-        ]
+        ],
     )
 
-    # ---------------------------------------------------------
-    # CREATE REAL NOTIFICATION FOR PROJECT OWNER
-    # ---------------------------------------------------------
-
-    if project.owner != request.user:
+    if project.owner_id != request.user.id:
 
         Notification.objects.create(
             recipient=project.owner,
@@ -367,7 +355,7 @@ def task_status_update(request, pk):
                 f"'{task.get_status_display()}'."
             ),
             notification_type=(
-                Notification.NotificationType.TASK_STATUS_UPDATED
+                Notification.NotificationType.TASK_ASSIGNED
             ),
             related_project=project,
         )
@@ -386,7 +374,7 @@ def task_status_update(request, pk):
 @login_required
 def task_complete(request, pk):
     """
-    Kept only for backwards compatibility.
+    Kept for backwards compatibility.
 
     The task list UI no longer uses this endpoint.
     """
@@ -439,7 +427,7 @@ def task_complete(request, pk):
         update_fields=[
             "status",
             "updated_at",
-        ]
+        ],
     )
 
     Notification.objects.create(
@@ -449,7 +437,7 @@ def task_complete(request, pk):
             f"'{task.title}'."
         ),
         notification_type=(
-            Notification.NotificationType.TASK_STATUS_UPDATED
+            Notification.NotificationType.TASK_ASSIGNED
         ),
         related_project=project,
     )
