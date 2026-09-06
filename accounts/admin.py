@@ -7,6 +7,10 @@ from .models import User
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
 
+    # =========================================================
+    # LIST DISPLAY
+    # =========================================================
+
     list_display = (
         "username",
         "email",
@@ -14,29 +18,78 @@ class CustomUserAdmin(UserAdmin):
         "last_name",
         "role",
         "points",
+        "level",
         "is_active",
+        "is_staff",
         "date_joined",
     )
+
+    # =========================================================
+    # FILTERS
+    # =========================================================
 
     list_filter = (
         "role",
         "is_active",
         "is_staff",
+        "is_superuser",
         "date_joined",
     )
+
+    # =========================================================
+    # SEARCH
+    # =========================================================
 
     search_fields = (
         "username",
         "email",
         "first_name",
         "last_name",
+        "location",
+        "skills",
     )
+
+    # =========================================================
+    # ORDERING
+    # =========================================================
 
     ordering = (
         "-date_joined",
     )
 
-    fieldsets = UserAdmin.fieldsets + (
+    # =========================================================
+    # READ-ONLY AUDIT FIELDS
+    # =========================================================
+
+    readonly_fields = (
+        "date_joined",
+        "last_login",
+    )
+
+    # =========================================================
+    # EDIT USER
+    # =========================================================
+
+    fieldsets = (
+        (
+            "Authentication",
+            {
+                "fields": (
+                    "username",
+                    "password",
+                )
+            },
+        ),
+        (
+            "Personal Information",
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                )
+            },
+        ),
         (
             "ProblemPool Profile",
             {
@@ -50,18 +103,69 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        (
+            "Important Dates",
+            {
+                "fields": (
+                    "last_login",
+                    "date_joined",
+                )
+            },
+        ),
     )
 
-    add_fieldsets = UserAdmin.add_fieldsets + (
+    # =========================================================
+    # ADD USER
+    # =========================================================
+
+    add_fieldsets = (
         (
-            "ProblemPool Profile",
+            None,
+            {
+                "classes": (
+                    "wide",
+                ),
+                "fields": (
+                    "username",
+                    "password1",
+                    "password2",
+                ),
+            },
+        ),
+        (
+            "Personal Information",
             {
                 "fields": (
                     "first_name",
                     "last_name",
                     "email",
+                )
+            },
+        ),
+        (
+            "ProblemPool Profile",
+            {
+                "fields": (
                     "role",
                 )
             },
         ),
     )
+
+    # =========================================================
+    # PERFORMANCE
+    # =========================================================
+
+    list_per_page = 25

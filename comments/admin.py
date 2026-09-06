@@ -3,6 +3,19 @@ from django.contrib import admin
 from .models import Comment
 
 
+# =========================================================
+# COMMENT MODERATION ACTION
+# =========================================================
+
+@admin.action(description="Delete selected comments")
+def delete_selected_comments(modeladmin, request, queryset):
+    queryset.delete()
+
+
+# =========================================================
+# COMMENT ADMIN
+# =========================================================
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
 
@@ -36,6 +49,19 @@ class CommentAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
+    actions = (
+        delete_selected_comments,
+    )
+
+    list_per_page = 25
+
+    # =====================================================
+    # DISPLAY HELPERS
+    # =====================================================
+
+    @admin.display(
+        description="Target",
+    )
     def target(self, obj):
 
         if obj.solution:
@@ -46,10 +72,12 @@ class CommentAdmin(admin.ModelAdmin):
 
         return "-"
 
-    target.short_description = "Target"
-
+    @admin.display(
+        description="Comment",
+    )
     def short_content(self, obj):
 
-        return obj.content[:70]
+        if len(obj.content) > 70:
+            return f"{obj.content[:70]}..."
 
-    short_content.short_description = "Comment"
+        return obj.content
