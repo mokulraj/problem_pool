@@ -44,6 +44,986 @@
     {% block extra_css %}
     {% endblock %}
 
+
+    <!-- =========================================================
+         PROBLEMPOOL NAVBAR
+    ========================================================== -->
+
+    <style>
+
+        /* =====================================================
+           NAVBAR FOUNDATION
+        ===================================================== */
+
+        .pp-navbar {
+            position: relative;
+            z-index: 1000;
+            min-height: 82px;
+            padding: 0;
+            background: rgba(255,255,255,.97);
+            border-bottom: 1px solid #ece8f3;
+            box-shadow:
+                0 4px 24px rgba(40,25,75,.035);
+            backdrop-filter: blur(18px);
+        }
+
+
+        .pp-navbar > .container {
+            min-height: 82px;
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .pp-brand {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 11px;
+            margin-right: 30px !important;
+            padding: 0 !important;
+            color: #171326 !important;
+            font-size: 1.28rem;
+            font-weight: 850;
+            letter-spacing: -.025em;
+            white-space: nowrap;
+        }
+
+
+        .pp-brand:hover {
+            color: #171326 !important;
+        }
+
+
+        .pp-brand-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            overflow: hidden;
+            border-radius: 13px;
+            background:
+                linear-gradient(
+                    145deg,
+                    #7956df,
+                    #5d38c6
+                );
+            color: #fff;
+            font-size: 1.15rem;
+            box-shadow:
+                0 9px 22px rgba(104,68,212,.20);
+        }
+
+
+        .pp-brand-icon::before {
+            content: "";
+            position: absolute;
+            top: -70%;
+            left: -80%;
+            width: 60%;
+            height: 220%;
+            background: rgba(255,255,255,.32);
+            transform: rotate(25deg);
+            transition: left .65s ease;
+        }
+
+
+        .pp-brand:hover .pp-brand-icon::before {
+            left: 125%;
+        }
+
+
+        /* =====================================================
+           NAVBAR COLLAPSE
+        ===================================================== */
+
+        #mainNavbar {
+            align-items: center;
+            min-height: 82px;
+        }
+
+
+        #mainNavbar > .navbar-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+
+        #mainNavbar .nav-item {
+            display: flex;
+            align-items: center;
+        }
+
+
+        /* =====================================================
+           UNIQUE NAV LINK
+        ===================================================== */
+
+        #mainNavbar .nav-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            min-height: 45px;
+
+            padding: 10px 13px !important;
+
+            overflow: hidden;
+
+            border: 1px solid transparent;
+            border-radius: 13px;
+
+            color: #514b5e;
+
+            font-size: .86rem;
+            font-weight: 680;
+            line-height: 1;
+
+            white-space: nowrap;
+
+            isolation: isolate;
+
+            transition:
+                color .25s ease,
+                transform .28s cubic-bezier(.16,1,.3,1),
+                border-color .25s ease,
+                box-shadow .28s ease;
+        }
+
+
+        #mainNavbar .nav-link::before {
+            content: "";
+
+            position: absolute;
+            z-index: -2;
+
+            width: 75px;
+            height: 75px;
+
+            left: 50%;
+            top: 50%;
+
+            transform:
+                translate(-50%,-50%)
+                scale(.2);
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(104,68,212,.17),
+                    rgba(104,68,212,.05) 45%,
+                    transparent 72%
+                );
+
+            opacity: 0;
+
+            transition:
+                transform .45s cubic-bezier(.16,1,.3,1),
+                opacity .35s ease;
+        }
+
+
+        #mainNavbar .nav-link::after {
+            content: "";
+
+            position: absolute;
+            z-index: -1;
+
+            top: 0;
+            left: -120%;
+
+            width: 75%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    105deg,
+                    transparent,
+                    rgba(255,255,255,.55),
+                    transparent
+                );
+
+            transform: skewX(-18deg);
+
+            transition: left .55s ease;
+        }
+
+
+        /* =====================================================
+           NAV ICON
+        ===================================================== */
+
+        #mainNavbar .nav-link i {
+            position: relative;
+
+            margin: 0 !important;
+
+            color: #756e80;
+
+            font-size: .98rem;
+
+            transform:
+                translateY(0)
+                rotate(0deg)
+                scale(1);
+
+            transition:
+                color .25s ease,
+                transform .35s cubic-bezier(.16,1,.3,1);
+        }
+
+
+        /* =====================================================
+           HOVER
+        ===================================================== */
+
+        #mainNavbar .nav-link:hover {
+            color: #6844d4;
+
+            border-color: rgba(104,68,212,.10);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(246,242,255,.98),
+                    rgba(250,248,255,.88)
+                );
+
+            transform:
+                translateY(-2px)
+                scale(1.025);
+
+            box-shadow:
+                0 10px 25px rgba(83,56,140,.075);
+        }
+
+
+        #mainNavbar .nav-link:hover::before {
+            opacity: 1;
+
+            transform:
+                translate(-50%,-50%)
+                scale(1.25);
+        }
+
+
+        #mainNavbar .nav-link:hover::after {
+            left: 145%;
+        }
+
+
+        #mainNavbar .nav-link:hover i {
+            color: #6844d4;
+
+            transform:
+                translateY(-2px)
+                rotate(-5deg)
+                scale(1.08);
+        }
+
+
+        /* =====================================================
+           ACTIVE NAV
+        ===================================================== */
+
+        #mainNavbar .nav-link.active {
+            color: #6844d4;
+
+            border-color: rgba(104,68,212,.10);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f2edff,
+                    #f7f4ff
+                );
+
+            font-weight: 760;
+
+            box-shadow:
+                0 7px 18px rgba(104,68,212,.07);
+        }
+
+
+        #mainNavbar .nav-link.active i {
+            color: #6844d4;
+        }
+
+
+        #mainNavbar .nav-link.active span {
+            position: relative;
+        }
+
+
+        #mainNavbar .nav-link.active span::after {
+            content: "";
+
+            position: absolute;
+
+            right: 0;
+            bottom: -9px;
+            left: 0;
+
+            height: 2px;
+
+            border-radius: 99px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #6844d4 20%,
+                    #6844d4 80%,
+                    transparent
+                );
+
+            transform:
+                scaleX(.35);
+
+            transform-origin: center;
+
+            animation:
+                pp-nav-line .65s cubic-bezier(.16,1,.3,1)
+                forwards;
+        }
+
+
+        @keyframes pp-nav-line {
+
+            0% {
+                transform: scaleX(.2);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+
+        }
+
+
+        /* =====================================================
+           RIGHT SIDE
+        ===================================================== */
+
+        #mainNavbar > .d-flex {
+            display: flex;
+            align-items: center;
+            gap: 8px !important;
+            margin-left: 16px;
+        }
+
+
+        /* =====================================================
+           NOTIFICATION
+        ===================================================== */
+
+        .pp-notification-link {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+
+            border: 1px solid #e7e1f0;
+            border-radius: 12px;
+
+            background: #fff;
+
+            color: #514b5e !important;
+
+            font-size: 1.05rem;
+
+            overflow: visible;
+
+            transition:
+                color .25s ease,
+                background .25s ease,
+                border-color .25s ease,
+                transform .3s cubic-bezier(.16,1,.3,1),
+                box-shadow .3s ease;
+        }
+
+
+        .pp-notification-link:hover {
+            color: #6844d4 !important;
+
+            background: #f7f3ff;
+
+            border-color: #d9cff0;
+
+            transform:
+                translateY(-2px)
+                rotate(-2deg);
+
+            box-shadow:
+                0 10px 23px rgba(83,56,140,.10);
+        }
+
+
+        .pp-notification-link i {
+            transition:
+                transform .35s cubic-bezier(.16,1,.3,1);
+        }
+
+
+        .pp-notification-link:hover i {
+            transform:
+                rotate(10deg)
+                scale(1.08);
+        }
+
+
+        .pp-notification-badge {
+            position: absolute;
+
+            top: -6px;
+            right: -6px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            min-width: 19px;
+            height: 19px;
+
+            padding: 0 5px;
+
+            border: 2px solid #fff;
+            border-radius: 999px;
+
+            background: #ef4c61;
+
+            color: #fff;
+
+            font-size: .58rem;
+            line-height: 1;
+            font-weight: 850;
+
+            box-shadow:
+                0 4px 10px rgba(239,76,97,.24);
+
+            animation:
+                pp-badge-pulse 2.5s ease-in-out infinite;
+        }
+
+
+        @keyframes pp-badge-pulse {
+
+            0%,100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+
+        }
+
+
+        /* =====================================================
+           USER PROFILE
+        ===================================================== */
+
+        .nav-user-link {
+            display: inline-flex !important;
+            align-items: center;
+
+            gap: 8px;
+
+            min-height: 42px;
+
+            padding: 4px 9px 4px 5px !important;
+
+            border: 1px solid transparent;
+            border-radius: 12px;
+
+            color: #332d40 !important;
+
+            font-size: .86rem;
+            font-weight: 700;
+
+            white-space: nowrap;
+
+            transition:
+                background .25s ease,
+                border-color .25s ease,
+                color .25s ease,
+                transform .25s ease;
+        }
+
+
+        .nav-user-link:hover {
+            background: #f7f4ff;
+            border-color: #e7e0f1;
+
+            color: #6844d4 !important;
+
+            transform: translateY(-1px);
+        }
+
+
+        .nav-user-link .bi-chevron-down {
+            margin-left: 1px !important;
+
+            color: #80798c;
+
+            font-size: .67rem;
+
+            transition:
+                transform .3s ease,
+                color .25s ease;
+        }
+
+
+        .nav-user-link:hover .bi-chevron-down {
+            color: #6844d4;
+
+            transform:
+                rotate(180deg);
+        }
+
+
+        .nav-avatar,
+        .nav-avatar-placeholder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 35px;
+            height: 35px;
+
+            flex: 0 0 35px;
+
+            border-radius: 50%;
+        }
+
+
+        .nav-avatar {
+            object-fit: cover;
+
+            border: 2px solid #eee9f7;
+
+            background: #f1edfa;
+
+            transition:
+                transform .3s cubic-bezier(.16,1,.3,1),
+                border-color .25s ease;
+        }
+
+
+        .nav-user-link:hover .nav-avatar {
+            transform: scale(1.06);
+
+            border-color: #d5c9ee;
+        }
+
+
+        .nav-avatar-placeholder {
+            background:
+                linear-gradient(
+                    145deg,
+                    #7956df,
+                    #5d38c6
+                );
+
+            color: #fff;
+
+            font-size: .78rem;
+            font-weight: 850;
+
+            box-shadow:
+                0 5px 14px rgba(104,68,212,.18);
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .pp-navbar .pp-btn-outline,
+        .pp-navbar .pp-btn-primary {
+
+            min-height: 42px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 6px;
+
+            padding: 9px 15px !important;
+
+            border-radius: 11px;
+
+            font-size: .82rem;
+            font-weight: 750;
+
+            white-space: nowrap;
+
+            transition:
+                transform .28s cubic-bezier(.16,1,.3,1),
+                box-shadow .28s ease,
+                background .25s ease,
+                color .25s ease,
+                border-color .25s ease;
+        }
+
+
+        .pp-navbar .pp-btn-outline {
+
+            border: 1px solid #ded7eb !important;
+
+            background: #fff !important;
+
+            color: #6844d4 !important;
+        }
+
+
+        .pp-navbar .pp-btn-outline:hover {
+
+            border-color: #cfc2e9 !important;
+
+            background: #f7f4ff !important;
+
+            color: #5430b7 !important;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 9px 21px rgba(83,56,140,.09);
+        }
+
+
+        .pp-navbar .pp-btn-primary {
+
+            border: 1px solid #6844d4 !important;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7956df,
+                    #6240ca
+                ) !important;
+
+            color: #fff !important;
+
+            box-shadow:
+                0 8px 19px rgba(104,68,212,.19);
+        }
+
+
+        .pp-navbar .pp-btn-primary:hover {
+
+            border-color: #5936c0 !important;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #704bd6,
+                    #5936c0
+                ) !important;
+
+            color: #fff !important;
+
+            transform:
+                translateY(-2px)
+                scale(1.02);
+
+            box-shadow:
+                0 13px 27px rgba(104,68,212,.27);
+        }
+
+
+        /* =====================================================
+           MOBILE TOGGLER
+        ===================================================== */
+
+        .pp-navbar .navbar-toggler {
+
+            width: 44px;
+            height: 44px;
+
+            padding: 0;
+
+            border: 1px solid #e0d9eb;
+
+            border-radius: 11px;
+
+            background: #fff;
+
+            box-shadow: none !important;
+        }
+
+
+        .pp-navbar .navbar-toggler:focus {
+
+            border-color: #b9a7df;
+
+            box-shadow:
+                0 0 0 3px rgba(104,68,212,.10) !important;
+        }
+
+
+        .pp-navbar .navbar-toggler-icon {
+
+            width: 20px;
+            height: 20px;
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 1199.98px) {
+
+            .pp-brand {
+                margin-right: 16px !important;
+            }
+
+
+            #mainNavbar .nav-link {
+
+                padding-left: 9px !important;
+                padding-right: 9px !important;
+
+                font-size: .81rem;
+            }
+
+
+            #mainNavbar > .d-flex {
+                margin-left: 8px;
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE NAV
+        ===================================================== */
+
+        @media (max-width: 991.98px) {
+
+            .pp-navbar {
+                min-height: 72px;
+            }
+
+
+            .pp-navbar > .container {
+                min-height: 72px;
+            }
+
+
+            .pp-brand {
+                margin-right: 0 !important;
+            }
+
+
+            #mainNavbar {
+
+                min-height: auto;
+
+                padding:
+                    15px 0 18px;
+            }
+
+
+            #mainNavbar > .navbar-nav {
+
+                align-items: stretch;
+
+                gap: 4px;
+
+                width: 100%;
+
+                margin: 0 !important;
+            }
+
+
+            #mainNavbar .nav-item {
+                width: 100%;
+            }
+
+
+            #mainNavbar .nav-link {
+
+                justify-content: flex-start;
+
+                width: 100%;
+
+                min-height: 46px;
+
+                padding:
+                    11px 14px !important;
+
+                border-radius: 12px;
+            }
+
+
+            #mainNavbar .nav-link.active span::after {
+                display: none;
+            }
+
+
+            #mainNavbar .nav-link.active::before {
+
+                width: 100%;
+                height: 100%;
+
+                opacity: 1;
+
+                transform:
+                    translate(-50%,-50%)
+                    scale(1);
+            }
+
+
+            #mainNavbar > .d-flex {
+
+                flex-wrap: wrap;
+
+                justify-content: flex-start;
+
+                width: 100%;
+
+                margin: 12px 0 0;
+
+                padding-top: 14px;
+
+                border-top:
+                    1px solid #eeeaf4;
+            }
+
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 575.98px) {
+
+            .pp-brand {
+                font-size: 1.1rem;
+            }
+
+
+            .pp-brand-icon {
+
+                width: 38px;
+                height: 38px;
+
+                flex-basis: 38px;
+
+                border-radius: 11px;
+
+                font-size: 1rem;
+            }
+
+
+            #mainNavbar > .d-flex {
+
+                display: grid !important;
+
+                grid-template-columns:
+                    auto 1fr;
+
+                gap: 8px !important;
+            }
+
+
+            .pp-notification-link {
+                grid-column: 1;
+            }
+
+
+            .nav-user-link {
+
+                grid-column: 2;
+
+                justify-self: start;
+            }
+
+
+            #mainNavbar > .d-flex form {
+
+                grid-column:
+                    1 / -1;
+
+                width: 100%;
+            }
+
+
+            #mainNavbar > .d-flex form .pp-btn-outline {
+
+                width: 100%;
+            }
+
+
+            #mainNavbar > .d-flex >
+            .pp-btn-outline,
+
+            #mainNavbar > .d-flex >
+            .pp-btn-primary {
+
+                flex: 1;
+            }
+
+        }
+
+
+        /* =====================================================
+           ACCESSIBILITY
+        ===================================================== */
+
+        .pp-navbar a:focus-visible,
+        .pp-navbar button:focus-visible {
+
+            outline:
+                3px solid
+                rgba(104,68,212,.25);
+
+            outline-offset: 2px;
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .pp-navbar *,
+            .pp-navbar *::before,
+            .pp-navbar *::after {
+
+                animation: none !important;
+
+                transition: none !important;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
@@ -74,7 +1054,9 @@
                 class="pp-brand-icon"
                 aria-hidden="true"
             >
+
                 <i class="bi bi-diagram-3-fill"></i>
+
             </span>
 
             <span>
@@ -111,7 +1093,7 @@
 
             <!-- MAIN LINKS -->
 
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav mb-2 mb-lg-0">
 
 
                 <!-- HOME -->
@@ -125,11 +1107,16 @@
                             aria-current="page"
                         {% endif %}
                     >
+
                         <i
-                            class="bi bi-house-door me-1"
+                            class="bi bi-house-door"
                             aria-hidden="true"
                         ></i>
-                        Home
+
+                        <span>
+                            Home
+                        </span>
+
                     </a>
 
                 </li>
@@ -146,11 +1133,16 @@
                             aria-current="page"
                         {% endif %}
                     >
+
                         <i
-                            class="bi bi-lightbulb me-1"
+                            class="bi bi-lightbulb"
                             aria-hidden="true"
                         ></i>
-                        Problems
+
+                        <span>
+                            Problems
+                        </span>
+
                     </a>
 
                 </li>
@@ -167,11 +1159,16 @@
                             aria-current="page"
                         {% endif %}
                     >
+
                         <i
-                            class="bi bi-check2-circle me-1"
+                            class="bi bi-check2-circle"
                             aria-hidden="true"
                         ></i>
-                        Solutions
+
+                        <span>
+                            Solutions
+                        </span>
+
                     </a>
 
                 </li>
@@ -188,11 +1185,16 @@
                             aria-current="page"
                         {% endif %}
                     >
+
                         <i
-                            class="bi bi-kanban me-1"
+                            class="bi bi-kanban"
                             aria-hidden="true"
                         ></i>
-                        Projects
+
+                        <span>
+                            Projects
+                        </span>
+
                     </a>
 
                 </li>
@@ -209,11 +1211,16 @@
                             aria-current="page"
                         {% endif %}
                     >
+
                         <i
-                            class="bi bi-search me-1"
+                            class="bi bi-search"
                             aria-hidden="true"
                         ></i>
-                        Search
+
+                        <span>
+                            Search
+                        </span>
+
                     </a>
 
                 </li>
@@ -230,11 +1237,16 @@
                             aria-current="page"
                         {% endif %}
                     >
+
                         <i
-                            class="bi bi-trophy me-1"
+                            class="bi bi-trophy"
                             aria-hidden="true"
                         ></i>
-                        Leaderboard
+
+                        <span>
+                            Leaderboard
+                        </span>
+
                     </a>
 
                 </li>
@@ -253,11 +1265,16 @@
                                 aria-current="page"
                             {% endif %}
                         >
+
                             <i
-                                class="bi bi-grid-1x2 me-1"
+                                class="bi bi-grid-1x2"
                                 aria-hidden="true"
                             ></i>
-                            Dashboard
+
+                            <span>
+                                Dashboard
+                            </span>
+
                         </a>
 
                     </li>
@@ -269,15 +1286,13 @@
 
             <!-- RIGHT SIDE -->
 
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center">
 
 
                 {% if user.is_authenticated %}
 
 
-                    <!-- ================================================= -->
-                    <!-- NOTIFICATION BELL -->
-                    <!-- ================================================= -->
+                    <!-- NOTIFICATIONS -->
 
                     <a
                         href="{% url 'notifications:list' %}"
@@ -312,9 +1327,7 @@
                     </a>
 
 
-                    <!-- ================================================= -->
-                    <!-- USER PROFILE -->
-                    <!-- ================================================= -->
+                    <!-- USER -->
 
                     <a
                         href="{% url 'accounts:profile' %}"
@@ -354,7 +1367,7 @@
 
 
                         <i
-                            class="bi bi-chevron-down ms-1"
+                            class="bi bi-chevron-down"
                             aria-hidden="true"
                         ></i>
 
@@ -377,11 +1390,13 @@
                         >
 
                             <i
-                                class="bi bi-box-arrow-right me-1"
+                                class="bi bi-box-arrow-right"
                                 aria-hidden="true"
                             ></i>
 
-                            Logout
+                            <span>
+                                Logout
+                            </span>
 
                         </button>
 
@@ -399,11 +1414,13 @@
                     >
 
                         <i
-                            class="bi bi-box-arrow-in-right me-1"
+                            class="bi bi-box-arrow-in-right"
                             aria-hidden="true"
                         ></i>
 
-                        Login
+                        <span>
+                            Login
+                        </span>
 
                     </a>
 
@@ -416,11 +1433,13 @@
                     >
 
                         <i
-                            class="bi bi-person-plus me-1"
+                            class="bi bi-person-plus"
                             aria-hidden="true"
                         ></i>
 
-                        Register
+                        <span>
+                            Register
+                        </span>
 
                     </a>
 
@@ -499,9 +1518,12 @@
 
 
 
-<!-- ========================================================= -->
-<!-- FOOTER -->
-<!-- ========================================================= -->
+<!-- =========================================================
+     FOOTER
+     HOME PAGE ONLY
+========================================================= -->
+
+{% if request.resolver_match.app_name == 'core' and request.resolver_match.url_name == 'home' %}
 
 <footer class="pp-footer">
 
@@ -545,6 +1567,8 @@
     </div>
 
 </footer>
+
+{% endif %}
 
 
 

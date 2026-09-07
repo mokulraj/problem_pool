@@ -9,8 +9,7 @@
 <style>
 
 /* ============================================================
-   PROBLEMPOOL — SIGNATURE SCROLL EXPERIENCE
-   UI / ANIMATION ONLY
+   PROBLEMPOOL — SIGNATURE HOME EXPERIENCE
 ============================================================ */
 
 .pp-home {
@@ -28,6 +27,7 @@
     opacity: 0;
     transform: translate3d(0, 70px, 0) scale(.94);
     filter: blur(12px);
+
     transition:
         opacity .9s cubic-bezier(.16,1,.3,1),
         transform 1.05s cubic-bezier(.16,1,.3,1),
@@ -55,9 +55,12 @@
 
 .pp-field-orb {
     position: absolute;
+
     width: 420px;
     height: 420px;
+
     border-radius: 50%;
+
     background:
         radial-gradient(
             circle,
@@ -65,8 +68,11 @@
             rgba(113,78,215,.035) 52%,
             transparent 72%
         );
+
     filter: blur(4px);
+
     transform: translate3d(0,0,0);
+
     will-change: transform;
 }
 
@@ -78,6 +84,7 @@
 .pp-field-orb.two {
     top: 52%;
     right: -240px;
+
     width: 360px;
     height: 360px;
 }
@@ -85,6 +92,7 @@
 .pp-field-orb.three {
     top: 82%;
     left: 30%;
+
     width: 240px;
     height: 240px;
 }
@@ -97,13 +105,19 @@
 .pp-hero {
     position: relative;
     z-index: 1;
+
     padding: 70px 0 95px;
 }
 
 .pp-hero-grid {
     display: grid;
-    grid-template-columns: 1.05fr .95fr;
+
+    grid-template-columns:
+        1.05fr
+        .95fr;
+
     align-items: center;
+
     gap: 65px;
 }
 
@@ -114,20 +128,27 @@
 
 
 /* ============================================================
-   HERO TEXT
+   HERO EYEBROW
 ============================================================ */
 
 .pp-eyebrow {
     display: inline-flex;
     align-items: center;
+
     gap: 9px;
+
     padding: 8px 13px;
+
     border: 1px solid #e3dcf4;
     border-radius: 999px;
+
     background: #f5f1ff;
+
     color: #6844d4;
+
     font-size: .72rem;
     font-weight: 850;
+
     letter-spacing: .09em;
     text-transform: uppercase;
 }
@@ -135,59 +156,193 @@
 .pp-eyebrow-dot {
     width: 7px;
     height: 7px;
+
     border-radius: 50%;
+
     background: #7048d9;
-    box-shadow: 0 0 0 5px rgba(112,72,217,.10);
-    animation: pp-dot 2.5s ease-in-out infinite;
+
+    box-shadow:
+        0 0 0 5px
+        rgba(112,72,217,.10);
+
+    animation:
+        pp-dot
+        2.5s
+        ease-in-out
+        infinite;
 }
 
+
+/* ============================================================
+   HERO TITLE
+============================================================ */
 
 .pp-hero-title {
     margin: 23px 0 0;
+
     max-width: 720px;
+
     color: #171326;
-    font-size: clamp(3.4rem,6vw,6.4rem);
+
+    font-size:
+        clamp(
+            3.4rem,
+            6vw,
+            6.4rem
+        );
+
     line-height: .94;
+
     letter-spacing: -.065em;
+
     font-weight: 900;
 }
 
-.pp-hero-title .accent {
+
+/* ============================================================
+   TYPEWRITER TITLE SYSTEM
+============================================================ */
+
+/*
+   The typography itself is untouched.
+
+   Only the text content is progressively revealed.
+
+   There is intentionally NO cursor.
+   There is intentionally NO blinking bar.
+*/
+
+.pp-type-line {
+    display: inline-block;
+
+    min-height: 1em;
+
+    white-space: nowrap;
+
+    vertical-align: baseline;
+}
+
+
+/* Prevent layout jumping while a line is typing. */
+
+.pp-type-line::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+}
+
+
+/* Purple line */
+
+.pp-type-line.accent {
     color: #6945d3;
 }
 
-.pp-hero-title .outline {
-    color: transparent;
-    -webkit-text-stroke: 1.5px #6945d3;
+
+/* Third line */
+
+.pp-project-line {
+    display: inline-block;
 }
 
 
+/* Existing outline styling remains unchanged. */
+
+.pp-hero-title .outline {
+    color: transparent;
+
+    -webkit-text-stroke:
+        1.5px
+        #6945d3;
+}
+
+
+/* ============================================================
+   TYPEWRITER MICRO EFFECT
+============================================================ */
+
+.pp-type-line.pp-typing {
+    animation:
+        pp-type-settle
+        .22s
+        ease-out
+        both;
+}
+
+@keyframes pp-type-settle {
+
+    0% {
+        transform:
+            translate3d(
+                0,
+                2px,
+                0
+            );
+
+        opacity: .82;
+    }
+
+    100% {
+        transform:
+            translate3d(
+                0,
+                0,
+                0
+            );
+
+        opacity: 1;
+    }
+
+}
+
+
+/* ============================================================
+   HERO DESCRIPTION
+============================================================ */
+
 .pp-hero-description {
     max-width: 610px;
+
     margin: 28px 0 0;
+
     color: #777184;
+
     font-size: 1.06rem;
+
     line-height: 1.8;
 }
 
 
+/* ============================================================
+   HERO ACTIONS
+============================================================ */
+
 .pp-hero-actions {
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 12px;
+
     margin-top: 32px;
 }
-
 
 .pp-primary-btn,
 .pp-secondary-btn {
     display: inline-flex;
+
     align-items: center;
+
     gap: 9px;
+
     padding: 14px 21px;
+
     border-radius: 12px;
+
     text-decoration: none;
+
     font-weight: 750;
+
     transition:
         transform .25s ease,
         box-shadow .25s ease;
@@ -195,26 +350,45 @@
 
 .pp-primary-btn {
     background: #6844d4;
+
     color: #fff;
-    box-shadow: 0 15px 30px rgba(104,68,212,.22);
+
+    box-shadow:
+        0 15px 30px
+        rgba(104,68,212,.22);
 }
 
 .pp-primary-btn:hover {
     color: #fff;
-    transform: translateY(-3px);
-    box-shadow: 0 20px 40px rgba(104,68,212,.30);
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 20px 40px
+        rgba(104,68,212,.30);
 }
 
 .pp-secondary-btn {
-    border: 1px solid #ded8eb;
-    background: rgba(255,255,255,.85);
+    border:
+        1px solid
+        #ded8eb;
+
+    background:
+        rgba(255,255,255,.85);
+
     color: #302a3d;
 }
 
 .pp-secondary-btn:hover {
     color: #6844d4;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(50,35,80,.08);
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(50,35,80,.08);
 }
 
 
@@ -224,8 +398,11 @@
 
 .pp-hero-visual {
     position: relative;
+
     min-height: 520px;
+
     isolation: isolate;
+
     will-change: transform;
 }
 
@@ -236,12 +413,18 @@
 
 .pp-visual-orb {
     position: absolute;
+
     width: 420px;
     height: 420px;
+
     top: 40px;
     left: 50%;
-    transform: translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     border-radius: 50%;
+
     background:
         radial-gradient(
             circle at 35% 28%,
@@ -249,37 +432,63 @@
             #ddd4fa 45%,
             #f8f6ff 72%
         );
-    animation: pp-world 7s ease-in-out infinite;
+
+    animation:
+        pp-world
+        7s
+        ease-in-out
+        infinite;
 }
 
 
 .pp-visual-ring {
     position: absolute;
+
     width: 455px;
     height: 455px;
+
     top: 22px;
     left: 50%;
-    transform: translateX(-50%);
-    border: 1px dashed rgba(104,68,212,.22);
+
+    transform:
+        translateX(-50%);
+
+    border:
+        1px dashed
+        rgba(104,68,212,.22);
+
     border-radius: 50%;
-    animation: pp-ring 18s linear infinite;
+
+    animation:
+        pp-ring
+        18s
+        linear
+        infinite;
 }
 
 
 .pp-visual-ring::before,
 .pp-visual-ring::after {
     content: "";
+
     position: absolute;
+
     border-radius: 50%;
+
     background: #7959db;
+
     box-shadow:
-        0 0 0 6px rgba(121,89,219,.08),
-        0 0 20px rgba(121,89,219,.25);
+        0 0 0 6px
+        rgba(121,89,219,.08),
+
+        0 0 20px
+        rgba(121,89,219,.25);
 }
 
 .pp-visual-ring::before {
     width: 8px;
     height: 8px;
+
     top: 34px;
     left: 92px;
 }
@@ -287,6 +496,7 @@
 .pp-visual-ring::after {
     width: 6px;
     height: 6px;
+
     right: 65px;
     bottom: 82px;
 }
@@ -298,17 +508,29 @@
 
 .pp-visual-center {
     position: absolute;
+
     z-index: 7;
+
     top: 170px;
     left: 50%;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     width: 125px;
     height: 125px;
-    transform: translateX(-50%);
-    border: 10px solid rgba(255,255,255,.65);
+
+    transform:
+        translateX(-50%);
+
+    border:
+        10px solid
+        rgba(255,255,255,.65);
+
     border-radius: 50%;
+
     background:
         radial-gradient(
             circle at 35% 28%,
@@ -316,37 +538,74 @@
             #6844d4 60%,
             #5631bc
         );
+
     color: white;
+
     box-shadow:
-        0 25px 60px rgba(104,68,212,.30);
-    animation: pp-core 5s ease-in-out infinite;
+        0 25px 60px
+        rgba(104,68,212,.30);
+
+    animation:
+        pp-core
+        5s
+        ease-in-out
+        infinite;
 }
 
 
 .pp-visual-center::before {
     content: "";
+
     position: absolute;
+
     inset: -20px;
-    border: 1px solid rgba(104,68,212,.18);
+
+    border:
+        1px solid
+        rgba(104,68,212,.18);
+
     border-radius: 50%;
-    animation: pp-pulse 3s ease-out infinite;
+
+    animation:
+        pp-pulse
+        3s
+        ease-out
+        infinite;
 }
 
 .pp-visual-center::after {
     content: "";
-    position: absolute;
-    inset: -38px;
-    border: 1px dashed rgba(104,68,212,.09);
-    border-radius: 50%;
-    animation: pp-pulse 4s ease-out 1s infinite;
-}
 
+    position: absolute;
+
+    inset: -38px;
+
+    border:
+        1px dashed
+        rgba(104,68,212,.09);
+
+    border-radius: 50%;
+
+    animation:
+        pp-pulse
+        4s
+        ease-out
+        1s
+        infinite;
+}
 
 .pp-visual-center i {
     position: relative;
+
     z-index: 3;
+
     font-size: 2.4rem;
-    animation: pp-star 6s ease-in-out infinite;
+
+    animation:
+        pp-star
+        6s
+        ease-in-out
+        infinite;
 }
 
 
@@ -356,8 +615,11 @@
 
 .pp-connection {
     position: absolute;
+
     z-index: 2;
+
     height: 1px;
+
     background:
         repeating-linear-gradient(
             90deg,
@@ -366,30 +628,48 @@
             transparent 5px,
             transparent 11px
         );
-    transform-origin: left center;
-    animation: pp-flow 2s linear infinite;
+
+    transform-origin:
+        left center;
+
+    animation:
+        pp-flow
+        2s
+        linear
+        infinite;
 }
 
 .pp-connection.one {
     width: 150px;
+
     top: 160px;
     left: 190px;
-    transform: rotate(14deg);
+
+    transform:
+        rotate(14deg);
 }
 
 .pp-connection.two {
     width: 150px;
+
     top: 275px;
     right: 180px;
-    transform: rotate(-13deg);
+
+    transform:
+        rotate(-13deg);
+
     animation-delay: .7s;
 }
 
 .pp-connection.three {
     width: 145px;
+
     bottom: 135px;
     left: 180px;
-    transform: rotate(-17deg);
+
+    transform:
+        rotate(-17deg);
+
     animation-delay: 1.3s;
 }
 
@@ -400,15 +680,32 @@
 
 .pp-floating-card {
     position: absolute;
+
     z-index: 5;
+
     width: 235px;
+
     padding: 18px;
-    border: 1px solid rgba(255,255,255,.9);
+
+    border:
+        1px solid
+        rgba(255,255,255,.9);
+
     border-radius: 18px;
-    background: rgba(255,255,255,.91);
-    box-shadow: 0 22px 50px rgba(53,36,94,.12);
-    backdrop-filter: blur(14px);
-    will-change: transform;
+
+    background:
+        rgba(255,255,255,.91);
+
+    box-shadow:
+        0 22px 50px
+        rgba(53,36,94,.12);
+
+    backdrop-filter:
+        blur(14px);
+
+    will-change:
+        transform;
+
     transition:
         box-shadow .3s ease,
         filter .3s ease;
@@ -416,78 +713,126 @@
 
 .pp-floating-card:hover {
     z-index: 20;
-    filter: brightness(1.02);
-    box-shadow: 0 30px 70px rgba(53,36,94,.20);
+
+    filter:
+        brightness(1.02);
+
+    box-shadow:
+        0 30px 70px
+        rgba(53,36,94,.20);
 }
 
 
 .pp-floating-card.problem {
     top: 65px;
     left: 0;
-    animation: pp-problem-card 8s ease-in-out infinite;
+
+    animation:
+        pp-problem-card
+        8s
+        ease-in-out
+        infinite;
 }
 
 .pp-floating-card.solution {
     top: 225px;
     right: 0;
-    animation: pp-solution-card 9s ease-in-out infinite;
+
+    animation:
+        pp-solution-card
+        9s
+        ease-in-out
+        infinite;
 }
 
 .pp-floating-card.project {
     bottom: 35px;
     left: 75px;
-    animation: pp-project-card 8.5s ease-in-out infinite;
+
+    animation:
+        pp-project-card
+        8.5s
+        ease-in-out
+        infinite;
 }
 
 
 .pp-mini-label {
     display: flex;
+
     align-items: center;
+
     gap: 7px;
+
     margin-bottom: 11px;
+
     color: #817b8d;
+
     font-size: .69rem;
+
     font-weight: 800;
-    text-transform: uppercase;
+
+    text-transform:
+        uppercase;
+
     letter-spacing: .08em;
 }
 
 
 .pp-mini-icon {
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     width: 30px;
     height: 30px;
+
     border-radius: 9px;
+
     background: #eee9ff;
+
     color: #6844d4;
 }
 
 
 .pp-floating-card h3 {
     margin: 0;
+
     color: #272135;
+
     font-size: .96rem;
+
     line-height: 1.4;
+
     font-weight: 800;
 }
 
 .pp-floating-card p {
     margin: 7px 0 0;
+
     color: #858091;
+
     font-size: .76rem;
+
     line-height: 1.5;
 }
 
 .pp-floating-status {
     display: inline-block;
+
     margin-top: 12px;
+
     padding: 5px 9px;
+
     border-radius: 999px;
+
     background: #edf9f2;
+
     color: #2c8a5c;
+
     font-size: .65rem;
+
     font-weight: 800;
 }
 
@@ -498,79 +843,118 @@
 
 .pp-process-section {
     position: relative;
+
     z-index: 2;
+
     padding: 30px 0 90px;
 }
 
-
 .pp-process-header {
     max-width: 650px;
+
     margin-bottom: 35px;
 }
 
-
 .pp-kicker {
     margin-bottom: 8px;
-    color: #6844d4;
-    font-size: .72rem;
-    font-weight: 850;
-    letter-spacing: .11em;
-    text-transform: uppercase;
-}
 
+    color: #6844d4;
+
+    font-size: .72rem;
+
+    font-weight: 850;
+
+    letter-spacing: .11em;
+
+    text-transform:
+        uppercase;
+}
 
 .pp-section-title {
     margin: 0;
+
     color: #201a2e;
-    font-size: clamp(2rem,4vw,3rem);
+
+    font-size:
+        clamp(
+            2rem,
+            4vw,
+            3rem
+        );
+
     line-height: 1.05;
+
     letter-spacing: -.045em;
+
     font-weight: 850;
 }
 
-
 .pp-section-subtitle {
     margin: 12px 0 0;
+
     color: #85808f;
+
     line-height: 1.7;
 }
 
-
 .pp-process-grid {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+
+    grid-template-columns:
+        repeat(4,1fr);
+
     gap: 16px;
 }
 
-
 .pp-process-card {
     position: relative;
+
     min-height: 210px;
+
     padding: 24px;
+
     overflow: hidden;
-    border: 1px solid #ebe7f2;
+
+    border:
+        1px solid
+        #ebe7f2;
+
     border-radius: 22px;
+
     background: #fff;
-    box-shadow: 0 15px 40px rgba(42,30,70,.055);
+
+    box-shadow:
+        0 15px 40px
+        rgba(42,30,70,.055);
+
     transition:
-        transform .35s cubic-bezier(.16,1,.3,1),
+        transform .35s
+        cubic-bezier(.16,1,.3,1),
+
         box-shadow .35s ease;
 }
 
-
 .pp-process-card:hover {
-    transform: translateY(-10px) rotateX(2deg);
-    box-shadow: 0 28px 60px rgba(42,30,70,.11);
-}
+    transform:
+        translateY(-10px)
+        rotateX(2deg);
 
+    box-shadow:
+        0 28px 60px
+        rgba(42,30,70,.11);
+}
 
 .pp-process-card::before {
     content: "";
+
     position: absolute;
+
     top: 0;
     left: -120%;
+
     width: 70%;
     height: 100%;
+
     background:
         linear-gradient(
             90deg,
@@ -578,54 +962,77 @@
             rgba(255,255,255,.75),
             transparent
         );
-    transform: skewX(-18deg);
-}
 
+    transform:
+        skewX(-18deg);
+}
 
 .pp-process-card.pp-active::before {
-    animation: pp-card-sweep 1.1s ease .25s;
+    animation:
+        pp-card-sweep
+        1.1s
+        ease
+        .25s;
 }
-
 
 .pp-process-number {
     position: absolute;
+
     right: 16px;
     top: 10px;
+
     color: #f0edf7;
+
     font-size: 4rem;
+
     line-height: 1;
+
     font-weight: 850;
 }
 
-
 .pp-process-icon {
     position: relative;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     width: 46px;
     height: 46px;
+
     margin-bottom: 22px;
+
     border-radius: 14px;
+
     background: #f0ebff;
+
     color: #6844d4;
+
     font-size: 1.2rem;
 }
 
-
 .pp-process-card h3 {
     position: relative;
+
     margin: 0 0 8px;
+
     color: #282135;
+
     font-size: 1.05rem;
+
     font-weight: 800;
 }
 
 .pp-process-card p {
     position: relative;
+
     margin: 0;
+
     color: #85808f;
+
     font-size: .82rem;
+
     line-height: 1.6;
 }
 
@@ -636,91 +1043,135 @@
 
 .pp-trending {
     position: relative;
+
     z-index: 2;
+
     padding: 80px 0 105px;
+
     background: #f5f2fa;
 }
 
-
 .pp-trending-header {
     display: flex;
+
     align-items: end;
+
     justify-content: space-between;
+
     gap: 20px;
+
     margin-bottom: 30px;
 }
 
-
 .pp-view-all {
     display: inline-flex;
+
     align-items: center;
+
     gap: 7px;
+
     color: #6844d4;
+
     text-decoration: none;
+
     font-size: .86rem;
+
     font-weight: 800;
-    transition: transform .25s ease;
+
+    transition:
+        transform .25s ease;
 }
 
 .pp-view-all:hover {
     color: #4e2da9;
-    transform: translateX(5px);
-}
 
+    transform:
+        translateX(5px);
+}
 
 .pp-problem-grid {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap: 18px;
 }
 
-
 .pp-problem-card {
     position: relative;
+
     min-height: 320px;
+
     padding: 25px;
+
     overflow: hidden;
-    border: 1px solid #e8e3ef;
+
+    border:
+        1px solid
+        #e8e3ef;
+
     border-radius: 24px;
+
     background: #fff;
-    box-shadow: 0 16px 42px rgba(42,30,70,.06);
+
+    box-shadow:
+        0 16px 42px
+        rgba(42,30,70,.06);
+
     transition:
-        transform .4s cubic-bezier(.16,1,.3,1),
+        transform .4s
+        cubic-bezier(.16,1,.3,1),
+
         box-shadow .35s ease;
 }
 
-
 .pp-problem-card:hover {
-    transform: translateY(-10px) rotateX(1deg);
-    box-shadow: 0 28px 60px rgba(42,30,70,.12);
-}
+    transform:
+        translateY(-10px)
+        rotateX(1deg);
 
+    box-shadow:
+        0 28px 60px
+        rgba(42,30,70,.12);
+}
 
 .pp-problem-card::before {
     content: "";
+
     position: absolute;
+
     width: 170px;
     height: 170px;
+
     right: -75px;
     bottom: -75px;
-    border-radius: 50%;
-    background: #f0ebff;
-    transition: transform .5s cubic-bezier(.16,1,.3,1);
-}
 
+    border-radius: 50%;
+
+    background: #f0ebff;
+
+    transition:
+        transform .5s
+        cubic-bezier(.16,1,.3,1);
+}
 
 .pp-problem-card:hover::before {
-    transform: scale(1.45);
+    transform:
+        scale(1.45);
 }
-
 
 .pp-problem-card::after {
     content: "";
+
     position: absolute;
+
     top: 0;
     left: -100%;
+
     width: 60%;
     height: 100%;
+
     background:
         linear-gradient(
             90deg,
@@ -728,66 +1179,98 @@
             rgba(111,72,216,.055),
             transparent
         );
-    transform: skewX(-18deg);
-}
 
+    transform:
+        skewX(-18deg);
+}
 
 .pp-problem-card.pp-active::after {
-    animation: pp-problem-sweep 1.3s ease .25s;
+    animation:
+        pp-problem-sweep
+        1.3s
+        ease
+        .25s;
 }
-
 
 .pp-problem-top {
     position: relative;
+
     z-index: 2;
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     margin-bottom: 26px;
 }
 
-
 .pp-category {
     padding: 6px 10px;
+
     border-radius: 999px;
+
     background: #f0ebff;
+
     color: #6844d4;
+
     font-size: .67rem;
+
     font-weight: 850;
-    text-transform: uppercase;
+
+    text-transform:
+        uppercase;
+
     letter-spacing: .04em;
 }
 
-
 .pp-open {
     display: inline-flex;
+
     align-items: center;
+
     gap: 5px;
+
     color: #31855b;
+
     font-size: .68rem;
+
     font-weight: 800;
 }
 
 .pp-open::before {
     content: "";
+
     width: 6px;
     height: 6px;
+
     border-radius: 50%;
+
     background: #48ad78;
 }
 
-
 .pp-problem-title {
     position: relative;
+
     z-index: 2;
+
     display: block;
+
     min-height: 72px;
+
     margin-bottom: 12px;
+
     color: #241d32;
+
     text-decoration: none;
+
     font-size: 1.22rem;
+
     line-height: 1.35;
+
     letter-spacing: -.02em;
+
     font-weight: 850;
 }
 
@@ -795,56 +1278,81 @@
     color: #6844d4;
 }
 
-
 .pp-problem-description {
     position: relative;
+
     z-index: 2;
+
     display: -webkit-box;
+
     min-height: 72px;
+
     overflow: hidden;
+
     color: #85808f;
+
     font-size: .84rem;
+
     line-height: 1.65;
+
     -webkit-line-clamp: 3;
+
     -webkit-box-orient: vertical;
 }
 
-
 .pp-problem-bottom {
     position: absolute;
+
     z-index: 3;
+
     right: 25px;
     bottom: 22px;
     left: 25px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     padding-top: 15px;
-    border-top: 1px solid #efebf3;
+
+    border-top:
+        1px solid
+        #efebf3;
+
     color: #8b8594;
+
     font-size: .7rem;
 }
 
-
 .pp-problem-bottom span {
     display: inline-flex;
+
     align-items: center;
+
     gap: 5px;
 }
 
-
 .pp-empty {
     grid-column: 1/-1;
+
     padding: 60px 30px;
+
     text-align: center;
-    border: 1px dashed #d8d0e5;
+
+    border:
+        1px dashed
+        #d8d0e5;
+
     border-radius: 24px;
+
     background: #fff;
 }
 
 
 /* ============================================================
-   KEYFRAMES
+   EXISTING KEYFRAMES
 ============================================================ */
 
 @keyframes pp-dot {
@@ -861,49 +1369,62 @@
 
 }
 
-
 @keyframes pp-world {
 
     0%,100% {
-        transform: translateX(-50%) scale(1);
+        transform:
+            translateX(-50%)
+            scale(1);
     }
 
     50% {
-        transform: translateX(-50%) scale(1.055);
+        transform:
+            translateX(-50%)
+            scale(1.055);
     }
 
 }
-
 
 @keyframes pp-ring {
 
     from {
-        transform: translateX(-50%) rotate(0deg);
+        transform:
+            translateX(-50%)
+            rotate(0deg);
     }
 
     to {
-        transform: translateX(-50%) rotate(360deg);
+        transform:
+            translateX(-50%)
+            rotate(360deg);
     }
 
 }
-
 
 @keyframes pp-core {
 
     0%,100% {
-        transform: translateX(-50%) translateY(0) scale(1);
+        transform:
+            translateX(-50%)
+            translateY(0)
+            scale(1);
     }
 
     35% {
-        transform: translateX(-50%) translateY(-9px) scale(1.035);
+        transform:
+            translateX(-50%)
+            translateY(-9px)
+            scale(1.035);
     }
 
     70% {
-        transform: translateX(-50%) translateY(5px) scale(.985);
+        transform:
+            translateX(-50%)
+            translateY(5px)
+            scale(.985);
     }
 
 }
-
 
 @keyframes pp-pulse {
 
@@ -923,27 +1444,33 @@
 
 }
 
-
 @keyframes pp-star {
 
     0%,100% {
-        transform: rotate(0deg) scale(1);
+        transform:
+            rotate(0deg)
+            scale(1);
     }
 
     25% {
-        transform: rotate(-10deg) scale(1.1);
+        transform:
+            rotate(-10deg)
+            scale(1.1);
     }
 
     50% {
-        transform: rotate(10deg) scale(.94);
+        transform:
+            rotate(10deg)
+            scale(.94);
     }
 
     75% {
-        transform: rotate(-5deg) scale(1.06);
+        transform:
+            rotate(-5deg)
+            scale(1.06);
     }
 
 }
-
 
 @keyframes pp-flow {
 
@@ -971,61 +1498,83 @@
 @keyframes pp-problem-card {
 
     0%,100% {
-        transform: translate3d(0,0,0) rotate(-4deg);
+        transform:
+            translate3d(0,0,0)
+            rotate(-4deg);
     }
 
     25% {
-        transform: translate3d(14px,-14px,0) rotate(-1deg);
+        transform:
+            translate3d(14px,-14px,0)
+            rotate(-1deg);
     }
 
     50% {
-        transform: translate3d(-5px,-24px,0) rotate(-6deg);
+        transform:
+            translate3d(-5px,-24px,0)
+            rotate(-6deg);
     }
 
     75% {
-        transform: translate3d(-13px,-7px,0) rotate(-2deg);
+        transform:
+            translate3d(-13px,-7px,0)
+            rotate(-2deg);
     }
 
 }
-
 
 @keyframes pp-solution-card {
 
     0%,100% {
-        transform: translate3d(0,0,0) rotate(4deg);
+        transform:
+            translate3d(0,0,0)
+            rotate(4deg);
     }
 
     25% {
-        transform: translate3d(-13px,-9px,0) rotate(1deg);
+        transform:
+            translate3d(-13px,-9px,0)
+            rotate(1deg);
     }
 
     50% {
-        transform: translate3d(-8px,16px,0) rotate(6deg);
+        transform:
+            translate3d(-8px,16px,0)
+            rotate(6deg);
     }
 
     75% {
-        transform: translate3d(9px,7px,0) rotate(2deg);
+        transform:
+            translate3d(9px,7px,0)
+            rotate(2deg);
     }
 
 }
 
-
 @keyframes pp-project-card {
 
     0%,100% {
-        transform: translate3d(0,0,0) rotate(-2deg);
+        transform:
+            translate3d(0,0,0)
+            rotate(-2deg);
     }
 
     25% {
-        transform: translate3d(13px,-11px,0) rotate(1deg);
+        transform:
+            translate3d(13px,-11px,0)
+            rotate(1deg);
     }
 
     50% {
-        transform: translate3d(21px,-2px,0) rotate(-4deg);
+        transform:
+            translate3d(21px,-2px,0)
+            rotate(-4deg);
     }
 
     75% {
-        transform: translate3d(7px,14px,0) rotate(-1deg);
+        transform:
+            translate3d(7px,14px,0)
+            rotate(-1deg);
     }
 
 }
@@ -1047,7 +1596,6 @@
 
 }
 
-
 @keyframes pp-problem-sweep {
 
     0% {
@@ -1062,7 +1610,7 @@
 
 
 /* ============================================================
-   PARALLAX CLASS
+   PARALLAX
 ============================================================ */
 
 .pp-parallax {
@@ -1106,7 +1654,8 @@
 @media (max-width:900px) {
 
     .pp-process-grid {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns:
+            repeat(2,1fr);
     }
 
     .pp-problem-grid {
@@ -1146,6 +1695,7 @@
 
     .pp-visual-center {
         top: 145px;
+
         width: 95px;
         height: 95px;
     }
@@ -1178,18 +1728,26 @@
 
     .pp-trending-header {
         align-items: flex-start;
+
         flex-direction: column;
     }
 
 }
 
 
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
 @media (prefers-reduced-motion:reduce) {
 
     .pp-reveal {
         opacity: 1 !important;
+
         transform: none !important;
+
         filter: none !important;
+
         transition: none !important;
     }
 
@@ -1206,6 +1764,10 @@
         animation: none !important;
     }
 
+    .pp-type-line {
+        animation: none !important;
+    }
+
 }
 
 </style>
@@ -1218,11 +1780,22 @@
          MOVING BACKGROUND FIELD
     ========================================================= -->
 
-    <div class="pp-scroll-field" aria-hidden="true">
+    <div
+        class="pp-scroll-field"
+        aria-hidden="true"
+    >
 
-        <div class="pp-field-orb one pp-parallax"></div>
-        <div class="pp-field-orb two pp-parallax"></div>
-        <div class="pp-field-orb three pp-parallax"></div>
+        <div
+            class="pp-field-orb one pp-parallax"
+        ></div>
+
+        <div
+            class="pp-field-orb two pp-parallax"
+        ></div>
+
+        <div
+            class="pp-field-orb three pp-parallax"
+        ></div>
 
     </div>
 
@@ -1240,6 +1813,7 @@
 
                 <div class="pp-hero-content">
 
+
                     <span
                         class="pp-eyebrow pp-reveal"
                         style="--pp-delay:80ms;"
@@ -1252,48 +1826,92 @@
                     </span>
 
 
+                    <!-- =================================================
+                         ANIMATED HERO TITLE
+
+                         Exact original text and styling.
+                         JavaScript only controls the reveal.
+                    ================================================== -->
+
                     <h1
-                        class="pp-hero-title pp-reveal"
+                        class="
+                            pp-hero-title
+                            pp-reveal
+                        "
                         style="--pp-delay:180ms;"
                     >
 
-                        Real Problems.
+                        <span
+                            class="
+                                pp-type-line
+                                pp-title-problem
+                            "
+                            data-type-text="Real Problems."
+                        ></span>
 
                         <br>
 
-                        <span class="accent">
-                            Real People.
-                        </span>
+                        <span
+                            class="
+                                pp-type-line
+                                accent
+                                pp-title-people
+                            "
+                            data-type-text="Real People."
+                        ></span>
 
                         <br>
 
-                        Real <span class="outline">Projects.</span>
+                        <span
+                            class="
+                                pp-type-line
+                                pp-project-line
+                                pp-title-project
+                            "
+                            data-project-line="true"
+                            data-first-part="Real "
+                            data-second-part="Projects."
+                        ></span>
 
                     </h1>
 
 
                     <p
-                        class="pp-hero-description pp-reveal"
+                        class="
+                            pp-hero-description
+                            pp-reveal
+                        "
                         style="--pp-delay:300ms;"
                     >
+
                         ProblemPool brings together people who see
                         problems and people who want to solve them.
                         Discover challenges, share ideas, build teams,
                         and turn meaningful solutions into real projects.
+
                     </p>
 
 
                     <div
-                        class="pp-hero-actions pp-reveal"
+                        class="
+                            pp-hero-actions
+                            pp-reveal
+                        "
                         style="--pp-delay:420ms;"
                     >
+
 
                         <a
                             href="{% url 'problems:list' %}"
                             class="pp-primary-btn"
                         >
+
                             Explore Problems
-                            <i class="bi bi-arrow-up-right"></i>
+
+                            <i
+                                class="bi bi-arrow-up-right"
+                            ></i>
+
                         </a>
 
 
@@ -1303,8 +1921,13 @@
                                 href="{% url 'problems:create' %}"
                                 class="pp-secondary-btn"
                             >
-                                <i class="bi bi-plus-lg"></i>
+
+                                <i
+                                    class="bi bi-plus-lg"
+                                ></i>
+
                                 Post a Problem
+
                             </a>
 
                         {% else %}
@@ -1313,13 +1936,20 @@
                                 href="{% url 'accounts:login' %}?next={% url 'problems:create' %}"
                                 class="pp-secondary-btn"
                             >
-                                <i class="bi bi-plus-lg"></i>
+
+                                <i
+                                    class="bi bi-plus-lg"
+                                ></i>
+
                                 Post a Problem
+
                             </a>
 
                         {% endif %}
 
+
                     </div>
+
 
                 </div>
 
@@ -1329,35 +1959,75 @@
                 ================================================== -->
 
                 <div
-                    class="pp-hero-visual pp-reveal pp-parallax"
+                    class="
+                        pp-hero-visual
+                        pp-reveal
+                        pp-parallax
+                    "
                     style="--pp-delay:260ms;"
                 >
 
-                    <div class="pp-visual-orb"></div>
 
-                    <div class="pp-visual-ring"></div>
-
-
-                    <div class="pp-connection one"></div>
-                    <div class="pp-connection two"></div>
-                    <div class="pp-connection three"></div>
+                    <div
+                        class="pp-visual-orb"
+                    ></div>
 
 
-                    <div class="pp-visual-center">
+                    <div
+                        class="pp-visual-ring"
+                    ></div>
 
-                        <i class="bi bi-stars"></i>
+
+                    <div
+                        class="pp-connection one"
+                    ></div>
+
+                    <div
+                        class="pp-connection two"
+                    ></div>
+
+                    <div
+                        class="pp-connection three"
+                    ></div>
+
+
+                    <div
+                        class="pp-visual-center"
+                    >
+
+                        <i
+                            class="bi bi-stars"
+                        ></i>
 
                     </div>
 
 
-                    <!-- PROBLEM -->
+                    <!-- =================================================
+                         PROBLEM CARD
+                    ================================================== -->
 
-                    <div class="pp-floating-card problem">
+                    <div
+                        class="
+                            pp-floating-card
+                            problem
+                        "
+                    >
 
-                        <div class="pp-mini-label">
+                        <div
+                            class="pp-mini-label"
+                        >
 
-                            <span class="pp-mini-icon">
-                                <i class="bi bi-exclamation-circle"></i>
+                            <span
+                                class="pp-mini-icon"
+                            >
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-exclamation-circle
+                                    "
+                                ></i>
+
                             </span>
 
                             Problem
@@ -1377,21 +2047,41 @@
                         </p>
 
 
-                        <span class="pp-floating-status">
+                        <span
+                            class="pp-floating-status"
+                        >
                             Open for ideas
                         </span>
 
                     </div>
 
 
-                    <!-- SOLUTION -->
+                    <!-- =================================================
+                         SOLUTION CARD
+                    ================================================== -->
 
-                    <div class="pp-floating-card solution">
+                    <div
+                        class="
+                            pp-floating-card
+                            solution
+                        "
+                    >
 
-                        <div class="pp-mini-label">
+                        <div
+                            class="pp-mini-label"
+                        >
 
-                            <span class="pp-mini-icon">
-                                <i class="bi bi-lightbulb"></i>
+                            <span
+                                class="pp-mini-icon"
+                            >
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-lightbulb
+                                    "
+                                ></i>
+
                             </span>
 
                             Solution
@@ -1413,14 +2103,32 @@
                     </div>
 
 
-                    <!-- PROJECT -->
+                    <!-- =================================================
+                         PROJECT CARD
+                    ================================================== -->
 
-                    <div class="pp-floating-card project">
+                    <div
+                        class="
+                            pp-floating-card
+                            project
+                        "
+                    >
 
-                        <div class="pp-mini-label">
+                        <div
+                            class="pp-mini-label"
+                        >
 
-                            <span class="pp-mini-icon">
-                                <i class="bi bi-rocket-takeoff"></i>
+                            <span
+                                class="pp-mini-icon"
+                            >
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-rocket-takeoff
+                                    "
+                                ></i>
+
                             </span>
 
                             Project
@@ -1441,7 +2149,9 @@
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
@@ -1454,25 +2164,38 @@
          PROCESS
     ========================================================= -->
 
-    <section class="pp-process-section">
+    <section
+        class="pp-process-section"
+    >
 
         <div class="container">
 
 
             <div
-                class="pp-process-header pp-reveal"
+                class="
+                    pp-process-header
+                    pp-reveal
+                "
                 style="--pp-delay:80ms;"
             >
 
-                <div class="pp-kicker">
+                <div
+                    class="pp-kicker"
+                >
                     How ProblemPool works
                 </div>
 
-                <h2 class="pp-section-title">
+
+                <h2
+                    class="pp-section-title"
+                >
                     From a problem to something real.
                 </h2>
 
-                <p class="pp-section-subtitle">
+
+                <p
+                    class="pp-section-subtitle"
+                >
                     One simple journey from discovering a challenge
                     to building a solution with the community.
                 </p>
@@ -1480,25 +2203,41 @@
             </div>
 
 
-            <div class="pp-process-grid">
+            <div
+                class="pp-process-grid"
+            >
 
 
                 <article
-                    class="pp-process-card pp-reveal"
+                    class="
+                        pp-process-card
+                        pp-reveal
+                    "
                     style="--pp-delay:80ms;"
                 >
 
-                    <span class="pp-process-number">
+                    <span
+                        class="pp-process-number"
+                    >
                         01
                     </span>
 
-                    <div class="pp-process-icon">
-                        <i class="bi bi-search"></i>
+
+                    <div
+                        class="pp-process-icon"
+                    >
+
+                        <i
+                            class="bi bi-search"
+                        ></i>
+
                     </div>
+
 
                     <h3>
                         Discover
                     </h3>
+
 
                     <p>
                         Find real problems posted by people,
@@ -1509,21 +2248,35 @@
 
 
                 <article
-                    class="pp-process-card pp-reveal"
+                    class="
+                        pp-process-card
+                        pp-reveal
+                    "
                     style="--pp-delay:180ms;"
                 >
 
-                    <span class="pp-process-number">
+                    <span
+                        class="pp-process-number"
+                    >
                         02
                     </span>
 
-                    <div class="pp-process-icon">
-                        <i class="bi bi-lightbulb"></i>
+
+                    <div
+                        class="pp-process-icon"
+                    >
+
+                        <i
+                            class="bi bi-lightbulb"
+                        ></i>
+
                     </div>
+
 
                     <h3>
                         Solve
                     </h3>
+
 
                     <p>
                         Share your ideas and propose practical
@@ -1534,21 +2287,35 @@
 
 
                 <article
-                    class="pp-process-card pp-reveal"
+                    class="
+                        pp-process-card
+                        pp-reveal
+                    "
                     style="--pp-delay:280ms;"
                 >
 
-                    <span class="pp-process-number">
+                    <span
+                        class="pp-process-number"
+                    >
                         03
                     </span>
 
-                    <div class="pp-process-icon">
-                        <i class="bi bi-people"></i>
+
+                    <div
+                        class="pp-process-icon"
+                    >
+
+                        <i
+                            class="bi bi-people"
+                        ></i>
+
                     </div>
+
 
                     <h3>
                         Collaborate
                     </h3>
+
 
                     <p>
                         Meet people with different skills and
@@ -1559,21 +2326,35 @@
 
 
                 <article
-                    class="pp-process-card pp-reveal"
+                    class="
+                        pp-process-card
+                        pp-reveal
+                    "
                     style="--pp-delay:380ms;"
                 >
 
-                    <span class="pp-process-number">
+                    <span
+                        class="pp-process-number"
+                    >
                         04
                     </span>
 
-                    <div class="pp-process-icon">
-                        <i class="bi bi-rocket-takeoff"></i>
+
+                    <div
+                        class="pp-process-icon"
+                    >
+
+                        <i
+                            class="bi bi-rocket-takeoff"
+                        ></i>
+
                     </div>
+
 
                     <h3>
                         Build
                     </h3>
+
 
                     <p>
                         Turn solutions into projects that create
@@ -1581,6 +2362,7 @@
                     </p>
 
                 </article>
+
 
             </div>
 
@@ -1593,23 +2375,33 @@
          TRENDING PROBLEMS
     ========================================================= -->
 
-    <section class="pp-trending">
+    <section
+        class="pp-trending"
+    >
 
         <div class="container">
 
 
             <div
-                class="pp-trending-header pp-reveal"
+                class="
+                    pp-trending-header
+                    pp-reveal
+                "
                 style="--pp-delay:80ms;"
             >
 
                 <div>
 
-                    <div class="pp-kicker">
+                    <div
+                        class="pp-kicker"
+                    >
                         Community pulse
                     </div>
 
-                    <h2 class="pp-section-title">
+
+                    <h2
+                        class="pp-section-title"
+                    >
                         Problems worth solving.
                     </h2>
 
@@ -1620,52 +2412,78 @@
                     href="{% url 'problems:list' %}"
                     class="pp-view-all"
                 >
+
                     Explore all problems
-                    <i class="bi bi-arrow-right"></i>
+
+                    <i
+                        class="bi bi-arrow-right"
+                    ></i>
+
                 </a>
 
             </div>
 
 
-            <div class="pp-problem-grid">
+            <div
+                class="pp-problem-grid"
+            >
 
 
                 {% for problem in trending_problems %}
 
+
                     <article
-                        class="pp-problem-card pp-reveal"
-                        style="--pp-delay:{{ forloop.counter0 }}00ms;"
+                        class="
+                            pp-problem-card
+                            pp-reveal
+                        "
+                        style="
+                            --pp-delay:
+                            {{ forloop.counter0 }}00ms;
+                        "
                     >
 
 
-                        <div class="pp-problem-top">
+                        <div
+                            class="pp-problem-top"
+                        >
 
-                            <span class="pp-category">
+                            <span
+                                class="pp-category"
+                            >
                                 {{ problem.get_category_display }}
                             </span>
 
 
                             {% if problem.status == "OPEN" %}
 
-                                <span class="pp-open">
+                                <span
+                                    class="pp-open"
+                                >
                                     Open
                                 </span>
 
                             {% elif problem.status == "IN_PROGRESS" %}
 
-                                <span class="pp-open">
+                                <span
+                                    class="pp-open"
+                                >
                                     In Progress
                                 </span>
 
                             {% elif problem.status == "SOLVED" %}
 
-                                <span class="pp-open">
+                                <span
+                                    class="pp-open"
+                                >
                                     Solved
                                 </span>
 
                             {% else %}
 
-                                <span class="pp-open">
+                                <span
+                                    class="pp-open"
+                                >
                                     Closed
                                 </span>
 
@@ -1682,31 +2500,45 @@
                         </a>
 
 
-                        <div class="pp-problem-description">
+                        <div
+                            class="pp-problem-description"
+                        >
                             {{ problem.description }}
                         </div>
 
 
-                        <div class="pp-problem-bottom">
+                        <div
+                            class="pp-problem-bottom"
+                        >
 
                             <span>
-                                <i class="bi bi-eye"></i>
+                                <i
+                                    class="bi bi-eye"
+                                ></i>
+
                                 {{ problem.views }}
                             </span>
 
 
                             <span>
-                                <i class="bi bi-lightbulb"></i>
+                                <i
+                                    class="bi bi-lightbulb"
+                                ></i>
+
                                 {{ problem.solution_count }}
                             </span>
 
 
                             <span>
-                                <i class="bi bi-geo-alt"></i>
+                                <i
+                                    class="bi bi-geo-alt"
+                                ></i>
+
                                 {{ problem.location|default:"Community" }}
                             </span>
 
                         </div>
+
 
                     </article>
 
@@ -1714,15 +2546,30 @@
                 {% empty %}
 
 
-                    <div class="pp-empty">
+                    <div
+                        class="pp-empty"
+                    >
 
-                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <i
+                            class="
+                                bi
+                                bi-inbox
+                                fs-1
+                                text-muted
+                            "
+                        ></i>
 
-                        <h3 class="h5 mt-3">
+
+                        <h3
+                            class="h5 mt-3"
+                        >
                             No problems yet
                         </h3>
 
-                        <p class="text-muted">
+
+                        <p
+                            class="text-muted"
+                        >
                             Be the first person to post a problem.
                         </p>
 
@@ -1752,6 +2599,7 @@
 
                 {% endfor %}
 
+
             </div>
 
         </div>
@@ -1763,316 +2611,745 @@
 
 
 <!-- ============================================================
-     SIGNATURE SCROLL ENGINE
+     SIGNATURE INTERACTION ENGINE
 ============================================================ -->
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    const revealElements = document.querySelectorAll(".pp-reveal");
-
-    const parallaxElements = document.querySelectorAll(".pp-parallax");
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
 
-    /* ----------------------------------------------------------
-       REVEAL OBSERVER
-    ---------------------------------------------------------- */
+        /* ========================================================
+           ELEMENTS
+        ======================================================== */
 
-    const revealObserver = new IntersectionObserver(
-        function (entries) {
+        const revealElements =
+            document.querySelectorAll(
+                ".pp-reveal"
+            );
 
-            entries.forEach(function (entry) {
+        const parallaxElements =
+            document.querySelectorAll(
+                ".pp-parallax"
+            );
 
-                if (entry.isIntersecting) {
 
-                    const element = entry.target;
+        /* ========================================================
+           TYPEWRITER ENGINE
+           
+           Sequence:
 
-                    const delay = element.style.getPropertyValue(
-                        "--pp-delay"
+           Real Problems.
+           ↓
+           hold
+           ↓
+           Real People.
+           ↓
+           hold
+           ↓
+           Real Projects.
+           ↓
+           hold
+           ↓
+           restart
+        ======================================================== */
+
+        const typeLines =
+            document.querySelectorAll(
+                ".pp-type-line"
+            );
+
+
+        const TYPE_SPEED = 42;
+
+        const LINE_HOLD = 50;
+
+        const BETWEEN_LINES = 280;
+
+        const LOOP_PAUSE = 1800;
+
+
+        /*
+           Type one normal text line.
+        */
+
+        function typeNormalLine(
+            element,
+            text
+        ) {
+
+            return new Promise(
+                function (resolve) {
+
+                    element.textContent = "";
+
+                    element.classList.add(
+                        "pp-typing"
                     );
 
-                    if (delay) {
-                        element.style.transitionDelay = delay;
+
+                    let index = 0;
+
+
+                    function writeCharacter() {
+
+                        if (index < text.length) {
+
+                            element.textContent +=
+                                text.charAt(index);
+
+                            index++;
+
+                            window.setTimeout(
+                                writeCharacter,
+                                TYPE_SPEED
+                            );
+
+                            return;
+                        }
+
+
+                        element.classList.remove(
+                            "pp-typing"
+                        );
+
+
+                        window.setTimeout(
+                            resolve,
+                            LINE_HOLD
+                        );
+
                     }
 
-                    element.classList.add("pp-active");
 
-                    /*
-                        Trigger a second visual event for cards.
-                    */
+                    writeCharacter();
+
+                }
+            );
+
+        }
+
+
+        /*
+           Special third line.
+
+           "Real" stays black.
+
+           "Projects." keeps the original
+           purple outline style.
+
+           No cursor is added.
+        */
+
+        function typeProjectLine(
+            element
+        ) {
+
+            return new Promise(
+                function (resolve) {
+
+                    element.innerHTML = "";
+
+                    element.classList.add(
+                        "pp-typing"
+                    );
+
+
+                    const firstPart =
+                        element.dataset.firstPart;
+
+                    const secondPart =
+                        element.dataset.secondPart;
+
+
+                    let index = 0;
+
+
+                    function writeFirstPart() {
+
+                        if (
+                            index <
+                            firstPart.length
+                        ) {
+
+                            element.textContent +=
+                                firstPart.charAt(index);
+
+                            index++;
+
+                            window.setTimeout(
+                                writeFirstPart,
+                                TYPE_SPEED
+                            );
+
+                            return;
+                        }
+
+
+                        const outline =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        outline.className =
+                            "outline";
+
+
+                        element.appendChild(
+                            outline
+                        );
+
+
+                        let projectIndex = 0;
+
+
+                        function writeProjectPart() {
+
+                            if (
+                                projectIndex <
+                                secondPart.length
+                            ) {
+
+                                outline.textContent +=
+                                    secondPart.charAt(
+                                        projectIndex
+                                    );
+
+                                projectIndex++;
+
+
+                                window.setTimeout(
+                                    writeProjectPart,
+                                    TYPE_SPEED
+                                );
+
+                                return;
+                            }
+
+
+                            element.classList.remove(
+                                "pp-typing"
+                            );
+
+
+                            window.setTimeout(
+                                resolve,
+                                LINE_HOLD
+                            );
+
+                        }
+
+
+                        writeProjectPart();
+
+                    }
+
+
+                    writeFirstPart();
+
+                }
+            );
+
+        }
+
+
+        /*
+           Main headline cycle.
+
+           It deliberately does NOT erase text.
+
+           When the third line finishes,
+           everything stays visible during the
+           loop pause.
+
+           Then the next cycle clears the
+           previous lines and starts again.
+        */
+
+        async function runHeadlineLoop() {
+
+            if (
+                window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                ).matches
+            ) {
+
+                document.querySelector(
+                    ".pp-title-problem"
+                ).textContent =
+                    "Real Problems.";
+
+                document.querySelector(
+                    ".pp-title-people"
+                ).textContent =
+                    "Real People.";
+
+
+                const project =
+                    document.querySelector(
+                        ".pp-title-project"
+                    );
+
+
+                project.innerHTML =
+                    'Real <span class="outline">Projects.</span>';
+
+                return;
+            }
+
+
+            while (true) {
+
+
+                /*
+                   Clear previous cycle.
+                */
+
+                typeLines.forEach(
+                    function (line) {
+
+                        line.textContent = "";
+
+                    }
+                );
+
+
+                const projectLine =
+                    document.querySelector(
+                        ".pp-title-project"
+                    );
+
+
+                projectLine.innerHTML = "";
+
+
+                /*
+                   LINE 1
+                */
+
+                await typeNormalLine(
+                    document.querySelector(
+                        ".pp-title-problem"
+                    ),
+                    "Real Problems."
+                );
+
+
+                await new Promise(
+                    function (resolve) {
+
+                        window.setTimeout(
+                            resolve,
+                            BETWEEN_LINES
+                        );
+
+                    }
+                );
+
+
+                /*
+                   LINE 2
+                */
+
+                await typeNormalLine(
+                    document.querySelector(
+                        ".pp-title-people"
+                    ),
+                    "Real People."
+                );
+
+
+                await new Promise(
+                    function (resolve) {
+
+                        window.setTimeout(
+                            resolve,
+                            BETWEEN_LINES
+                        );
+
+                    }
+                );
+
+
+                /*
+                   LINE 3
+                */
+
+                await typeProjectLine(
+                    projectLine
+                );
+
+
+                /*
+                   All three lines remain
+                   completely normal here.
+                */
+
+                await new Promise(
+                    function (resolve) {
+
+                        window.setTimeout(
+                            resolve,
+                            LOOP_PAUSE
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        /*
+           Start headline animation after
+           the hero reveal has entered.
+        */
+
+        window.setTimeout(
+            function () {
+
+                runHeadlineLoop();
+
+            },
+            650
+        );
+
+
+        /* ========================================================
+           REVEAL OBSERVER
+        ======================================================== */
+
+        const revealObserver =
+            new IntersectionObserver(
+                function (entries) {
+
+                    entries.forEach(
+                        function (entry) {
+
+                            if (
+                                entry.isIntersecting
+                            ) {
+
+                                const element =
+                                    entry.target;
+
+
+                                const delay =
+                                    element.style
+                                        .getPropertyValue(
+                                            "--pp-delay"
+                                        );
+
+
+                                if (delay) {
+
+                                    element.style
+                                        .transitionDelay =
+                                        delay;
+
+                                }
+
+
+                                element.classList.add(
+                                    "pp-active"
+                                );
+
+
+                                if (
+                                    element.classList.contains(
+                                        "pp-process-card"
+                                    ) ||
+                                    element.classList.contains(
+                                        "pp-problem-card"
+                                    )
+                                ) {
+
+                                    setTimeout(
+                                        function () {
+
+                                            element.classList.add(
+                                                "pp-active"
+                                            );
+
+                                        },
+                                        80
+                                    );
+
+                                }
+
+                            } else {
+
+                                entry.target.classList.remove(
+                                    "pp-active"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                },
+                {
+                    threshold: 0.14,
+
+                    rootMargin:
+                        "0px 0px -60px 0px"
+                }
+            );
+
+
+        revealElements.forEach(
+            function (element) {
+
+                revealObserver.observe(
+                    element
+                );
+
+            }
+        );
+
+
+        /* ========================================================
+           SCROLL PARALLAX
+        ======================================================== */
+
+        let ticking = false;
+
+
+        function updateParallax() {
+
+            parallaxElements.forEach(
+                function (element) {
+
+                    const rect =
+                        element.getBoundingClientRect();
+
+
+                    const elementCenter =
+                        rect.top +
+                        rect.height / 2;
+
+
+                    const viewportCenter =
+                        window.innerHeight / 2;
+
+
+                    const distance =
+                        elementCenter -
+                        viewportCenter;
+
+
+                    const speed =
+                        element.classList.contains(
+                            "pp-field-orb"
+                        )
+                            ? 0.055
+                            : 0.035;
+
+
+                    const movement =
+                        distance * speed;
+
 
                     if (
                         element.classList.contains(
-                            "pp-process-card"
-                        ) ||
-                        element.classList.contains(
-                            "pp-problem-card"
+                            "pp-field-orb"
                         )
                     ) {
 
-                        setTimeout(function () {
+                        const direction =
+                            element.classList.contains(
+                                "two"
+                            )
+                                ? -1
+                                : 1;
 
-                            element.classList.add("pp-active");
 
-                        }, 80);
+                        element.style.transform =
+                            "translate3d(" +
+                            (
+                                movement *
+                                direction
+                            ) +
+                            "px," +
+                            (
+                                distance *
+                                speed
+                            ) +
+                            "px,0)";
 
                     }
 
-                } else {
-
-                    /*
-                        Remove the state when leaving the viewport.
-                        This allows the animation to happen again
-                        when scrolling back upward.
-                    */
-
-                    entry.target.classList.remove("pp-active");
-
                 }
+            );
 
-            });
 
-        },
-        {
-            threshold: 0.14,
-            rootMargin: "0px 0px -60px 0px"
+            ticking = false;
+
         }
-    );
 
 
-    revealElements.forEach(function (element) {
+        function requestParallax() {
 
-        revealObserver.observe(element);
+            if (!ticking) {
 
-    });
+                window.requestAnimationFrame(
+                    updateParallax
+                );
 
+                ticking = true;
 
-    /* ----------------------------------------------------------
-       SCROLL PARALLAX
-    ---------------------------------------------------------- */
+            }
 
-    let ticking = false;
-
-
-    function updateParallax() {
-
-        const scrollY = window.scrollY;
+        }
 
 
-        parallaxElements.forEach(function (element) {
+        window.addEventListener(
+            "scroll",
+            requestParallax,
+            {
+                passive: true
+            }
+        );
 
-            const rect = element.getBoundingClientRect();
 
-            const elementCenter =
-                rect.top + rect.height / 2;
+        updateParallax();
+
+
+        /* ========================================================
+           HERO DEPTH RESPONSE
+        ======================================================== */
+
+        const heroVisual =
+            document.querySelector(
+                ".pp-hero-visual"
+            );
+
+
+        function updateHeroDepth() {
+
+            if (!heroVisual) {
+                return;
+            }
+
+
+            if (
+                window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                ).matches
+            ) {
+                return;
+            }
+
+
+            const rect =
+                heroVisual.getBoundingClientRect();
+
 
             const viewportCenter =
                 window.innerHeight / 2;
 
+
             const distance =
-                elementCenter - viewportCenter;
+                rect.top +
+                rect.height / 2 -
+                viewportCenter;
 
 
-            /*
-                Gentle depth movement.
-                It deliberately stays small so the page remains
-                comfortable to use.
-            */
-
-            const speed =
-                element.classList.contains("pp-field-orb")
-                    ? 0.055
-                    : 0.035;
+            const rotate =
+                Math.max(
+                    -2,
+                    Math.min(
+                        2,
+                        distance * 0.002
+                    )
+                );
 
 
-            const movement =
-                distance * speed;
+            const translate =
+                Math.max(
+                    -14,
+                    Math.min(
+                        14,
+                        distance * -0.018
+                    )
+                );
 
 
-            if (
-                element.classList.contains(
-                    "pp-field-orb"
-                )
-            ) {
+            heroVisual.style.transform =
+                "translate3d(0," +
+                translate +
+                "px,0) rotateX(" +
+                rotate +
+                "deg)";
 
-                const direction =
-                    element.classList.contains("two")
-                        ? -1
-                        : 1;
+        }
 
 
-                element.style.transform =
-                    "translate3d(" +
-                    (movement * direction) +
-                    "px," +
-                    (distance * speed) +
-                    "px,0)";
+        let heroTicking = false;
+
+
+        function requestHeroDepth() {
+
+            if (!heroTicking) {
+
+                window.requestAnimationFrame(
+                    function () {
+
+                        updateHeroDepth();
+
+                        heroTicking = false;
+
+                    }
+                );
+
+                heroTicking = true;
 
             }
 
-        });
-
-
-        ticking = false;
-
-    }
-
-
-    function requestParallax() {
-
-        if (!ticking) {
-
-            window.requestAnimationFrame(
-                updateParallax
-            );
-
-            ticking = true;
-
         }
 
-    }
+
+        window.addEventListener(
+            "scroll",
+            requestHeroDepth,
+            {
+                passive: true
+            }
+        );
 
 
-    window.addEventListener(
-        "scroll",
-        requestParallax,
-        {
-            passive: true
-        }
-    );
+        updateHeroDepth();
 
 
-    updateParallax();
-
-
-    /* ----------------------------------------------------------
-       HERO DEPTH RESPONSE
-    ---------------------------------------------------------- */
-
-    const heroVisual =
-        document.querySelector(".pp-hero-visual");
-
-
-    function updateHeroDepth() {
-
-        if (!heroVisual) {
-            return;
-        }
-
+        /* ========================================================
+           REDUCED MOTION
+        ======================================================== */
 
         if (
             window.matchMedia(
                 "(prefers-reduced-motion: reduce)"
             ).matches
         ) {
-            return;
-        }
 
+            revealElements.forEach(
+                function (element) {
 
-        const rect =
-            heroVisual.getBoundingClientRect();
-
-
-        const viewportCenter =
-            window.innerHeight / 2;
-
-
-        const distance =
-            rect.top + rect.height / 2 -
-            viewportCenter;
-
-
-        const rotate =
-            Math.max(
-                -2,
-                Math.min(
-                    2,
-                    distance * 0.002
-                )
-            );
-
-
-        const translate =
-            Math.max(
-                -14,
-                Math.min(
-                    14,
-                    distance * -0.018
-                )
-            );
-
-
-        /*
-            Only a tiny additional movement is applied.
-            The cards and orb retain their own animations.
-        */
-
-        heroVisual.style.transform =
-            "translate3d(0," +
-            translate +
-            "px,0) rotateX(" +
-            rotate +
-            "deg)";
-
-    }
-
-
-    let heroTicking = false;
-
-
-    function requestHeroDepth() {
-
-        if (!heroTicking) {
-
-            window.requestAnimationFrame(
-                function () {
-
-                    updateHeroDepth();
-
-                    heroTicking = false;
+                    element.classList.add(
+                        "pp-active"
+                    );
 
                 }
             );
 
-            heroTicking = true;
-
         }
 
     }
-
-
-    window.addEventListener(
-        "scroll",
-        requestHeroDepth,
-        {
-            passive: true
-        }
-    );
-
-
-    updateHeroDepth();
-
-
-    /* ----------------------------------------------------------
-       CLEANUP FOR REDUCED MOTION
-    ---------------------------------------------------------- */
-
-    if (
-        window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-        ).matches
-    ) {
-
-        revealElements.forEach(function (element) {
-
-            element.classList.add("pp-active");
-
-        });
-
-    }
-
-});
+);
 
 </script>
 
