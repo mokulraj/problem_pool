@@ -5,191 +5,1700 @@
 {% endblock %}
 
 
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   PROJECTS PAGE
+========================================================= */
+
+.pp-projects-page {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #faf9ff;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.pp-projects-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 430px;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at 8% 45%,
+            rgba(104,68,212,.12),
+            transparent 31%
+        ),
+        radial-gradient(
+            circle at 88% 38%,
+            rgba(104,68,212,.10),
+            transparent 34%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f6ff 0%,
+            #fbfaff 48%,
+            #f7f4ff 100%
+        );
+
+    border-bottom: 1px solid #ebe7f3;
+}
+
+
+/* =========================================================
+   HERO DECORATION
+========================================================= */
+
+.pp-projects-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 560px;
+    height: 560px;
+
+    right: -220px;
+    top: -250px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(104,68,212,.08);
+
+    box-shadow:
+        0 0 0 35px rgba(104,68,212,.025),
+        0 0 0 75px rgba(104,68,212,.018),
+        0 0 0 120px rgba(104,68,212,.012);
+
+    pointer-events: none;
+}
+
+
+.pp-projects-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    left: -170px;
+    bottom: -210px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(104,68,212,.09),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HERO CONTAINER
+========================================================= */
+
+.pp-projects-hero .container {
+    position: relative;
+    z-index: 3;
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.pp-projects-hero-content {
+    position: relative;
+    z-index: 5;
+    max-width: 760px;
+}
+
+
+/* =========================================================
+   EYEBROW
+========================================================= */
+
+.pp-projects-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 9px 15px;
+
+    border: 1px solid rgba(104,68,212,.13);
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.72);
+
+    color: #6240ca;
+
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .04em;
+
+    box-shadow:
+        0 8px 24px rgba(74,48,132,.05);
+}
+
+
+.pp-projects-eyebrow::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #7956df;
+
+    box-shadow:
+        0 0 0 5px rgba(121,86,223,.10);
+}
+
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
+.pp-projects-title {
+    margin: 20px 0 0;
+
+    color: #171329;
+
+    font-size: clamp(54px, 6vw, 82px);
+
+    line-height: .96;
+
+    font-weight: 900;
+
+    letter-spacing: -4px;
+}
+
+
+.pp-projects-title .accent {
+    display: block;
+    color: #6844d4;
+}
+
+
+.pp-projects-title::after {
+    content: "";
+
+    display: block;
+
+    width: 66px;
+    height: 5px;
+
+    margin-top: 21px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7956df,
+            #603bc8
+        );
+
+    box-shadow:
+        0 5px 14px rgba(104,68,212,.20);
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+
+.pp-projects-description {
+    max-width: 620px;
+
+    margin: 20px 0 0;
+
+    color: #756f82;
+
+    font-size: 17px;
+
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   HERO VISUAL
+========================================================= */
+
+.pp-projects-visual {
+    position: absolute;
+
+    right: 5%;
+    top: 50%;
+
+    width: 390px;
+    height: 300px;
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   VISUAL ORBIT
+========================================================= */
+
+.pp-projects-orbit {
+    position: absolute;
+
+    width: 275px;
+    height: 275px;
+
+    right: 40px;
+    top: 12px;
+
+    border:
+        1px solid rgba(104,68,212,.11);
+
+    border-radius: 50%;
+}
+
+
+.pp-projects-orbit::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 26px;
+
+    border:
+        1px dashed rgba(104,68,212,.10);
+
+    border-radius: 50%;
+}
+
+
+.pp-projects-orbit::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 55px;
+
+    border:
+        1px solid rgba(104,68,212,.07);
+
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   CENTER
+========================================================= */
+
+.pp-projects-core {
+    position: absolute;
+
+    z-index: 4;
+
+    top: 82px;
+    right: 118px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #7956df,
+            #5e39c8
+        );
+
+    color: #fff;
+
+    font-size: 37px;
+
+    box-shadow:
+        0 22px 45px rgba(104,68,212,.28),
+        0 0 0 15px rgba(104,68,212,.06),
+        0 0 0 30px rgba(104,68,212,.025);
+
+    animation:
+        pp-project-core-float
+        6s ease-in-out infinite;
+}
+
+
+@keyframes pp-project-core-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+
+}
+
+
+/* =========================================================
+   VISUAL CARDS
+========================================================= */
+
+.pp-project-mini-card {
+    position: absolute;
+
+    z-index: 6;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px 16px;
+
+    border:
+        1px solid rgba(225,220,237,.95);
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.94);
+
+    color: #383244;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 15px 35px rgba(46,33,76,.10);
+
+    white-space: nowrap;
+}
+
+
+.pp-project-mini-card i {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 29px;
+    height: 29px;
+
+    border-radius: 9px;
+
+    background: #f0ebff;
+
+    color: #6844d4;
+
+    font-size: 14px;
+}
+
+
+.pp-project-mini-card.one {
+    top: 32px;
+    right: 225px;
+
+    animation:
+        pp-mini-one
+        7s ease-in-out infinite;
+}
+
+
+.pp-project-mini-card.two {
+    top: 67px;
+    right: -5px;
+
+    animation:
+        pp-mini-two
+        8s ease-in-out infinite;
+}
+
+
+.pp-project-mini-card.three {
+    bottom: 35px;
+    right: 15px;
+
+    animation:
+        pp-mini-three
+        7.5s ease-in-out infinite;
+}
+
+
+.pp-project-mini-card.four {
+    bottom: 18px;
+    right: 215px;
+
+    animation:
+        pp-mini-four
+        8.5s ease-in-out infinite;
+}
+
+
+@keyframes pp-mini-one {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+
+    50% {
+        transform: translateY(-7px) rotate(-1deg);
+    }
+
+}
+
+
+@keyframes pp-mini-two {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(2deg);
+    }
+
+    50% {
+        transform: translateY(-6px) rotate(1deg);
+    }
+
+}
+
+
+@keyframes pp-mini-three {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+
+}
+
+
+@keyframes pp-mini-four {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(1deg);
+    }
+
+    50% {
+        transform: translateY(-5px) rotate(0deg);
+    }
+
+}
+
+
+/* =========================================================
+   PROJECT CONTENT
+========================================================= */
+
+.pp-projects-content {
+    position: relative;
+    z-index: 5;
+
+    padding:
+        48px 0 90px;
+
+    background:
+        #ffffff;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.pp-projects-section-header {
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 26px;
+}
+
+
+.pp-projects-section-title {
+    margin: 0;
+
+    color: #171329;
+
+    font-size: 31px;
+
+    line-height: 1.2;
+
+    font-weight: 850;
+
+    letter-spacing: -.9px;
+}
+
+
+.pp-projects-section-title::after {
+    content: "";
+
+    display: block;
+
+    width: 40px;
+    height: 4px;
+
+    margin-top: 9px;
+
+    border-radius: 999px;
+
+    background: #6844d4;
+}
+
+
+/* =========================================================
+   PROJECT GRID
+========================================================= */
+
+.pp-projects-grid {
+    position: relative;
+}
+
+
+/* =========================================================
+   PROJECT CARD
+========================================================= */
+
+.pp-project-card {
+    position: relative;
+
+    height: 100%;
+
+    overflow: hidden;
+
+    border:
+        1px solid #e7e2ee !important;
+
+    border-radius:
+        20px !important;
+
+    background:
+        #ffffff !important;
+
+    box-shadow:
+        0 10px 30px rgba(39,29,61,.045);
+
+    transition:
+        transform .35s cubic-bezier(.16,1,.3,1),
+        box-shadow .35s ease,
+        border-color .3s ease;
+}
+
+
+.pp-project-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7956df,
+            #603bc8
+        );
+
+    opacity: 0;
+
+    transform:
+        scaleX(.2);
+
+    transform-origin: left;
+
+    transition:
+        opacity .3s ease,
+        transform .4s ease;
+}
+
+
+.pp-project-card:hover {
+    transform:
+        translateY(-7px);
+
+    border-color:
+        #d9d0ed !important;
+
+    box-shadow:
+        0 24px 48px rgba(45,31,77,.10);
+}
+
+
+.pp-project-card:hover::before {
+    opacity: 1;
+
+    transform:
+        scaleX(1);
+}
+
+
+/* =========================================================
+   CARD DECORATIVE GLOW
+========================================================= */
+
+.pp-project-card::after {
+    content: "";
+
+    position: absolute;
+
+    right: -75px;
+    bottom: -75px;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(104,68,212,.09),
+            transparent 70%
+        );
+
+    pointer-events: none;
+
+    transition:
+        transform .4s ease;
+}
+
+
+.pp-project-card:hover::after {
+    transform:
+        scale(1.18);
+}
+
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.pp-project-card-inner {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    height: 100%;
+
+    padding: 25px;
+}
+
+
+/* =========================================================
+   STATUS / DATE
+========================================================= */
+
+.pp-project-meta {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+}
+
+
+.pp-project-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        7px 12px;
+
+    border:
+        1px solid #dfd6f8;
+
+    border-radius:
+        999px;
+
+    background:
+        #f1edff;
+
+    color:
+        #5e3bc9;
+
+    font-size:
+        10px;
+
+    font-weight:
+        850;
+}
+
+
+.pp-project-status::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #7956df;
+}
+
+
+.pp-project-date {
+    color:
+        #9992a4;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   PROJECT TITLE
+========================================================= */
+
+.pp-project-title {
+    min-height:
+        54px;
+
+    margin:
+        0 0 13px;
+
+    color:
+        #19142d;
+
+    font-size:
+        20px;
+
+    line-height:
+        1.4;
+
+    font-weight:
+        820;
+
+    letter-spacing:
+        -.35px;
+}
+
+
+.pp-project-title a {
+    color:
+        inherit;
+
+    text-decoration:
+        none;
+
+    transition:
+        color .25s ease;
+}
+
+
+.pp-project-title a:hover {
+    color:
+        #6844d4;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.pp-project-description {
+    min-height:
+        94px;
+
+    margin:
+        0;
+
+    color:
+        #756e81;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.75;
+}
+
+
+/* =========================================================
+   CREATOR
+========================================================= */
+
+.pp-project-creator {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin-top:
+        auto;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px solid #eeeaf3;
+}
+
+
+.pp-project-avatar,
+.pp-project-avatar-placeholder {
+    width:
+        38px;
+
+    height:
+        38px;
+
+    flex:
+        0 0 38px;
+
+    border-radius:
+        50%;
+}
+
+
+.pp-project-avatar {
+    object-fit:
+        cover;
+
+    border:
+        2px solid #eee9f7;
+
+    background:
+        #f4f1fa;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease;
+}
+
+
+.pp-project-card:hover .pp-project-avatar {
+    transform:
+        scale(1.06);
+
+    border-color:
+        #d6c9ed;
+}
+
+
+.pp-project-avatar-placeholder {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eee9ff,
+            #e1d8ff
+        );
+
+    color:
+        #5e3bc9;
+
+    font-size:
+        12px;
+
+    font-weight:
+        850;
+}
+
+
+.pp-project-creator-label {
+    display:
+        block;
+
+    margin-bottom:
+        2px;
+
+    color:
+        #aaa4b1;
+
+    font-size:
+        9px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        .05em;
+
+    text-transform:
+        uppercase;
+}
+
+
+.pp-project-creator-name {
+    display:
+        block;
+
+    max-width:
+        190px;
+
+    overflow:
+        hidden;
+
+    color:
+        #40394b;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.pp-project-view {
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    width:
+        100%;
+
+    min-height:
+        46px;
+
+    margin-top:
+        18px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid #ddd6eb !important;
+
+    border-radius:
+        11px !important;
+
+    background:
+        #ffffff !important;
+
+    color:
+        #5937c7 !important;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
+
+    transition:
+        transform .28s ease,
+        background .28s ease,
+        border-color .28s ease,
+        color .28s ease,
+        box-shadow .28s ease;
+}
+
+
+.pp-project-view::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 75%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            105deg,
+            transparent,
+            rgba(255,255,255,.55),
+            transparent
+        );
+
+    transform:
+        skewX(-18deg);
+
+    transition:
+        left .55s ease;
+}
+
+
+.pp-project-view:hover {
+    color:
+        #ffffff !important;
+
+    border-color:
+        #6844d4 !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7956df,
+            #603bc8
+        ) !important;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 11px 24px rgba(93,55,205,.19);
+}
+
+
+.pp-project-view:hover::before {
+    left:
+        145%;
+}
+
+
+.pp-project-view i {
+    transition:
+        transform .3s ease;
+}
+
+
+.pp-project-view:hover i {
+    transform:
+        translateX(5px);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.pp-project-empty {
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    padding:
+        75px 25px !important;
+
+    text-align:
+        center;
+
+    border:
+        1px solid #e6e1ed !important;
+
+    border-radius:
+        20px !important;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 12px 32px rgba(38,28,61,.05);
+}
+
+
+.pp-project-empty::before {
+    content: "";
+
+    position:
+        absolute;
+
+    width:
+        280px;
+
+    height:
+        280px;
+
+    top:
+        -190px;
+
+    left:
+        50%;
+
+    transform:
+        translateX(-50%);
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(104,68,212,.09),
+            transparent 70%
+        );
+}
+
+
+.pp-project-empty-icon {
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        78px;
+
+    height:
+        78px;
+
+    margin:
+        0 auto 20px;
+
+    border:
+        1px solid #e1daf3;
+
+    border-radius:
+        21px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f0ebff,
+            #f8f6ff
+        );
+
+    color:
+        #603bd0;
+
+    font-size:
+        30px;
+
+    box-shadow:
+        0 12px 28px rgba(91,54,214,.08);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .pp-projects-visual {
+        right:
+            -45px;
+
+        transform:
+            translateY(-50%)
+            scale(.82);
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .pp-projects-hero {
+        min-height:
+            350px;
+
+        padding:
+            55px 0;
+    }
+
+    .pp-projects-visual {
+        display:
+            none;
+    }
+
+    .pp-projects-title {
+        font-size:
+            62px;
+    }
+
+    .pp-projects-content {
+        padding-top:
+            38px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+    .pp-projects-hero {
+        min-height:
+            auto;
+
+        padding:
+            42px 0;
+    }
+
+    .pp-projects-title {
+        font-size:
+            46px;
+
+        letter-spacing:
+            -2.5px;
+    }
+
+    .pp-projects-description {
+        font-size:
+            14px;
+    }
+
+    .pp-projects-content {
+        padding:
+            30px 0 60px;
+    }
+
+    .pp-projects-section-title {
+        font-size:
+            24px;
+    }
+
+    .pp-project-card-inner {
+        padding:
+            22px;
+    }
+
+    .pp-project-title {
+        min-height:
+            auto;
+
+        font-size:
+            18px;
+    }
+
+    .pp-project-description {
+        min-height:
+            auto;
+    }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.pp-projects-page a:focus-visible {
+
+    outline:
+        3px solid
+        rgba(104,68,212,.25);
+
+    outline-offset:
+        3px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pp-projects-page *,
+    .pp-projects-page *::before,
+    .pp-projects-page *::after {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
 {% block content %}
 
-<section class="pp-section">
+<section class="pp-projects-page">
 
-    <div class="container">
 
-        <!-- HEADER -->
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
 
-        <div class="mb-5">
+    <section class="pp-projects-hero">
 
-            <span class="pp-badge pp-badge-purple mb-3">
-                Community Projects
-            </span>
+        <div class="container">
 
-            <h1 class="display-5 fw-bold mb-2">
-                Projects
-            </h1>
+            <div class="pp-projects-hero-content">
 
-            <p class="text-muted mb-0">
-                Turn selected solutions into meaningful projects.
-            </p>
+                <span class="pp-projects-eyebrow">
+                    COMMUNITY PROJECTS
+                </span>
+
+
+                <h1 class="pp-projects-title">
+
+                    Projects
+
+                    <span class="accent">
+                        That Create Impact.
+                    </span>
+
+                </h1>
+
+
+                <p class="pp-projects-description">
+                    Turn selected solutions into meaningful projects.
+                    Bring ideas, people, and practical action together
+                    to create something that matters.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 DECORATIVE VISUAL
+                 UI ONLY
+            ================================================== -->
+
+            <div
+                class="pp-projects-visual"
+                aria-hidden="true"
+            >
+
+                <div class="pp-projects-orbit">
+
+                </div>
+
+
+                <div class="pp-projects-core">
+
+                    <i class="bi bi-kanban-fill"></i>
+
+                </div>
+
+
+                <div class="pp-project-mini-card one">
+
+                    <i class="bi bi-lightbulb"></i>
+
+                    <span>
+                        Real Ideas
+                    </span>
+
+                </div>
+
+
+                <div class="pp-project-mini-card two">
+
+                    <i class="bi bi-people"></i>
+
+                    <span>
+                        Community
+                    </span>
+
+                </div>
+
+
+                <div class="pp-project-mini-card three">
+
+                    <i class="bi bi-rocket-takeoff"></i>
+
+                    <span>
+                        Real Impact
+                    </span>
+
+                </div>
+
+
+                <div class="pp-project-mini-card four">
+
+                    <i class="bi bi-check2-circle"></i>
+
+                    <span>
+                        Built Together
+                    </span>
+
+                </div>
+
+            </div>
 
         </div>
 
-
-        <!-- PROJECT LIST -->
-
-        {% if projects %}
-
-            <div class="row g-4">
-
-                {% for project in projects %}
-
-                    <div class="col-md-6 col-lg-4">
-
-                        <article class="pp-card h-100 p-4">
-
-                            <!-- STATUS -->
-
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-
-                                {% if project.status %}
-
-                                    <span class="pp-badge pp-badge-purple">
-                                        {{ project.get_status_display }}
-                                    </span>
-
-                                {% endif %}
+    </section>
 
 
-                                {% if project.created_at %}
+    <!-- =====================================================
+         PROJECT CONTENT
+    ====================================================== -->
 
-                                    <small class="text-muted">
-                                        {{ project.created_at|date:"d M Y" }}
-                                    </small>
+    <section class="pp-projects-content">
 
-                                {% endif %}
-
-                            </div>
+        <div class="container">
 
 
-                            <!-- TITLE -->
-
-                            <h2 class="h4 fw-bold mb-3">
-
-                                <a
-                                    href="{% url 'projects:detail' project.pk %}"
-                                    class="text-decoration-none text-dark"
-                                >
-                                    {{ project.title }}
-                                </a>
-
-                            </h2>
+            {% if projects %}
 
 
-                            <!-- DESCRIPTION -->
+                <!-- SECTION HEADER -->
 
-                            <p class="text-muted mb-4">
+                <div class="pp-projects-section-header">
 
-                                {{ project.description|truncatewords:25 }}
+                    <h2 class="pp-projects-section-title">
+                        All Projects
+                    </h2>
 
-                            </p>
+                </div>
 
 
-                            <!-- CREATOR -->
+                <!-- PROJECT GRID -->
 
-                            {% if project.created_by %}
+                <div class="row g-4 pp-projects-grid">
 
-                                <div class="d-flex align-items-center gap-2 mb-4">
+                    {% for project in projects %}
 
-                                    {% if project.created_by.profile_image %}
+                        <div class="col-md-6 col-lg-4">
 
-                                        <img
-                                            src="{{ project.created_by.profile_image.url }}"
-                                            alt="{{ project.created_by.username }}"
-                                            style="
-                                                width: 36px;
-                                                height: 36px;
-                                                object-fit: cover;
-                                                border-radius: 50%;
-                                            "
+                            <article class="pp-card pp-project-card h-100">
+
+                                <div class="pp-project-card-inner">
+
+
+                                    <!-- STATUS / DATE -->
+
+                                    <div class="pp-project-meta">
+
+                                        {% if project.status %}
+
+                                            <span class="pp-project-status">
+                                                {{ project.get_status_display }}
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if project.created_at %}
+
+                                            <small class="pp-project-date">
+                                                {{ project.created_at|date:"d M Y" }}
+                                            </small>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <!-- TITLE -->
+
+                                    <h2 class="pp-project-title">
+
+                                        <a
+                                            href="{% url 'projects:detail' project.pk %}"
                                         >
 
-                                    {% else %}
+                                            {{ project.title }}
 
-                                        <div
-                                            class="rounded-circle d-flex align-items-center justify-content-center"
-                                            style="
-                                                width: 36px;
-                                                height: 36px;
-                                                background: #f0eef8;
-                                                font-weight: 700;
-                                            "
-                                        >
-                                            {{ project.created_by.username|first|upper }}
+                                        </a>
+
+                                    </h2>
+
+
+                                    <!-- DESCRIPTION -->
+
+                                    <p class="pp-project-description">
+
+                                        {{ project.description|truncatewords:25 }}
+
+                                    </p>
+
+
+                                    <!-- CREATOR -->
+
+                                    {% if project.created_by %}
+
+                                        <div class="pp-project-creator">
+
+
+                                            {% if project.created_by.profile_image %}
+
+                                                <img
+                                                    src="{{ project.created_by.profile_image.url }}"
+                                                    alt="{{ project.created_by.username }}"
+                                                    class="pp-project-avatar"
+                                                >
+
+                                            {% else %}
+
+                                                <div
+                                                    class="pp-project-avatar-placeholder"
+                                                    aria-hidden="true"
+                                                >
+
+                                                    {{ project.created_by.username|first|upper }}
+
+                                                </div>
+
+                                            {% endif %}
+
+
+                                            <div>
+
+                                                <small class="pp-project-creator-label">
+                                                    Created by
+                                                </small>
+
+
+                                                <strong class="pp-project-creator-name">
+
+                                                    {{ project.created_by.get_full_name|default:project.created_by.username }}
+
+                                                </strong>
+
+                                            </div>
+
                                         </div>
 
                                     {% endif %}
 
 
-                                    <div>
+                                    <!-- VIEW -->
 
-                                        <small class="text-muted d-block">
-                                            Created by
-                                        </small>
+                                    <a
+                                        href="{% url 'projects:detail' project.pk %}"
+                                        class="btn pp-btn-outline pp-project-view"
+                                    >
 
-                                        <strong>
-                                            {{ project.created_by.get_full_name|default:project.created_by.username }}
-                                        </strong>
+                                        <span>
+                                            View Project
+                                        </span>
 
-                                    </div>
+                                        <i class="bi bi-arrow-right"></i>
+
+                                    </a>
 
                                 </div>
 
-                            {% endif %}
+                            </article>
 
+                        </div>
 
-                            <!-- VIEW -->
-
-                            <a
-                                href="{% url 'projects:detail' project.pk %}"
-                                class="btn pp-btn-outline w-100"
-                            >
-                                View Project
-
-                                <i class="bi bi-arrow-right ms-1"></i>
-
-                            </a>
-
-                        </article>
-
-                    </div>
-
-                {% endfor %}
-
-            </div>
-
-
-        {% else %}
-
-            <!-- EMPTY STATE -->
-
-            <div class="pp-card p-5 text-center">
-
-                <div class="empty-state-icon mx-auto mb-3">
-
-                    <i class="bi bi-kanban"></i>
+                    {% endfor %}
 
                 </div>
 
 
-                <h2 class="h4 fw-bold">
-                    No projects yet
-                </h2>
+            {% else %}
 
 
-                <p class="text-muted mb-0">
-                    Projects are created from selected solutions.
-                </p>
+                <!-- EMPTY STATE -->
 
-            </div>
+                <div class="pp-card pp-project-empty">
 
-        {% endif %}
+                    <div class="pp-project-empty-icon">
 
-    </div>
+                        <i class="bi bi-kanban"></i>
+
+                    </div>
+
+
+                    <h2 class="h4 fw-bold">
+                        No projects yet
+                    </h2>
+
+
+                    <p class="text-muted mb-0">
+                        Projects are created from selected solutions.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+    </section>
 
 </section>
 
