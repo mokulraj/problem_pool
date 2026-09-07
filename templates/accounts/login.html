@@ -77,6 +77,7 @@
         min-width: 0;
         min-height: 650px;
         padding-top: 45px;
+        isolation: isolate;
     }
 
 
@@ -115,6 +116,8 @@
     }
 
     .pp-login-copy h1 {
+        position: relative;
+        z-index: 10;
         margin: 0;
         color: #181329;
         font-size: clamp(3.4rem, 5.8vw, 5.5rem);
@@ -128,6 +131,8 @@
     }
 
     .pp-login-copy p {
+        position: relative;
+        z-index: 10;
         width: 395px;
         max-width: 100%;
         margin: 27px 0 0;
@@ -138,10 +143,147 @@
 
 
     /* =========================================================
+       TEXT AREA — ANIMATED ORBIT DEPTH
+    ========================================================= */
+
+    /*
+       The existing orbit has been moved into the heading area.
+       It sits behind the text rather than below it.
+    */
+
+    .pp-login-intro .pp-orbit {
+        right: auto;
+        bottom: auto;
+        left: 205px;
+        top: 10px;
+
+        width: 400px;
+        height: 400px;
+
+        opacity: .72;
+
+        transform:
+            scale(.92);
+
+        transform-origin: center center;
+
+        z-index: 1;
+
+        animation:
+            loginTextOrbitFloat 7s ease-in-out infinite;
+    }
+
+
+    /*
+       Extra soft movement makes the orbit feel alive while
+       remaining behind the existing heading.
+    */
+
+    .pp-login-intro .pp-orbit-glow {
+        animation:
+            loginGlow 4.5s ease-in-out infinite,
+            loginTextGlowDrift 8s ease-in-out infinite;
+    }
+
+
+    /*
+       Slightly faster ring movement gives the left side
+       a more active visual identity.
+    */
+
+    .pp-login-intro .pp-orbit-ring.one {
+        animation:
+            loginRotate 15s linear infinite;
+    }
+
+    .pp-login-intro .pp-orbit-ring.two {
+        animation:
+            loginRotateReverse 20s linear infinite;
+    }
+
+    .pp-login-intro .pp-orbit-ring.three {
+        animation:
+            loginRotate 26s linear infinite;
+    }
+
+
+    /*
+       The core remains the same existing animation but gets
+       a subtle breathing effect.
+    */
+
+    .pp-login-intro .pp-orbit-core {
+        animation:
+            loginCore 4.8s ease-in-out infinite,
+            loginTextCoreGlow 3.8s ease-in-out infinite;
+    }
+
+
+    /* =========================================================
+       TEXT ORBIT ANIMATION
+    ========================================================= */
+
+    @keyframes loginTextOrbitFloat {
+
+        0%,
+        100% {
+            transform:
+                scale(.92)
+                translate3d(0, 0, 0);
+        }
+
+        50% {
+            transform:
+                scale(.95)
+                translate3d(8px, -10px, 0);
+        }
+
+    }
+
+
+    @keyframes loginTextGlowDrift {
+
+        0%,
+        100% {
+            transform:
+                translate3d(0, 0, 0)
+                scale(1);
+        }
+
+        50% {
+            transform:
+                translate3d(-12px, 9px, 0)
+                scale(1.08);
+        }
+
+    }
+
+
+    @keyframes loginTextCoreGlow {
+
+        0%,
+        100% {
+            box-shadow:
+                0 25px 50px rgba(91, 51, 194, 0.25),
+                0 0 0 12px rgba(104, 66, 210, 0.07);
+        }
+
+        50% {
+            box-shadow:
+                0 30px 60px rgba(91, 51, 194, 0.31),
+                0 0 0 18px rgba(104, 66, 210, 0.10);
+        }
+
+    }
+
+
+    /* =========================================================
        SMALL FEATURE PILLS
     ========================================================= */
 
     .pp-login-points {
+        position: relative;
+        z-index: 12;
         display: flex;
         flex-wrap: wrap;
         gap: 9px;
@@ -161,6 +303,7 @@
         font-weight: 750;
         box-shadow:
             0 7px 20px rgba(48, 36, 78, 0.035);
+        backdrop-filter: blur(8px);
     }
 
     .pp-login-point i {
@@ -367,13 +510,26 @@
         backdrop-filter: blur(15px);
     }
 
+
+    /* =========================================================
+       LOCK + WELCOME BACK — SAME ROW
+    ========================================================= */
+
+    .pp-login-heading-row {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-bottom: 10px;
+    }
+
     .pp-lock {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 54px;
         height: 54px;
-        margin-bottom: 21px;
+        flex: 0 0 54px;
+        margin: 0;
         border-radius: 15px;
         background:
             linear-gradient(
@@ -385,6 +541,17 @@
         font-size: 1.18rem;
         box-shadow:
             0 14px 28px rgba(94, 53, 199, 0.22);
+        transition:
+            transform .3s cubic-bezier(.16,1,.3,1),
+            box-shadow .3s ease;
+    }
+
+    .pp-login-heading-row:hover .pp-lock {
+        transform:
+            translateY(-2px)
+            scale(1.035);
+        box-shadow:
+            0 18px 34px rgba(94, 53, 199, 0.28);
     }
 
     .pp-login-card h2 {
@@ -601,7 +768,7 @@
 
 
     /* =========================================================
-       ANIMATIONS
+       EXISTING ANIMATIONS
     ========================================================= */
 
     @keyframes loginGlow {
@@ -807,11 +974,10 @@
             font-size: 4rem;
         }
 
-        .pp-orbit {
-            right: -90px;
-            bottom: -25px;
-            transform: scale(0.82);
-            transform-origin: bottom right;
+        .pp-login-intro .pp-orbit {
+            left: 35px;
+            top: 120px;
+            transform: scale(.78);
         }
 
     }
@@ -836,7 +1002,7 @@
 
         .pp-login-intro {
             width: 100%;
-            min-height: 400px;
+            min-height: 430px;
             padding-top: 20px;
         }
 
@@ -853,12 +1019,20 @@
             width: 350px;
         }
 
-        .pp-orbit {
-            right: -50px;
-            bottom: -110px;
-            transform: scale(0.58);
-            transform-origin: bottom right;
-            opacity: 0.7;
+        .pp-login-intro .pp-orbit {
+            left: 50%;
+            top: 120px;
+            right: auto;
+            bottom: auto;
+
+            transform:
+                translateX(-50%)
+                scale(.62);
+
+            opacity: .52;
+
+            animation:
+                loginTextOrbitFloatMobile 7s ease-in-out infinite;
         }
 
         .pp-login-form-area {
@@ -868,6 +1042,26 @@
         .pp-login-card {
             max-width: 500px;
             margin: auto;
+        }
+
+    }
+
+
+    @keyframes loginTextOrbitFloatMobile {
+
+        0%,
+        100% {
+            transform:
+                translateX(-50%)
+                scale(.62)
+                translateY(0);
+        }
+
+        50% {
+            transform:
+                translateX(-50%)
+                scale(.65)
+                translateY(-8px);
         }
 
     }
@@ -884,7 +1078,7 @@
         }
 
         .pp-login-intro {
-            min-height: 350px;
+            min-height: 380px;
         }
 
         .pp-login-copy h1 {
@@ -901,10 +1095,12 @@
             display: none;
         }
 
-        .pp-orbit {
-            right: -130px;
-            bottom: -130px;
-            opacity: 0.5;
+        .pp-login-intro .pp-orbit {
+            top: 115px;
+            transform:
+                translateX(-50%)
+                scale(.50);
+            opacity: .42;
         }
 
         .pp-login-card {
@@ -913,7 +1109,18 @@
         }
 
         .pp-login-card h2 {
-            font-size: 1.75rem;
+            font-size: 1.65rem;
+        }
+
+        .pp-login-heading-row {
+            gap: 10px;
+        }
+
+        .pp-lock {
+            width: 48px;
+            height: 48px;
+            flex-basis: 48px;
+            border-radius: 13px;
         }
 
     }
@@ -1022,6 +1229,7 @@
 
                 <!-- =================================================
                      ANIMATED ORBIT
+                     NOW POSITIONED BEHIND THE LEFT HEADING
                 ================================================== -->
 
                 <div
@@ -1086,19 +1294,25 @@
                 <div class="pp-login-card">
 
 
-                    <div
-                        class="pp-lock"
-                        aria-hidden="true"
-                    >
+                    <!-- LOCK + WELCOME BACK -->
 
-                        <i class="bi bi-lock-fill"></i>
+                    <div class="pp-login-heading-row">
+
+                        <div
+                            class="pp-lock"
+                            aria-hidden="true"
+                        >
+
+                            <i class="bi bi-lock-fill"></i>
+
+                        </div>
+
+
+                        <h2>
+                            Welcome back!
+                        </h2>
 
                     </div>
-
-
-                    <h2>
-                        Welcome back!
-                    </h2>
 
 
                     <p class="pp-login-subtitle">

@@ -115,6 +115,8 @@
     }
 
     .pp-register-copy h1 {
+        position: relative;
+        z-index: 10;
         margin: 0;
         color: #181329;
         font-size: clamp(3.4rem, 5.6vw, 5.35rem);
@@ -128,6 +130,8 @@
     }
 
     .pp-register-copy p {
+        position: relative;
+        z-index: 10;
         width: 390px;
         max-width: 100%;
         margin: 27px 0 0;
@@ -142,6 +146,8 @@
     ========================================================= */
 
     .pp-register-points {
+        position: relative;
+        z-index: 10;
         display: flex;
         flex-wrap: wrap;
         gap: 9px;
@@ -170,24 +176,25 @@
 
     /* =========================================================
        ORBIT
+       Positioned beside the heading
     ========================================================= */
 
     .pp-register-orbit {
         position: absolute;
-        z-index: 2;
-        right: -25px;
-        bottom: -15px;
-        width: 400px;
-        height: 400px;
+        z-index: 3;
+        top: 15px;
+        right: -35px;
+        width: 285px;
+        height: 285px;
         pointer-events: none;
     }
 
     .pp-register-glow {
         position: absolute;
-        left: 100px;
-        top: 100px;
-        width: 200px;
-        height: 200px;
+        left: 71px;
+        top: 71px;
+        width: 143px;
+        height: 143px;
         border-radius: 50%;
         background:
             radial-gradient(
@@ -207,19 +214,19 @@
     }
 
     .pp-register-ring.one {
-        inset: 48px;
+        inset: 34px;
         animation: registerRotate 18s linear infinite;
     }
 
     .pp-register-ring.two {
-        inset: 88px;
+        inset: 63px;
         border-style: dashed;
         border-color: rgba(105, 67, 211, 0.11);
         animation: registerRotateReverse 24s linear infinite;
     }
 
     .pp-register-ring.three {
-        inset: 18px;
+        inset: 13px;
         border-color: rgba(105, 67, 211, 0.065);
         animation: registerRotate 30s linear infinite;
     }
@@ -231,13 +238,13 @@
 
     .pp-register-core {
         position: absolute;
-        left: 150px;
-        top: 150px;
+        left: 107px;
+        top: 107px;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 100px;
-        height: 100px;
+        width: 71px;
+        height: 71px;
         border-radius: 50%;
         background:
             radial-gradient(
@@ -247,7 +254,7 @@
                 #5933c2 100%
             );
         color: #fff;
-        font-size: 1.9rem;
+        font-size: 1.45rem;
         box-shadow:
             0 25px 50px rgba(91, 51, 194, 0.25),
             0 0 0 12px rgba(104, 66, 210, 0.07);
@@ -257,7 +264,7 @@
     .pp-register-core::before {
         content: "";
         position: absolute;
-        inset: -23px;
+        inset: -16px;
         border: 1px solid rgba(104, 66, 210, 0.12);
         border-radius: 50%;
         animation: registerPulse 3.5s ease-out infinite;
@@ -266,7 +273,7 @@
     .pp-register-core::after {
         content: "";
         position: absolute;
-        inset: -42px;
+        inset: -29px;
         border: 1px dashed rgba(104, 66, 210, 0.08);
         border-radius: 50%;
     }
@@ -281,32 +288,33 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 45px;
-        height: 45px;
+        width: 32px;
+        height: 32px;
         border: 1px solid rgba(255, 255, 255, 0.85);
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.88);
         color: #7048d9;
+        font-size: 0.78rem;
         box-shadow:
             0 12px 30px rgba(56, 40, 91, 0.10);
         backdrop-filter: blur(10px);
     }
 
     .pp-register-node.one {
-        top: 47px;
-        left: 178px;
+        top: 33px;
+        left: 127px;
         animation: registerNodeOne 6s ease-in-out infinite;
     }
 
     .pp-register-node.two {
-        top: 178px;
-        right: 28px;
+        top: 127px;
+        right: 20px;
         animation: registerNodeTwo 7s ease-in-out infinite;
     }
 
     .pp-register-node.three {
-        bottom: 40px;
-        left: 82px;
+        bottom: 29px;
+        left: 59px;
         animation: registerNodeThree 6.5s ease-in-out infinite;
     }
 
@@ -317,30 +325,30 @@
 
     .pp-register-particle {
         position: absolute;
-        width: 7px;
-        height: 7px;
+        width: 5px;
+        height: 5px;
         border-radius: 50%;
         background: #8060d8;
         opacity: 0.35;
     }
 
     .pp-register-particle.one {
-        top: 50px;
-        right: 4px;
+        top: 36px;
+        right: 3px;
         animation: registerParticleOne 6s ease-in-out infinite;
     }
 
     .pp-register-particle.two {
-        bottom: 58px;
-        right: 65px;
+        bottom: 41px;
+        right: 46px;
         animation: registerParticleTwo 7s ease-in-out infinite;
     }
 
     .pp-register-particle.three {
-        top: 208px;
-        left: 3px;
-        width: 5px;
-        height: 5px;
+        top: 148px;
+        left: 2px;
+        width: 4px;
+        height: 4px;
         animation: registerParticleThree 5s ease-in-out infinite;
     }
 
@@ -644,11 +652,11 @@
         }
 
         40% {
-            transform: translateY(-9px) scale(1.035);
+            transform: translateY(-7px) scale(1.035);
         }
 
         70% {
-            transform: translateY(5px) scale(0.98);
+            transform: translateY(4px) scale(0.98);
         }
     }
 
@@ -675,7 +683,7 @@
         }
 
         50% {
-            transform: translate(13px, -9px);
+            transform: translate(10px, -7px);
         }
     }
 
@@ -686,7 +694,7 @@
         }
 
         50% {
-            transform: translate(-11px, 13px);
+            transform: translate(-9px, 10px);
         }
     }
 
@@ -697,7 +705,7 @@
         }
 
         50% {
-            transform: translate(10px, -13px);
+            transform: translate(8px, -10px);
         }
     }
 
@@ -722,7 +730,7 @@
         }
 
         50% {
-            transform: translate(-18px, 15px);
+            transform: translate(-14px, 12px);
             opacity: 0.8;
         }
     }
@@ -735,7 +743,7 @@
         }
 
         50% {
-            transform: translate(15px, -20px);
+            transform: translate(12px, -15px);
             opacity: 0.75;
         }
     }
@@ -747,7 +755,7 @@
         }
 
         50% {
-            transform: translate(12px, -15px);
+            transform: translate(10px, -12px);
         }
     }
 
@@ -784,10 +792,10 @@
         }
 
         .pp-register-orbit {
-            right: -100px;
-            bottom: -25px;
+            right: -90px;
+            top: 150px;
             transform: scale(0.78);
-            transform-origin: bottom right;
+            transform-origin: center;
         }
 
     }
@@ -831,9 +839,9 @@
 
         .pp-register-orbit {
             right: -65px;
-            bottom: -120px;
+            top: 160px;
             transform: scale(0.58);
-            transform-origin: bottom right;
+            transform-origin: top right;
             opacity: 0.65;
         }
 
@@ -884,8 +892,10 @@
 
         .pp-register-orbit {
             right: -135px;
-            bottom: -135px;
+            top: 135px;
             opacity: 0.45;
+            transform: scale(0.52);
+            transform-origin: top right;
         }
 
         .pp-register-card {
@@ -911,8 +921,6 @@
 
             <!-- =================================================
                  LEFT CONTENT
-                 Page-level ProblemPool brand removed because
-                 base.html already contains the navbar brand.
             ================================================== -->
 
             <div class="pp-register-intro">
