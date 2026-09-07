@@ -1126,24 +1126,46 @@
 
                 <li class="nav-item">
 
-                    <a
-                        class="nav-link {% if request.resolver_match.app_name == 'problems' %}active{% endif %}"
-                        href="{% url 'problems:list' %}"
-                        {% if request.resolver_match.app_name == 'problems' %}
-                            aria-current="page"
-                        {% endif %}
-                    >
+                    {% if user.is_authenticated %}
 
-                        <i
-                            class="bi bi-lightbulb"
-                            aria-hidden="true"
-                        ></i>
+                        <a
+                            class="nav-link {% if request.resolver_match.app_name == 'problems' %}active{% endif %}"
+                            href="{% url 'problems:list' %}"
+                            {% if request.resolver_match.app_name == 'problems' %}
+                                aria-current="page"
+                            {% endif %}
+                        >
 
-                        <span>
-                            Problems
-                        </span>
+                            <i
+                                class="bi bi-lightbulb"
+                                aria-hidden="true"
+                            ></i>
 
-                    </a>
+                            <span>
+                                Problems
+                            </span>
+
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            class="nav-link"
+                            href="{% url 'accounts:login' %}?next={% url 'problems:list' %}"
+                        >
+
+                            <i
+                                class="bi bi-lightbulb"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+                                Problems
+                            </span>
+
+                        </a>
+
+                    {% endif %}
 
                 </li>
 
@@ -1152,24 +1174,46 @@
 
                 <li class="nav-item">
 
-                    <a
-                        class="nav-link {% if request.resolver_match.app_name == 'solutions' %}active{% endif %}"
-                        href="{% url 'solutions:list' %}"
-                        {% if request.resolver_match.app_name == 'solutions' %}
-                            aria-current="page"
-                        {% endif %}
-                    >
+                    {% if user.is_authenticated %}
 
-                        <i
-                            class="bi bi-check2-circle"
-                            aria-hidden="true"
-                        ></i>
+                        <a
+                            class="nav-link {% if request.resolver_match.app_name == 'solutions' %}active{% endif %}"
+                            href="{% url 'solutions:list' %}"
+                            {% if request.resolver_match.app_name == 'solutions' %}
+                                aria-current="page"
+                            {% endif %}
+                        >
 
-                        <span>
-                            Solutions
-                        </span>
+                            <i
+                                class="bi bi-check2-circle"
+                                aria-hidden="true"
+                            ></i>
 
-                    </a>
+                            <span>
+                                Solutions
+                            </span>
+
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            class="nav-link"
+                            href="{% url 'accounts:login' %}?next={% url 'solutions:list' %}"
+                        >
+
+                            <i
+                                class="bi bi-check2-circle"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+                                Solutions
+                            </span>
+
+                        </a>
+
+                    {% endif %}
 
                 </li>
 
@@ -1178,24 +1222,46 @@
 
                 <li class="nav-item">
 
-                    <a
-                        class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}"
-                        href="{% url 'projects:list' %}"
-                        {% if request.resolver_match.app_name == 'projects' %}
-                            aria-current="page"
-                        {% endif %}
-                    >
+                    {% if user.is_authenticated %}
 
-                        <i
-                            class="bi bi-kanban"
-                            aria-hidden="true"
-                        ></i>
+                        <a
+                            class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}"
+                            href="{% url 'projects:list' %}"
+                            {% if request.resolver_match.app_name == 'projects' %}
+                                aria-current="page"
+                            {% endif %}
+                        >
 
-                        <span>
-                            Projects
-                        </span>
+                            <i
+                                class="bi bi-kanban"
+                                aria-hidden="true"
+                            ></i>
 
-                    </a>
+                            <span>
+                                Projects
+                            </span>
+
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            class="nav-link"
+                            href="{% url 'accounts:login' %}?next={% url 'projects:list' %}"
+                        >
+
+                            <i
+                                class="bi bi-kanban"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+                                Projects
+                            </span>
+
+                        </a>
+
+                    {% endif %}
 
                 </li>
 
@@ -1204,24 +1270,46 @@
 
                 <li class="nav-item">
 
-                    <a
-                        class="nav-link {% if request.resolver_match.app_name == 'search' %}active{% endif %}"
-                        href="{% url 'search:global_search' %}"
-                        {% if request.resolver_match.app_name == 'search' %}
-                            aria-current="page"
-                        {% endif %}
-                    >
+                    {% if user.is_authenticated %}
 
-                        <i
-                            class="bi bi-search"
-                            aria-hidden="true"
-                        ></i>
+                        <a
+                            class="nav-link {% if request.resolver_match.app_name == 'search' %}active{% endif %}"
+                            href="{% url 'search:global_search' %}"
+                            {% if request.resolver_match.app_name == 'search' %}
+                                aria-current="page"
+                            {% endif %}
+                        >
 
-                        <span>
-                            Search
-                        </span>
+                            <i
+                                class="bi bi-search"
+                                aria-hidden="true"
+                            ></i>
 
-                    </a>
+                            <span>
+                                Search
+                            </span>
+
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            class="nav-link"
+                            href="{% url 'accounts:login' %}?next={% url 'search:global_search' %}"
+                        >
+
+                            <i
+                                class="bi bi-search"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+                                Search
+                            </span>
+
+                        </a>
+
+                    {% endif %}
 
                 </li>
 
@@ -1230,24 +1318,46 @@
 
                 <li class="nav-item">
 
-                    <a
-                        class="nav-link {% if request.resolver_match.app_name == 'reputation' %}active{% endif %}"
-                        href="{% url 'reputation:leaderboard' %}"
-                        {% if request.resolver_match.app_name == 'reputation' %}
-                            aria-current="page"
-                        {% endif %}
-                    >
+                    {% if user.is_authenticated %}
 
-                        <i
-                            class="bi bi-trophy"
-                            aria-hidden="true"
-                        ></i>
+                        <a
+                            class="nav-link {% if request.resolver_match.app_name == 'reputation' %}active{% endif %}"
+                            href="{% url 'reputation:leaderboard' %}"
+                            {% if request.resolver_match.app_name == 'reputation' %}
+                                aria-current="page"
+                            {% endif %}
+                        >
 
-                        <span>
-                            Leaderboard
-                        </span>
+                            <i
+                                class="bi bi-trophy"
+                                aria-hidden="true"
+                            ></i>
 
-                    </a>
+                            <span>
+                                Leaderboard
+                            </span>
+
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            class="nav-link"
+                            href="{% url 'accounts:login' %}?next={% url 'reputation:leaderboard' %}"
+                        >
+
+                            <i
+                                class="bi bi-trophy"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+                                Leaderboard
+                            </span>
+
+                        </a>
+
+                    {% endif %}
 
                 </li>
 
