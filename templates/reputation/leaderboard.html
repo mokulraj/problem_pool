@@ -2,129 +2,1011 @@
 
 {% block title %}Leaderboard | ProblemPool{% endblock %}
 
+
 {% block extra_css %}
 
 <style>
 
-.leaderboard-page {
-    min-height: calc(100vh - 80px);
-    padding: 50px 0 70px;
+/* =========================================================
+   LEADERBOARD PAGE
+========================================================= */
 
+.leaderboard-page {
+    position: relative;
+    min-height: calc(100vh - 80px);
+    overflow: hidden;
+    padding: 0 0 80px;
     background:
         radial-gradient(
-            circle at 10% 10%,
-            rgba(99, 102, 241, 0.07),
-            transparent 28%
+            circle at 8% 25%,
+            rgba(104, 68, 212, .10),
+            transparent 30%
         ),
         radial-gradient(
-            circle at 90% 20%,
-            rgba(168, 85, 247, 0.05),
-            transparent 28%
+            circle at 88% 15%,
+            rgba(130, 92, 230, .11),
+            transparent 32%
         ),
         linear-gradient(
             180deg,
-            #fafaff 0%,
-            #ffffff 45%,
-            #fafaff 100%
+            #faf9ff 0%,
+            #ffffff 55%,
+            #fbfaff 100%
         );
 }
 
 
 /* =========================================================
-   HEADER
+   BACKGROUND ORBITS
 ========================================================= */
 
-.leaderboard-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
+.leaderboard-page::before {
+    content: "";
+    position: absolute;
 
-.leaderboard-icon {
-    width: 70px;
-    height: 70px;
+    width: 620px;
+    height: 620px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: -245px;
+    right: -135px;
 
-    margin: 0 auto 18px;
+    border-radius: 50%;
 
-    border-radius: 20px;
-
-    background: linear-gradient(
-        135deg,
-        #6338e8,
-        #4520c7
-    );
-
-    color: white;
-
-    font-size: 32px;
+    border: 1px solid rgba(104,68,212,.055);
 
     box-shadow:
-        0 12px 28px rgba(91, 54, 232, 0.25);
+        0 0 0 42px rgba(104,68,212,.025),
+        0 0 0 86px rgba(104,68,212,.018),
+        0 0 0 132px rgba(104,68,212,.012);
+
+    pointer-events: none;
 }
 
-.leaderboard-header h1 {
-    margin: 0;
 
-    color: #111827;
+.leaderboard-page::after {
+    content: "";
 
-    font-size: 34px;
-    font-weight: 750;
+    position: absolute;
 
-    letter-spacing: -0.8px;
+    width: 460px;
+    height: 460px;
+
+    left: -270px;
+    top: 170px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(104,68,212,.075),
+            transparent 70%
+        );
+
+    pointer-events: none;
 }
 
-.leaderboard-header p {
-    margin: 8px 0 0;
 
-    color: #64748b;
-
-    font-size: 15px;
+.leaderboard-page > .container {
+    position: relative;
+    z-index: 2;
 }
 
 
 /* =========================================================
-   CURRENT USER POSITION
+   HERO
+========================================================= */
+
+.leaderboard-hero {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        500px;
+
+    align-items: center;
+
+    min-height: 390px;
+
+    padding:
+        48px
+        0
+        28px;
+}
+
+
+/* =========================================================
+   HERO COPY
+========================================================= */
+
+.leaderboard-copy {
+    position: relative;
+    z-index: 5;
+
+    max-width: 610px;
+}
+
+
+.leaderboard-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 24px;
+
+    padding:
+        9px
+        15px;
+
+    border:
+        1px solid
+        #ddd1f8;
+
+    border-radius: 999px;
+
+    background:
+        rgba(250,248,255,.85);
+
+    color: #6540d0;
+
+    font-size: .69rem;
+    font-weight: 850;
+
+    letter-spacing: .08em;
+    text-transform: uppercase;
+
+    box-shadow:
+        0 7px 20px
+        rgba(78,48,140,.045);
+}
+
+
+.leaderboard-eyebrow::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #7450dc;
+
+    box-shadow:
+        0 0 0 5px
+        rgba(116,80,220,.10);
+}
+
+
+.leaderboard-copy h1 {
+    margin: 0;
+
+    color: #141125;
+
+    font-size:
+        clamp(
+            3rem,
+            5vw,
+            4.35rem
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -.065em;
+
+    line-height: .98;
+}
+
+
+.leaderboard-copy h1 span {
+    display: block;
+
+    color: #6740d4;
+}
+
+
+.leaderboard-copy h1::after {
+    content: "";
+
+    display: block;
+
+    width: 54px;
+    height: 5px;
+
+    margin-top: 22px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7954df,
+            #5d36c8
+        );
+
+    box-shadow:
+        0 5px 14px
+        rgba(104,68,212,.20);
+}
+
+
+.leaderboard-description {
+    max-width: 510px;
+
+    margin:
+        24px
+        0
+        0;
+
+    color: #766e83;
+
+    font-size: 1rem;
+
+    line-height: 1.65;
+}
+
+
+.leaderboard-description strong {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #766e83;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   HERO VISUAL
+========================================================= */
+
+.leaderboard-visual {
+    position: relative;
+
+    width: 500px;
+    height: 330px;
+
+    justify-self: end;
+}
+
+
+.leaderboard-orbit {
+    position: absolute;
+
+    width: 275px;
+    height: 275px;
+
+    top: 20px;
+    right: 72px;
+
+    border:
+        1px solid
+        rgba(104,68,212,.12);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 27px rgba(104,68,212,.025),
+        0 0 0 55px rgba(104,68,212,.018);
+}
+
+
+.leaderboard-orbit::before,
+.leaderboard-orbit::after {
+    content: "";
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(104,68,212,.08);
+}
+
+
+.leaderboard-orbit::before {
+    inset: 22px;
+}
+
+
+.leaderboard-orbit::after {
+    inset: 48px;
+}
+
+
+/* =========================================================
+   TROPHY
+========================================================= */
+
+.leaderboard-trophy {
+    position: absolute;
+
+    top: 76px;
+    right: 122px;
+
+    width: 165px;
+    height: 165px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 48%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(124,84,225,.17),
+            rgba(124,84,225,.045) 62%,
+            transparent 70%
+        );
+
+    animation:
+        leaderboard-trophy-float
+        5s
+        ease-in-out
+        infinite;
+}
+
+
+.leaderboard-trophy::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 17px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(121,82,223,.24),
+            rgba(121,82,223,.07) 68%,
+            transparent 70%
+        );
+}
+
+
+.leaderboard-trophy-icon {
+    position: relative;
+    z-index: 3;
+
+    width: 125px;
+    height: 125px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 36px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #7b55df,
+            #5c35c9
+        );
+
+    color: #fff;
+
+    font-size: 58px;
+
+    box-shadow:
+        0 24px 45px
+        rgba(83,48,177,.28),
+        inset 0 1px 0
+        rgba(255,255,255,.25);
+}
+
+
+.leaderboard-trophy-icon i {
+    filter:
+        drop-shadow(
+            0 5px 7px
+            rgba(40,20,90,.18)
+        );
+}
+
+
+@keyframes leaderboard-trophy-float {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+/* =========================================================
+   HERO FLOATING LABELS
+========================================================= */
+
+.leaderboard-float-card {
+    position: absolute;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 145px;
+
+    padding:
+        12px
+        14px;
+
+    border:
+        1px solid
+        rgba(229,223,242,.95);
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.92);
+
+    box-shadow:
+        0 15px 32px
+        rgba(58,39,98,.09);
+
+    color: #282137;
+
+    font-size: .72rem;
+    font-weight: 750;
+
+    backdrop-filter: blur(14px);
+}
+
+
+.leaderboard-float-card i {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 31px;
+    height: 31px;
+
+    flex: 0 0 31px;
+
+    border-radius: 10px;
+
+    background: #f0eaff;
+
+    color: #704bd8;
+
+    font-size: .95rem;
+}
+
+
+.leaderboard-float-card strong {
+    display: block;
+
+    font-weight: 800;
+}
+
+
+.leaderboard-float-card small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #7f778b;
+
+    font-size: .64rem;
+    font-weight: 600;
+}
+
+
+.float-solve {
+    top: 22px;
+    right: 285px;
+    animation:
+        leaderboard-card-one
+        6s
+        ease-in-out
+        infinite;
+}
+
+
+.float-build {
+    top: 104px;
+    right: -5px;
+    animation:
+        leaderboard-card-two
+        7s
+        ease-in-out
+        infinite;
+}
+
+
+.float-impact {
+    bottom: 20px;
+    right: 292px;
+    animation:
+        leaderboard-card-three
+        6.5s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes leaderboard-card-one {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+
+@keyframes leaderboard-card-two {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(6px);
+    }
+}
+
+
+@keyframes leaderboard-card-three {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+
+/* =========================================================
+   SPARKLES
+========================================================= */
+
+.leaderboard-spark {
+    position: absolute;
+
+    color: #754cda;
+
+    font-size: 1.5rem;
+
+    animation:
+        leaderboard-sparkle
+        3.5s
+        ease-in-out
+        infinite;
+}
+
+
+.spark-one {
+    top: 0;
+    right: 150px;
+
+    color: #f2b82d;
+
+    font-size: 2rem;
+}
+
+
+.spark-two {
+    top: 78px;
+    right: 30px;
+
+    font-size: 1.1rem;
+}
+
+
+.spark-three {
+    bottom: 36px;
+    right: 235px;
+
+    color: #f0b72b;
+
+    font-size: 1.45rem;
+}
+
+
+@keyframes leaderboard-sparkle {
+
+    0%,100% {
+        opacity: .65;
+        transform: scale(.9) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.12) rotate(8deg);
+    }
+}
+
+
+/* =========================================================
+   CURRENT POSITION
 ========================================================= */
 
 .current-position {
-    display: flex;
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        280px
+        minmax(0, 1fr)
+        290px;
+
     align-items: center;
-    justify-content: space-between;
+
+    min-height: 116px;
+
+    margin:
+        0
+        0
+        38px;
+
+    padding:
+        20px
+        28px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #ded3f6;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #faf7ff,
+            #ffffff,
+            #faf8ff
+        );
+
+    box-shadow:
+        0 15px 35px
+        rgba(70,45,120,.065);
+}
+
+
+.current-position::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #8159e4,
+            #5d36c9
+        );
+}
+
+
+.current-position::after {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: 28%;
+    top: -120px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(112,74,215,.08),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+.position-block,
+.position-user,
+.position-points {
+    position: relative;
+    z-index: 2;
+}
+
+
+.position-block {
+    display: flex;
+
+    align-items: center;
 
     gap: 20px;
-
-    margin-bottom: 30px;
-    padding: 20px 24px;
-
-    background: #f5f1ff;
-
-    border: 1px solid #e4dcff;
-
-    border-radius: 12px;
 }
+
+
+.position-crown {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    height: 64px;
+
+    flex: 0 0 64px;
+
+    border-radius: 50%;
+
+    background:
+        #eee7ff;
+
+    color: #6540cf;
+
+    font-size: 1.5rem;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(104,68,212,.05);
+}
+
 
 .current-position-label {
-    color: #64748b;
-    font-size: 13px;
+    color: #81798d;
+
+    font-size: .74rem;
+
+    font-weight: 700;
 }
+
 
 .current-position-rank {
     margin-top: 3px;
 
-    color: #4520c7;
+    color: #5f38cd;
 
-    font-size: 24px;
+    font-size: 2rem;
+
+    font-weight: 900;
+
+    letter-spacing: -.05em;
+}
+
+
+.position-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding-left: 22px;
+
+    border-left:
+        1px solid
+        #ded4ef;
+}
+
+
+.position-avatar,
+.position-avatar-placeholder {
+    width: 54px;
+    height: 54px;
+
+    flex: 0 0 54px;
+
+    border-radius: 50%;
+}
+
+
+.position-avatar {
+    object-fit: cover;
+
+    border:
+        2px solid
+        #e8e0f6;
+
+    box-shadow:
+        0 7px 15px
+        rgba(55,35,100,.08);
+}
+
+
+.position-avatar-placeholder {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f0eaff,
+            #e5dcff
+        );
+
+    color: #6842d0;
+
+    font-weight: 850;
+}
+
+
+.position-user-name {
+    color: #211a2d;
+
+    font-size: .95rem;
+
+    font-weight: 850;
+}
+
+
+.position-user-level {
+    margin-top: 3px;
+
+    color: #8a8293;
+
+    font-size: .72rem;
+}
+
+
+.position-points {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+}
+
+
+.position-points-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+
+    background: #fff;
+
+    color: #7048d7;
+
+    font-size: 1.25rem;
+
+    box-shadow:
+        0 7px 18px
+        rgba(55,35,100,.08);
+}
+
+
+.position-points strong {
+    display: block;
+
+    color: #211a2d;
+
+    font-size: 1rem;
+
+    font-weight: 850;
+}
+
+
+.position-points strong span {
+    color: #633dce;
+}
+
+
+.position-points small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8b8394;
+
+    font-size: .67rem;
+}
+
+
+/* =========================================================
+   CONTRIBUTOR SECTION
+========================================================= */
+
+.contributors-heading {
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin:
+        0
+        0
+        16px;
+}
+
+
+.contributors-title {
+    margin: 0;
+
+    color: #171226;
+
+    font-size: 1.45rem;
+
+    font-weight: 900;
+
+    letter-spacing: -.035em;
+}
+
+
+.contributors-title::after {
+    content: "";
+
+    display: block;
+
+    width: 38px;
+    height: 3px;
+
+    margin-top: 10px;
+
+    border-radius: 999px;
+
+    background: #6d45d6;
+}
+
+
+.leaderboard-filter {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding:
+        10px
+        14px;
+
+    border:
+        1px solid
+        #e4dcef;
+
+    border-radius: 13px;
+
+    background: #fff;
+
+    color: #6540cf;
+
+    font-size: .75rem;
+
     font-weight: 750;
 }
 
-.current-position-user {
-    color: #111827;
 
-    font-size: 15px;
-    font-weight: 650;
+.leaderboard-filter i {
+    font-size: .85rem;
 }
 
 
@@ -133,16 +1015,21 @@
 ========================================================= */
 
 .leaderboard-card {
+    position: relative;
+
     overflow: hidden;
 
-    background: white;
+    border:
+        1px solid
+        #e6e1eb;
 
-    border: 1px solid #e7e9ef;
+    border-radius: 20px;
 
-    border-radius: 14px;
+    background: #fff;
 
     box-shadow:
-        0 5px 18px rgba(15, 23, 42, 0.06);
+        0 17px 40px
+        rgba(38,27,63,.065);
 }
 
 
@@ -154,65 +1041,146 @@
     display: grid;
 
     grid-template-columns:
-        70px
-        minmax(190px, 1.6fr)
+        90px
+        minmax(250px, 1.7fr)
         110px
-        150px
-        130px
-        150px;
+        140px
+        140px
+        170px;
 
-    gap: 15px;
+    gap: 14px;
 
-    padding: 17px 22px;
+    align-items: center;
 
-    background: #faf9ff;
+    padding:
+        18px
+        28px;
 
-    border-bottom: 1px solid #eceaf3;
+    border-bottom:
+        1px solid
+        #ece8f1;
 
-    color: #64748b;
+    background:
+        #fcfbfe;
 
-    font-size: 11px;
-    font-weight: 700;
+    color: #898192;
+
+    font-size: .65rem;
+
+    font-weight: 850;
+
+    letter-spacing: .08em;
 
     text-transform: uppercase;
-
-    letter-spacing: 0.5px;
 }
 
 
 /* =========================================================
-   USER ROW
+   ROW
 ========================================================= */
 
 .leaderboard-row {
+    position: relative;
+
     display: grid;
 
     grid-template-columns:
-        70px
-        minmax(190px, 1.6fr)
+        90px
+        minmax(250px, 1.7fr)
         110px
-        150px
-        130px
-        150px;
+        140px
+        140px
+        170px;
 
-    gap: 15px;
+    gap: 14px;
 
     align-items: center;
 
-    padding: 20px 22px;
+    min-height: 84px;
 
-    border-bottom: 1px solid #edf0f4;
+    padding:
+        17px
+        28px;
+
+    border-bottom:
+        1px solid
+        #f0edf3;
+
+    background: #fff;
 
     transition:
-        background 0.2s ease;
+        background .25s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
 }
+
 
 .leaderboard-row:last-child {
     border-bottom: none;
 }
 
+
 .leaderboard-row:hover {
-    background: #fcfbff;
+    background:
+        linear-gradient(
+            90deg,
+            #fcfaff,
+            #ffffff
+        );
+
+    transform:
+        translateX(2px);
+
+    box-shadow:
+        0 7px 20px
+        rgba(67,42,120,.045);
+}
+
+
+.leaderboard-row::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #7954df,
+            #5c36c8
+        );
+
+    transform:
+        scaleY(0);
+
+    transform-origin: center;
+
+    transition:
+        transform .25s ease;
+}
+
+
+.leaderboard-row:hover::before {
+    transform: scaleY(1);
+}
+
+
+/* =========================================================
+   TOP THREE ROWS
+========================================================= */
+
+.leaderboard-row:nth-child(2) {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(246,242,255,.65),
+            #fff
+        );
 }
 
 
@@ -221,16 +1189,26 @@
 ========================================================= */
 
 .leaderboard-rank {
-    color: #475569;
+    display: flex;
 
-    font-size: 17px;
-    font-weight: 750;
+    align-items: center;
+
+    color: #6f687a;
+
+    font-size: .86rem;
+
+    font-weight: 850;
 }
 
-.rank-top {
-    color: #5732d7;
 
-    font-size: 20px;
+.rank-top {
+    font-size: 1.45rem;
+
+    filter:
+        drop-shadow(
+            0 3px 5px
+            rgba(50,30,90,.10)
+        );
 }
 
 
@@ -240,6 +1218,7 @@
 
 .leaderboard-user {
     display: flex;
+
     align-items: center;
 
     gap: 12px;
@@ -247,55 +1226,147 @@
     min-width: 0;
 }
 
+
 .leaderboard-avatar,
 .leaderboard-avatar-placeholder {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
 
-    flex-shrink: 0;
+    flex: 0 0 46px;
 
     border-radius: 50%;
 }
 
+
 .leaderboard-avatar {
     object-fit: cover;
+
+    border:
+        2px solid
+        #eee9f6;
+
+    background: #f5f1fc;
+
+    box-shadow:
+        0 5px 12px
+        rgba(60,40,110,.07);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease;
 }
+
+
+.leaderboard-row:hover .leaderboard-avatar {
+    transform: scale(1.05);
+
+    border-color: #d9cff0;
+}
+
 
 .leaderboard-avatar-placeholder {
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    background: #eeeaff;
+    background:
+        linear-gradient(
+            145deg,
+            #f0ebff,
+            #e6ddff
+        );
 
-    color: #5735d7;
+    color: #613bce;
 
-    font-size: 15px;
-    font-weight: 750;
+    font-size: .88rem;
+
+    font-weight: 850;
 }
 
-.leaderboard-username {
-    color: #111827;
 
-    font-size: 14px;
-    font-weight: 700;
+.leaderboard-user > div:last-child {
+    min-width: 0;
+}
+
+
+.leaderboard-username {
+    display: inline-block;
+
+    max-width: 100%;
+
+    color: #211b2e;
+
+    font-size: .9rem;
+
+    font-weight: 850;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
 
+
 .leaderboard-username:hover {
-    color: #5732d7;
-    text-decoration: underline;
+    color: #633dce;
+
+    text-decoration: none;
 }
 
+
 .leaderboard-level {
-    margin-top: 3px;
+    display: inline-flex;
 
-    color: #64748b;
+    margin-top: 4px;
 
-    font-size: 11px;
+    padding:
+        3px
+        8px;
+
+    border-radius: 999px;
+
+    background:
+        #f5f1fb;
+
+    color: #8a8195;
+
+    font-size: .61rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   POINTS
+========================================================= */
+
+.leaderboard-points {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: fit-content;
+
+    min-width: 38px;
+
+    padding:
+        7px
+        10px;
+
+    border-radius: 9px;
+
+    background:
+        #f0eaff;
+
+    color: #5c36c9;
+
+    font-size: .9rem;
+
+    font-weight: 900;
 }
 
 
@@ -303,43 +1374,101 @@
    VALUES
 ========================================================= */
 
-.leaderboard-points {
-    color: #4520c7;
-
-    font-size: 17px;
-    font-weight: 750;
-}
-
 .leaderboard-value {
-    color: #475569;
+    color: #625a6c;
 
-    font-size: 13px;
-    font-weight: 600;
+    font-size: .79rem;
+
+    font-weight: 650;
 }
 
 
 /* =========================================================
-   EMPTY
+   EMPTY STATE
 ========================================================= */
 
 .leaderboard-empty {
-    padding: 70px 25px;
+    padding:
+        75px
+        25px;
+
+    color: #777080;
 
     text-align: center;
 
-    color: #64748b;
-
-    font-size: 14px;
+    font-size: .9rem;
 }
 
+
 .leaderboard-empty i {
-    display: block;
+    display: flex;
 
-    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
 
-    color: #b4a2f7;
+    width: 68px;
+    height: 68px;
 
-    font-size: 45px;
+    margin:
+        0
+        auto
+        16px;
+
+    border-radius: 19px;
+
+    background:
+        #f1ecff;
+
+    color: #7550db;
+
+    font-size: 29px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1199px) {
+
+    .leaderboard-hero {
+        grid-template-columns:
+            minmax(0, 1fr)
+            390px;
+    }
+
+
+    .leaderboard-visual {
+        width: 390px;
+        transform: scale(.88);
+        transform-origin: right center;
+    }
+
+
+    .current-position {
+        grid-template-columns:
+            235px
+            minmax(0, 1fr)
+            230px;
+    }
+
+
+    .leaderboard-table-header,
+    .leaderboard-row {
+        grid-template-columns:
+            70px
+            minmax(190px, 1.6fr)
+            90px
+            115px
+            115px
+            140px;
+
+        gap: 10px;
+
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
 }
 
 
@@ -349,20 +1478,135 @@
 
 @media (max-width: 991px) {
 
+    .leaderboard-page {
+        padding-bottom: 55px;
+    }
+
+
+    .leaderboard-hero {
+        display: block;
+
+        min-height: auto;
+
+        padding:
+            45px
+            0
+            25px;
+    }
+
+
+    .leaderboard-copy {
+        max-width: 100%;
+    }
+
+
+    .leaderboard-copy h1 {
+        font-size:
+            clamp(
+                2.7rem,
+                8vw,
+                3.7rem
+            );
+    }
+
+
+    .leaderboard-visual {
+        width: 100%;
+        height: 300px;
+
+        margin-top: 15px;
+
+        transform: scale(.9);
+        transform-origin: center;
+    }
+
+
+    .leaderboard-orbit {
+        right: 50%;
+
+        transform:
+            translateX(50%);
+    }
+
+
+    .leaderboard-trophy {
+        right: calc(50% - 82px);
+    }
+
+
+    .float-solve {
+        right: calc(50% + 95px);
+    }
+
+
+    .float-build {
+        right: calc(50% - 245px);
+    }
+
+
+    .float-impact {
+        right: calc(50% + 100px);
+    }
+
+
+    .spark-one {
+        right: calc(50% - 120px);
+    }
+
+
+    .spark-two {
+        right: calc(50% - 145px);
+    }
+
+
+    .spark-three {
+        right: calc(50% + 85px);
+    }
+
+
+    .current-position {
+        grid-template-columns:
+            1fr;
+
+        gap: 18px;
+
+        padding:
+            20px;
+    }
+
+
+    .position-user {
+        padding-left: 0;
+
+        border-left: none;
+    }
+
+
+    .position-points {
+        justify-content: flex-start;
+    }
+
+
     .leaderboard-table-header {
         display: none;
     }
 
+
     .leaderboard-row {
         grid-template-columns:
-            45px
-            minmax(180px, 1fr)
-            100px;
+            55px
+            minmax(0, 1fr)
+            85px;
 
         gap: 12px;
 
-        padding: 18px;
+        min-height: 78px;
+
+        padding:
+            15px
+            17px;
     }
+
 
     .leaderboard-row > :nth-child(4),
     .leaderboard-row > :nth-child(5),
@@ -370,41 +1614,206 @@
         display: none;
     }
 
+
+    .leaderboard-rank {
+        justify-content: center;
+    }
+
+
+    .leaderboard-card {
+        border-radius: 17px;
+    }
+
+
+    .contributors-heading {
+        align-items: center;
+    }
+
 }
 
 
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
 @media (max-width: 575px) {
 
-    .leaderboard-page {
-        padding-top: 32px;
+    .leaderboard-hero {
+        padding:
+            35px
+            0
+            20px;
     }
 
-    .leaderboard-header h1 {
-        font-size: 28px;
+
+    .leaderboard-eyebrow {
+        margin-bottom: 19px;
+
+        padding:
+            8px
+            12px;
+
+        font-size: .61rem;
     }
+
+
+    .leaderboard-copy h1 {
+        font-size: 2.55rem;
+    }
+
+
+    .leaderboard-description {
+        margin-top: 20px;
+
+        font-size: .86rem;
+    }
+
+
+    .leaderboard-visual {
+        height: 255px;
+
+        transform: scale(.72);
+    }
+
 
     .current-position {
-        align-items: flex-start;
-        flex-direction: column;
+        border-radius: 16px;
     }
+
+
+    .position-block {
+        gap: 13px;
+    }
+
+
+    .position-crown {
+        width: 52px;
+        height: 52px;
+
+        flex-basis: 52px;
+
+        font-size: 1.2rem;
+    }
+
+
+    .current-position-rank {
+        font-size: 1.7rem;
+    }
+
+
+    .position-avatar,
+    .position-avatar-placeholder {
+        width: 45px;
+        height: 45px;
+
+        flex-basis: 45px;
+    }
+
+
+    .position-points-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+
+    .contributors-title {
+        font-size: 1.2rem;
+    }
+
+
+    .leaderboard-filter {
+        padding:
+            8px
+            11px;
+
+        font-size: .68rem;
+    }
+
 
     .leaderboard-row {
         grid-template-columns:
             38px
             minmax(0, 1fr)
-            75px;
+            65px;
 
-        padding: 16px 14px;
+        gap: 8px;
+
+        padding:
+            14px
+            11px;
     }
+
 
     .leaderboard-avatar,
     .leaderboard-avatar-placeholder {
         width: 38px;
         height: 38px;
+
+        flex-basis: 38px;
     }
 
+
+    .leaderboard-user {
+        gap: 8px;
+    }
+
+
+    .leaderboard-username {
+        font-size: .79rem;
+    }
+
+
+    .leaderboard-level {
+        font-size: .56rem;
+    }
+
+
     .leaderboard-points {
-        font-size: 15px;
+        min-width: 32px;
+
+        padding:
+            5px
+            7px;
+
+        font-size: .75rem;
+    }
+
+
+    .rank-top {
+        font-size: 1.15rem;
+    }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.leaderboard-page a:focus-visible {
+    outline:
+        3px solid
+        rgba(104,68,212,.25);
+
+    outline-offset: 3px;
+
+    border-radius: 6px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .leaderboard-page *,
+    .leaderboard-page *::before,
+    .leaderboard-page *::after {
+
+        animation: none !important;
+
+        transition: none !important;
     }
 
 }
@@ -420,63 +1829,260 @@
 
     <div class="container">
 
-        <!-- HEADER -->
 
-        <div class="leaderboard-header">
+        <!-- =================================================
+             HERO
+        ================================================== -->
 
-            <div class="leaderboard-icon">
-                <i class="bi bi-trophy-fill"></i>
+        <section class="leaderboard-hero">
+
+
+            <!-- HERO COPY -->
+
+            <div class="leaderboard-copy">
+
+                <div class="leaderboard-eyebrow">
+                    Community Leaderboard
+                </div>
+
+
+                <h1>
+                    ProblemPool
+                    <span>Leaderboard</span>
+                </h1>
+
+
+                <p class="leaderboard-description">
+                    Top contributors ranked by reputation points.
+                    <strong>
+                        Solve. Build. Collaborate. Make an Impact.
+                    </strong>
+                </p>
+
             </div>
 
-            <h1>
-                ProblemPool Leaderboard
-            </h1>
 
-            <p>
-                Top contributors ranked by reputation points.
-            </p>
+            <!-- HERO VISUAL -->
 
-        </div>
+            <div
+                class="leaderboard-visual"
+                aria-hidden="true"
+            >
+
+                <div class="leaderboard-orbit"></div>
 
 
-        <!-- CURRENT USER POSITION -->
+                <div class="leaderboard-trophy">
 
-        <div class="current-position">
+                    <div class="leaderboard-trophy-icon">
+
+                        <i class="bi bi-trophy-fill"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div class="leaderboard-float-card float-solve">
+
+                    <i class="bi bi-lightbulb-fill"></i>
+
+                    <div>
+                        <strong>Solve</strong>
+                        <small>Problems</small>
+                    </div>
+
+                </div>
+
+
+                <div class="leaderboard-float-card float-build">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <div>
+                        <strong>Build</strong>
+                        <small>Solutions</small>
+                    </div>
+
+                </div>
+
+
+                <div class="leaderboard-float-card float-impact">
+
+                    <i class="bi bi-rocket-takeoff-fill"></i>
+
+                    <div>
+                        <strong>Create</strong>
+                        <small>Impact</small>
+                    </div>
+
+                </div>
+
+
+                <span class="leaderboard-spark spark-one">
+                    ✦
+                </span>
+
+                <span class="leaderboard-spark spark-two">
+                    ✦
+                </span>
+
+                <span class="leaderboard-spark spark-three">
+                    ✦
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CURRENT USER POSITION
+        ================================================== -->
+
+        <section class="current-position">
+
+
+            <!-- POSITION -->
+
+            <div class="position-block">
+
+                <div class="position-crown">
+
+                    <i class="bi bi-award-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="current-position-label">
+                        Your current position
+                    </div>
+
+
+                    <div class="current-position-rank">
+                        #{{ current_user_position }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- USER -->
+
+            <div class="position-user">
+
+
+                {% if current_user.profile_image %}
+
+                    <img
+                        src="{{ current_user.profile_image.url }}"
+                        alt="{{ current_user.username }}"
+                        class="position-avatar"
+                    >
+
+                {% else %}
+
+                    <div
+                        class="position-avatar-placeholder"
+                        aria-hidden="true"
+                    >
+                        {{ current_user.first_name|first|default:current_user.username|first|upper }}
+                    </div>
+
+                {% endif %}
+
+
+                <div>
+
+                    <a
+                        href="{% url 'accounts:public_profile' current_user.username %}"
+                        class="position-user-name text-decoration-none"
+                    >
+                        {{ current_user.username }}
+                    </a>
+
+
+                    <div class="position-user-level">
+                        {{ current_user.level }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- POINTS -->
+
+            <div class="position-points">
+
+                <div class="position-points-icon">
+
+                    <i class="bi bi-star-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        <span>
+                            {{ current_user.points }}
+                        </span>
+                        points
+                    </strong>
+
+                    <small>
+                        Keep going! You're making a difference.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CONTRIBUTORS HEADING
+        ================================================== -->
+
+        <div class="contributors-heading">
 
             <div>
 
-                <div class="current-position-label">
-                    Your current position
-                </div>
-
-                <div class="current-position-rank">
-                    #{{ current_user_position }}
-                </div>
+                <h2 class="contributors-title">
+                    Top Contributors
+                </h2>
 
             </div>
 
-            <div class="current-position-user">
 
-                <a
-                    href="{% url 'accounts:public_profile' current_user.username %}"
-                    class="text-decoration-none"
-                >
-                    {{ current_user.username }}
-                </a>
+            <div class="leaderboard-filter">
 
-                ·
-                {{ current_user.points }} points
+                <i class="bi bi-calendar3"></i>
+
+                <span>
+                    All Time
+                </span>
+
+                <i class="bi bi-chevron-down"></i>
 
             </div>
 
         </div>
 
 
-        <!-- LEADERBOARD -->
+        <!-- =================================================
+             LEADERBOARD
+        ================================================== -->
 
         <div class="leaderboard-card">
 
             {% if top_users %}
+
 
                 <!-- TABLE HEADER -->
 
@@ -486,21 +2092,26 @@
                         Rank
                     </div>
 
+
                     <div>
                         User
                     </div>
+
 
                     <div>
                         Points
                     </div>
 
+
                     <div>
                         Problems
                     </div>
 
+
                     <div>
                         Solutions
                     </div>
+
 
                     <div>
                         Projects
@@ -514,6 +2125,7 @@
                 {% for user in top_users %}
 
                     <div class="leaderboard-row">
+
 
                         <!-- RANK -->
 
@@ -551,6 +2163,7 @@
 
                         <div class="leaderboard-user">
 
+
                             {% if user.profile_image %}
 
                                 <img
@@ -561,8 +2174,13 @@
 
                             {% else %}
 
-                                <div class="leaderboard-avatar-placeholder">
+                                <div
+                                    class="leaderboard-avatar-placeholder"
+                                    aria-hidden="true"
+                                >
+
                                     {{ user.first_name|first|default:user.username|first|upper }}
+
                                 </div>
 
                             {% endif %}
@@ -577,6 +2195,7 @@
                                     {{ user.username }}
                                 </a>
 
+
                                 <div class="leaderboard-level">
                                     {{ user.level }}
                                 </div>
@@ -589,21 +2208,27 @@
                         <!-- POINTS -->
 
                         <div class="leaderboard-points">
+
                             {{ user.points }}
+
                         </div>
 
 
                         <!-- PROBLEMS -->
 
                         <div class="leaderboard-value">
+
                             {{ user.problems_created_count }}
+
                         </div>
 
 
                         <!-- SOLUTIONS -->
 
                         <div class="leaderboard-value">
+
                             {{ user.solutions_submitted_count }}
+
                         </div>
 
 
@@ -623,15 +2248,25 @@
 
                 {% endfor %}
 
+
             {% else %}
+
+
+                <!-- =================================================
+                     EMPTY STATE
+                ================================================== -->
 
                 <div class="leaderboard-empty">
 
-                    <i class="bi bi-trophy"></i>
+                    <i
+                        class="bi bi-trophy"
+                        aria-hidden="true"
+                    ></i>
 
                     No reputation rankings are available yet.
 
                 </div>
+
 
             {% endif %}
 
