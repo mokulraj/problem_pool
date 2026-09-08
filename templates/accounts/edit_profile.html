@@ -7,33 +7,15 @@
 {% block content %}
 
 <style>
-    /* =========================================================
-       EDIT PROFILE — CLEAN UI POLISH
-       UI ONLY — NO FUNCTIONALITY CHANGES
-       ========================================================= */
-
     .pp-edit-page {
         min-height: calc(100vh - 90px);
         padding: 48px 0 70px;
         position: relative;
         overflow: hidden;
         background:
-            radial-gradient(
-                circle at 5% 25%,
-                rgba(112, 67, 220, .10),
-                transparent 25%
-            ),
-            radial-gradient(
-                circle at 96% 80%,
-                rgba(112, 67, 220, .07),
-                transparent 24%
-            ),
-            linear-gradient(
-                135deg,
-                #faf9ff 0%,
-                #f6f3ff 48%,
-                #ffffff 100%
-            );
+            radial-gradient(circle at 5% 25%, rgba(112, 67, 220, .10), transparent 25%),
+            radial-gradient(circle at 96% 80%, rgba(112, 67, 220, .07), transparent 24%),
+            linear-gradient(135deg, #faf9ff 0%, #f6f3ff 48%, #ffffff 100%);
     }
 
     .pp-edit-page::before {
@@ -70,10 +52,6 @@
         margin: 0 auto;
     }
 
-    /* =========================================================
-       BREADCRUMB
-       ========================================================= */
-
     .pp-edit-breadcrumb {
         display: flex;
         align-items: center;
@@ -87,7 +65,6 @@
     .pp-edit-breadcrumb a {
         color: #7c70a1;
         text-decoration: none;
-        transition: color .2s ease;
     }
 
     .pp-edit-breadcrumb a:hover {
@@ -98,20 +75,12 @@
         color: #272039;
     }
 
-    /* =========================================================
-       MAIN GRID
-       ========================================================= */
-
     .pp-edit-grid {
         display: grid;
         grid-template-columns: 315px minmax(0, 1fr);
         gap: 18px;
         align-items: stretch;
     }
-
-    /* =========================================================
-       LEFT COLUMN
-       ========================================================= */
 
     .pp-edit-sidebar {
         display: flex;
@@ -120,10 +89,6 @@
         min-width: 0;
         height: 100%;
     }
-
-    /* =========================================================
-       PROFILE CARD
-       ========================================================= */
 
     .pp-profile-side-card {
         background: rgba(255, 255, 255, .94);
@@ -233,10 +198,6 @@
         box-shadow: 0 7px 17px rgba(97, 51, 208, .19);
     }
 
-    /* =========================================================
-       SIDE NAV
-       ========================================================= */
-
     .pp-side-nav {
         padding-top: 15px;
     }
@@ -281,17 +242,9 @@
 
     .pp-side-nav-item.active {
         color: #6235d1;
-        background: linear-gradient(
-            90deg,
-            #eee7ff,
-            #f7f4ff
-        );
+        background: linear-gradient(90deg, #eee7ff, #f7f4ff);
         box-shadow: inset 3px 0 0 #7040dc;
     }
-
-    /* =========================================================
-       CREATIVE CARD
-       ========================================================= */
 
     .pp-creative-card {
         position: relative;
@@ -302,16 +255,8 @@
         border-radius: 22px;
         border: 1px solid rgba(108, 68, 214, .13);
         background:
-            radial-gradient(
-                circle at 82% 25%,
-                rgba(124, 78, 226, .15),
-                transparent 30%
-            ),
-            linear-gradient(
-                145deg,
-                #ffffff,
-                #f7f3ff
-            );
+            radial-gradient(circle at 82% 25%, rgba(124, 78, 226, .15), transparent 30%),
+            linear-gradient(145deg, #ffffff, #f7f3ff);
         box-shadow: 0 16px 42px rgba(67, 44, 125, .06);
     }
 
@@ -356,30 +301,18 @@
         margin-top: 15px;
         padding: 9px 13px;
         border-radius: 10px;
-        background: linear-gradient(
-            135deg,
-            #7444dd,
-            #5d30ce
-        );
+        background: linear-gradient(135deg, #7444dd, #5d30ce);
         color: #fff;
         text-decoration: none;
         font-size: 10px;
         font-weight: 800;
         box-shadow: 0 9px 20px rgba(96, 51, 207, .19);
-        transition:
-            transform .2s ease,
-            box-shadow .2s ease;
     }
 
     .pp-creative-button:hover {
         color: #fff;
         transform: translateY(-2px);
-        box-shadow: 0 13px 25px rgba(96, 51, 207, .25);
     }
-
-    /* =========================================================
-       CLEAN CSS ILLUSTRATION
-       ========================================================= */
 
     .pp-illustration {
         position: absolute;
@@ -397,12 +330,7 @@
         right: 5px;
         top: 12px;
         border-radius: 50%;
-        background:
-            radial-gradient(
-                circle,
-                rgba(123, 72, 220, .17),
-                transparent 68%
-            );
+        background: radial-gradient(circle, rgba(123, 72, 220, .17), transparent 68%);
     }
 
     .pp-illustration-hair {
@@ -462,11 +390,7 @@
         width: 89px;
         height: 67px;
         border-radius: 45px 45px 15px 15px;
-        background: linear-gradient(
-            145deg,
-            #8655e4,
-            #6133cf
-        );
+        background: linear-gradient(145deg, #8655e4, #6133cf);
     }
 
     .pp-illustration-laptop {
@@ -574,10 +498,6 @@
         transform: rotate(4deg);
     }
 
-    /* =========================================================
-       RIGHT FORM CARD
-       ========================================================= */
-
     .pp-edit-card {
         position: relative;
         overflow: hidden;
@@ -603,10 +523,6 @@
             0 0 0 64px rgba(108, 67, 220, .015);
         pointer-events: none;
     }
-
-    /* =========================================================
-       FORM HEADER
-       ========================================================= */
 
     .pp-form-header {
         position: relative;
@@ -650,11 +566,7 @@
         height: 3px;
         margin-top: 12px;
         border-radius: 999px;
-        background: linear-gradient(
-            90deg,
-            #7040dc,
-            #986cf0
-        );
+        background: linear-gradient(90deg, #7040dc, #986cf0);
     }
 
     .pp-form-motivation {
@@ -678,10 +590,6 @@
         position: relative;
         z-index: 2;
     }
-
-    /* =========================================================
-       FIELDS
-       ========================================================= */
 
     .pp-form-row {
         display: grid;
@@ -764,10 +672,6 @@
         cursor: pointer;
     }
 
-    /* =========================================================
-       IMAGE UPLOAD
-       ========================================================= */
-
     .pp-image-upload {
         display: grid;
         grid-template-columns: 88px minmax(0, 1fr);
@@ -776,11 +680,7 @@
         padding: 13px;
         border: 1px dashed #d8cef0;
         border-radius: 14px;
-        background: linear-gradient(
-            135deg,
-            #fcfaff,
-            #f8f4ff
-        );
+        background: linear-gradient(135deg, #fcfaff, #f8f4ff);
     }
 
     .pp-current-image {
@@ -840,10 +740,6 @@
         accent-color: #6d3ed5;
     }
 
-    /* =========================================================
-       ERRORS / HELP TEXT
-       ========================================================= */
-
     .pp-edit-card .alert {
         border-radius: 11px;
         font-size: 11px;
@@ -861,10 +757,6 @@
         color: #9b94a9;
         font-size: 9px;
     }
-
-    /* =========================================================
-       ACTIONS
-       ========================================================= */
 
     .pp-form-actions {
         display: flex;
@@ -890,16 +782,10 @@
         gap: 7px;
         padding: 0 20px;
         border: 0;
-        background: linear-gradient(
-            135deg,
-            #7444dd,
-            #5d30ce
-        );
+        background: linear-gradient(135deg, #7444dd, #5d30ce);
         color: #fff;
         box-shadow: 0 10px 23px rgba(96, 51, 207, .20);
-        transition:
-            transform .2s ease,
-            box-shadow .2s ease;
+        transition: transform .2s ease, box-shadow .2s ease;
     }
 
     .pp-save-btn:hover {
@@ -917,22 +803,12 @@
         background: #fff;
         color: #6840cf;
         text-decoration: none;
-        transition:
-            background .2s ease,
-            border-color .2s ease,
-            transform .2s ease;
     }
 
     .pp-cancel-btn:hover {
         color: #6840cf;
         background: #f7f3ff;
-        border-color: #cfc2ea;
-        transform: translateY(-1px);
     }
-
-    /* =========================================================
-       ANIMATION
-       ========================================================= */
 
     @keyframes pp-profile-orbit {
         from {
@@ -945,8 +821,7 @@
     }
 
     @keyframes pp-spark-float {
-        0%,
-        100% {
+        0%, 100% {
             transform: translateY(0) rotate(0deg);
         }
 
@@ -954,10 +829,6 @@
             transform: translateY(-6px) rotate(7deg);
         }
     }
-
-    /* =========================================================
-       TABLET
-       ========================================================= */
 
     @media (max-width: 991px) {
 
@@ -978,15 +849,7 @@
         .pp-profile-side-card {
             grid-row: span 2;
         }
-
-        .pp-creative-card {
-            min-height: 220px;
-        }
     }
-
-    /* =========================================================
-       MOBILE
-       ========================================================= */
 
     @media (max-width: 767px) {
 
@@ -1009,10 +872,6 @@
 
         .pp-profile-side-card {
             margin-bottom: 18px;
-        }
-
-        .pp-creative-card {
-            min-height: 220px;
         }
 
         .pp-form-header {
@@ -1131,7 +990,6 @@
 
             <aside class="pp-edit-sidebar">
 
-
                 <div class="pp-profile-side-card">
 
                     <div class="pp-profile-preview">
@@ -1199,8 +1057,10 @@
                         </a>
 
 
+                        <!-- Dedicated Account Settings Page -->
+
                         <a
-                            href="{% url 'accounts:edit_profile' %}#account-settings"
+                            href="{% url 'accounts:account_settings' %}"
                             class="pp-side-nav-item"
                         >
                             <i class="bi bi-gear"></i>
@@ -1218,7 +1078,7 @@
 
 
                         <a
-                            href="{% url 'accounts:edit_profile' %}#privacy-security"
+                            href="{% url 'accounts:account_settings' %}#privacy-security"
                             class="pp-side-nav-item"
                         >
                             <i class="bi bi-shield-check"></i>
@@ -1230,9 +1090,7 @@
                 </div>
 
 
-                <!-- =================================================
-                     CREATIVE CARD
-                     ================================================= -->
+                <!-- CREATIVE CARD -->
 
                 <div class="pp-creative-card">
 
@@ -1261,48 +1119,35 @@
                     </a>
 
 
-                    <!-- CSS ILLUSTRATION -->
-
                     <div class="pp-illustration">
 
                         <div class="pp-illustration-glow"></div>
-
 
                         <div class="pp-speech">
                             Keep<br>
                             Growing 💜
                         </div>
 
-
                         <span class="pp-spark one">
                             ✦
                         </span>
-
 
                         <span class="pp-spark two">
                             ✧
                         </span>
 
-
                         <div class="pp-illustration-hair"></div>
-
 
                         <div class="pp-illustration-head"></div>
 
-
                         <div class="pp-illustration-face">
-
                             <span class="pp-eye"></span>
                             <span class="pp-eye"></span>
-
                         </div>
-
 
                         <div class="pp-illustration-body"></div>
 
-
                         <div class="pp-illustration-laptop"></div>
-
 
                         <div class="pp-illustration-plant">
 
@@ -1322,7 +1167,7 @@
 
 
             <!-- =================================================
-                 RIGHT FORM
+                 EDIT PROFILE FORM
                  ================================================= -->
 
             <main class="pp-edit-card">
@@ -1336,16 +1181,13 @@
                             Profile Settings
                         </div>
 
-
                         <h1 class="pp-form-title">
                             Profile Information
                         </h1>
 
-
                         <p class="pp-form-subtitle">
                             Update your details and let your personality shine.
                         </p>
-
 
                         <div class="pp-form-line"></div>
 
@@ -1362,7 +1204,6 @@
 
 
                 <div class="pp-form-content">
-
 
                     <form
                         method="post"
@@ -1497,7 +1338,6 @@
                                             {{ request.user.profile_image.name }}
                                         </div>
 
-
                                         <div class="pp-current-label">
 
                                             Currently:
@@ -1521,9 +1361,7 @@
 
 
                                     <div class="pp-clear-row">
-
                                         {{ form.profile_image }}
-
                                     </div>
 
                                 </div>

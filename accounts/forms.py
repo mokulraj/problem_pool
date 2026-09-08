@@ -177,3 +177,44 @@ class ProfileForm(forms.ModelForm):
                 }
             ),
         }
+
+
+class EmailChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+
+        fields = [
+            "email",
+        ]
+
+        widgets = {
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "setting-input",
+                    "placeholder": "Enter your email address",
+                    "autocomplete": "email",
+                }
+            ),
+        }
+
+        labels = {
+            "email": "Email Address",
+        }
+
+    def clean_email(self):
+
+        email = self.cleaned_data["email"].strip().lower()
+
+        existing_user = User.objects.filter(
+            email__iexact=email
+        ).exclude(
+            pk=self.instance.pk
+        ).first()
+
+        if existing_user:
+            raise forms.ValidationError(
+                "An account with this email already exists."
+            )
+
+        return email

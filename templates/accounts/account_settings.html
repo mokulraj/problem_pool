@@ -1,0 +1,1726 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings | ProblemPool{% endblock %}
+
+{% block content %}
+
+<style>
+    :root {
+        --as-purple: #6844d4;
+        --as-purple-2: #7956df;
+        --as-purple-light: #f4f0ff;
+        --as-purple-border: #ddd4f7;
+        --as-navy: #172033;
+        --as-text: #303445;
+        --as-muted: #7b7d90;
+        --as-border: #e7e7ee;
+        --as-bg: #f8f8fc;
+        --as-green: #16a05a;
+        --as-red: #df3540;
+    }
+
+    .account-settings-page {
+        min-height: calc(100vh - 82px);
+        background:
+            radial-gradient(
+                circle at 85% 4%,
+                rgba(104, 68, 212, .07),
+                transparent 30%
+            ),
+            #f8f8fc;
+        padding: 28px 0 60px;
+    }
+
+    .account-settings-container {
+        width: min(1500px, calc(100% - 70px));
+        margin: 0 auto;
+    }
+
+    /* =====================================================
+       BREADCRUMB
+    ===================================================== */
+
+    .settings-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #858698;
+        font-size: 13px;
+        margin-bottom: 22px;
+    }
+
+    .settings-breadcrumb i {
+        color: var(--as-purple);
+    }
+
+    /* =====================================================
+       LAYOUT
+    ===================================================== */
+
+    .settings-content-layout {
+        display: grid;
+        grid-template-columns: 285px minmax(0, 1fr);
+        gap: 28px;
+        align-items: start;
+    }
+
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
+
+    .settings-sidebar {
+        position: sticky;
+        top: 100px;
+        padding: 20px 16px;
+        background: #fff;
+        border: 1px solid var(--as-border);
+        border-radius: 18px;
+        box-shadow: 0 8px 28px rgba(35, 30, 70, .045);
+    }
+
+    .settings-user {
+        text-align: center;
+        padding: 5px 0 20px;
+    }
+
+    .settings-user-avatar-wrap {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 9px;
+    }
+
+    .settings-user-avatar,
+    .settings-user-placeholder {
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        border: 5px solid #f1edff;
+        box-shadow: 0 0 0 1px #ddd4f7;
+    }
+
+    .settings-user-avatar {
+        display: block;
+        object-fit: cover;
+    }
+
+    .settings-user-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(145deg, #7956df, #5d38c6);
+        color: #fff;
+        font-size: 31px;
+        font-weight: 800;
+    }
+
+    .settings-online-dot {
+        position: absolute;
+        right: 2px;
+        bottom: 6px;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #25c76f;
+        border: 3px solid #fff;
+    }
+
+    .settings-user h2 {
+        margin: 0;
+        color: var(--as-navy);
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .settings-username {
+        margin-top: 4px;
+        color: #898a99;
+        font-size: 13px;
+    }
+
+    .settings-level {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 9px;
+        color: var(--as-purple);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .settings-level i {
+        color: #efb82f;
+    }
+
+    /* =====================================================
+       STATS
+    ===================================================== */
+
+    .settings-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 15px 0;
+        border-top: 1px solid #ededf2;
+        border-bottom: 1px solid #ededf2;
+        margin-bottom: 14px;
+    }
+
+    .settings-stat {
+        position: relative;
+        text-align: center;
+    }
+
+    .settings-stat:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        right: 0;
+        bottom: 2px;
+        width: 1px;
+        background: #e5e4eb;
+    }
+
+    .settings-stat strong {
+        display: block;
+        color: var(--as-navy);
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .settings-stat span {
+        display: block;
+        margin-top: 3px;
+        color: #898a99;
+        font-size: 11px;
+    }
+
+    /* =====================================================
+       NAV
+    ===================================================== */
+
+    .settings-side-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .settings-side-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 44px;
+        padding: 9px 13px;
+        border-radius: 10px;
+        color: #5c5d6d;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: .2s ease;
+    }
+
+    .settings-side-link i {
+        width: 20px;
+        color: #7e7f90;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .settings-side-link:hover {
+        background: #f7f4ff;
+        color: var(--as-purple);
+    }
+
+    .settings-side-link:hover i {
+        color: var(--as-purple);
+    }
+
+    .settings-side-link.active {
+        color: var(--as-purple);
+        background: #f0ebff;
+        box-shadow: inset 3px 0 0 var(--as-purple);
+    }
+
+    .settings-side-link.active i {
+        color: var(--as-purple);
+    }
+
+    /* =====================================================
+       QUOTE
+    ===================================================== */
+
+    .settings-quote {
+        margin-top: 18px;
+        padding: 21px 15px;
+        border-radius: 15px;
+        background: linear-gradient(145deg, #f6f3ff, #f8f9ff);
+        text-align: center;
+    }
+
+    .settings-quote p {
+        margin: 0;
+        color: #5e5d7c;
+        font-size: 13px;
+        line-height: 1.7;
+        font-weight: 650;
+    }
+
+    .settings-quote span {
+        display: block;
+        margin-top: 8px;
+        color: #85859a;
+        font-size: 11px;
+    }
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .settings-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+        margin-bottom: 23px;
+    }
+
+    .settings-title h1 {
+        margin: 0;
+        color: #111b31;
+        font-size: 34px;
+        font-weight: 850;
+        letter-spacing: -.8px;
+    }
+
+    .settings-title p {
+        margin: 6px 0 0;
+        color: #7b7d90;
+        font-size: 14px;
+    }
+
+    .settings-control-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        min-width: 330px;
+        padding: 15px 20px;
+        border: 1px solid #e5ddfa;
+        border-radius: 17px;
+        background: linear-gradient(120deg, #f4efff, #efebff);
+    }
+
+    .settings-control-icon {
+        width: 52px;
+        height: 52px;
+        flex: 0 0 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        background: linear-gradient(145deg, #7956df, #6844d4);
+        color: white;
+        font-size: 22px;
+        box-shadow: 0 8px 18px rgba(104, 68, 212, .18);
+    }
+
+    .settings-control-card strong {
+        display: block;
+        color: #332092;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .settings-control-card span {
+        display: block;
+        margin-top: 4px;
+        color: #777494;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    /* =====================================================
+       MESSAGES
+    ===================================================== */
+
+    .settings-messages {
+        margin-bottom: 18px;
+    }
+
+    .settings-message {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 11px 14px;
+        margin-bottom: 8px;
+        border-radius: 9px;
+        font-size: 13px;
+    }
+
+    .settings-message.success {
+        background: #ecfaf1;
+        border: 1px solid #bce8cc;
+        color: #157744;
+    }
+
+    .settings-message.error {
+        background: #fff1f1;
+        border: 1px solid #ffcaca;
+        color: #b42318;
+    }
+
+    /* =====================================================
+       CARDS
+    ===================================================== */
+
+    .settings-card {
+        padding: 24px 27px;
+        margin-bottom: 19px;
+        background: #fff;
+        border: 1px solid var(--as-border);
+        border-radius: 18px;
+        box-shadow: 0 7px 25px rgba(37, 31, 70, .04);
+    }
+
+    .settings-card-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .settings-heading-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .settings-card-icon {
+        width: 52px;
+        height: 52px;
+        flex: 0 0 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #efecff;
+        color: #5838d7;
+        font-size: 21px;
+    }
+
+    .settings-card-icon.blue {
+        background: #edf3ff;
+        color: #3778e9;
+    }
+
+    .settings-card-icon.green {
+        background: #ebfaf1;
+        color: #16a05a;
+    }
+
+    .settings-card-icon.red {
+        background: #fff0f1;
+        color: #e03943;
+    }
+
+    .settings-card-heading h2 {
+        margin: 2px 0 4px;
+        color: #182138;
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: -.25px;
+    }
+
+    .settings-card-heading p {
+        margin: 0;
+        color: #7b7d90;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* =====================================================
+       BADGES
+    ===================================================== */
+
+    .settings-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 9px;
+        background: #edf9f1;
+        color: #15934b;
+        font-size: 11px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+    .settings-badge.blue {
+        background: #edf4ff;
+        color: #356fd5;
+    }
+
+    /* =====================================================
+       CLEAN INPUTS
+    ===================================================== */
+
+    .settings-field {
+        min-width: 0;
+    }
+
+    .settings-field label {
+        display: block;
+        margin-bottom: 7px;
+        color: #252b40;
+        font-size: 12px;
+        font-weight: 750;
+    }
+
+    .settings-input-wrap {
+        position: relative;
+        width: 100%;
+    }
+
+    .settings-input-wrap > i {
+        position: absolute;
+        z-index: 2;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9a9bab;
+        font-size: 15px;
+        pointer-events: none;
+    }
+
+    /*
+       Django generated inputs:
+       EmailChangeForm and PasswordChangeForm
+    */
+
+    .settings-input,
+    .settings-input-wrap input,
+    .settings-input-wrap .form-control {
+        width: 100% !important;
+        height: 46px !important;
+        min-height: 46px !important;
+        box-sizing: border-box !important;
+
+        padding: 0 14px 0 42px !important;
+
+        border: 1px solid #dedee7 !important;
+        border-radius: 10px !important;
+
+        background: #fff !important;
+        color: #292d3d !important;
+
+        font-family: inherit !important;
+        font-size: 13px !important;
+        line-height: 46px !important;
+
+        outline: none !important;
+        box-shadow: none !important;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease,
+            background .2s ease !important;
+    }
+
+    .settings-input:hover,
+    .settings-input-wrap input:hover,
+    .settings-input-wrap .form-control:hover {
+        border-color: #c9c9d5 !important;
+    }
+
+    .settings-input:focus,
+    .settings-input-wrap input:focus,
+    .settings-input-wrap .form-control:focus {
+        border-color: #8b70dc !important;
+        background: #fff !important;
+        box-shadow:
+            0 0 0 3px rgba(104, 68, 212, .08) !important;
+    }
+
+    .settings-input::placeholder,
+    .settings-input-wrap input::placeholder {
+        color: #a1a2b0 !important;
+        opacity: 1 !important;
+    }
+
+    /* =====================================================
+       EMAIL
+    ===================================================== */
+
+    .email-form {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 13px;
+        align-items: end;
+    }
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    .settings-btn {
+        height: 46px;
+        padding: 0 18px;
+        border: 0;
+        border-radius: 10px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        background: #151d31;
+        color: #fff;
+
+        font-size: 12px;
+        font-weight: 750;
+
+        cursor: pointer;
+        white-space: nowrap;
+
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .settings-btn:hover {
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(17, 24, 39, .13);
+    }
+
+    .settings-btn-purple {
+        background: linear-gradient(135deg, #7956df, #6340ce);
+        box-shadow: 0 7px 15px rgba(104, 68, 212, .17);
+    }
+
+    .settings-btn-blue {
+        background: linear-gradient(135deg, #3978e8, #356fd7);
+        box-shadow: 0 7px 15px rgba(57, 120, 232, .16);
+    }
+
+    /* =====================================================
+       PASSWORD
+    ===================================================== */
+
+    .password-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 15px;
+    }
+
+    .password-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 17px;
+    }
+
+    .settings-help {
+        margin-top: 6px;
+        color: #8b8c9b;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .settings-error {
+        margin-top: 6px;
+        color: #c62828;
+        font-size: 11px;
+    }
+
+    .settings-nonfield-error {
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        border-radius: 9px;
+        background: #fff2f2;
+        border: 1px solid #ffd0d0;
+        color: #b42318;
+        font-size: 12px;
+    }
+
+    /* =====================================================
+       BOTTOM GRID
+    ===================================================== */
+
+    .settings-bottom-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 19px;
+    }
+
+    .settings-bottom-grid .settings-card {
+        margin-bottom: 0;
+    }
+
+    /* =====================================================
+       SELECTS
+    ===================================================== */
+
+    .region-fields {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 13px;
+    }
+
+    .settings-select {
+        width: 100%;
+        height: 45px;
+        padding: 0 12px;
+
+        border: 1px solid #dedee7;
+        border-radius: 10px;
+
+        background: #fff;
+        color: #343747;
+
+        font-family: inherit;
+        font-size: 12px;
+
+        outline: none;
+        cursor: pointer;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .settings-select:hover {
+        border-color: #c9c9d5;
+    }
+
+    .settings-select:focus {
+        border-color: #8b70dc;
+        box-shadow:
+            0 0 0 3px rgba(104, 68, 212, .08);
+    }
+
+    .region-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 13px;
+    }
+
+    /* =====================================================
+       DANGER
+    ===================================================== */
+
+    .danger-card {
+        border-color: #ffc9cd;
+        background: linear-gradient(
+            180deg,
+            #fffafa,
+            #fff
+        );
+    }
+
+    .danger-card .settings-card-heading h2 {
+        color: #c92f39;
+    }
+
+    .danger-card .settings-card-heading p {
+        color: #996b70;
+    }
+
+    .danger-text {
+        margin: 0 0 13px;
+        color: #625b61;
+        font-size: 11px;
+        line-height: 1.55;
+    }
+
+    .danger-input {
+        width: 100%;
+        height: 44px;
+        box-sizing: border-box;
+
+        padding: 0 13px 0 42px;
+
+        border: 1px solid #dedee7;
+        border-radius: 10px;
+
+        background: #fff;
+        color: #30323e;
+
+        font-size: 12px;
+        outline: none;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .danger-input:hover {
+        border-color: #d0cfd7;
+    }
+
+    .danger-input:focus {
+        border-color: #e27b81;
+        box-shadow:
+            0 0 0 3px rgba(229, 57, 53, .07);
+    }
+
+    .danger-button {
+        width: 100%;
+        height: 42px;
+        margin-top: 11px;
+
+        border: 0;
+        border-radius: 9px;
+
+        background: linear-gradient(
+            135deg,
+            #ef363e,
+            #df2932
+        );
+
+        color: white;
+
+        font-size: 12px;
+        font-weight: 750;
+
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .danger-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 17px rgba(229, 57, 53, .18);
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 1200px) {
+
+        .account-settings-container {
+            width: min(100% - 40px, 1100px);
+        }
+
+        .settings-content-layout {
+            grid-template-columns: 250px minmax(0, 1fr);
+        }
+
+        .settings-control-card {
+            min-width: 280px;
+        }
+    }
+
+    @media (max-width: 1000px) {
+
+        .settings-content-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-sidebar {
+            position: static;
+        }
+
+        .settings-side-nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .settings-quote {
+            display: none;
+        }
+
+        .settings-title-row {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .settings-control-card {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+    }
+
+    @media (max-width: 760px) {
+
+        .account-settings-container {
+            width: calc(100% - 24px);
+        }
+
+        .settings-card {
+            padding: 20px;
+        }
+
+        .email-form {
+            grid-template-columns: 1fr;
+        }
+
+        .password-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .password-footer {
+            justify-content: stretch;
+        }
+
+        .password-footer .settings-btn {
+            width: 100%;
+        }
+
+        .settings-bottom-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-bottom-grid .settings-card {
+            margin-bottom: 19px;
+        }
+
+        .settings-bottom-grid .settings-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .region-fields {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-card-heading {
+            flex-direction: column;
+        }
+
+        .settings-badge {
+            align-self: flex-start;
+        }
+    }
+
+    @media (max-width: 500px) {
+
+        .settings-title h1 {
+            font-size: 28px;
+        }
+
+        .settings-title p {
+            font-size: 13px;
+        }
+
+        .settings-side-nav {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-control-card {
+            padding: 14px;
+        }
+
+        .settings-control-icon {
+            width: 45px;
+            height: 45px;
+            flex-basis: 45px;
+        }
+    }
+</style>
+
+
+<div class="account-settings-page">
+
+    <div class="account-settings-container">
+
+        <!-- BREADCRUMB -->
+
+        <div class="settings-breadcrumb">
+
+            <i class="bi bi-house-door-fill"></i>
+
+            <span>/</span>
+
+            <span>Account Settings</span>
+
+        </div>
+
+
+        <div class="settings-content-layout">
+
+
+            <!-- =================================================
+                 SIDEBAR
+            ================================================== -->
+
+            <aside class="settings-sidebar">
+
+                <div class="settings-user">
+
+                    <div class="settings-user-avatar-wrap">
+
+                        {% if profile_user.profile_image %}
+
+                            <img
+                                src="{{ profile_user.profile_image.url }}"
+                                alt="{{ profile_user.username }}"
+                                class="settings-user-avatar"
+                            >
+
+                        {% else %}
+
+                            <div class="settings-user-placeholder">
+                                {{ profile_user.username|first|upper }}
+                            </div>
+
+                        {% endif %}
+
+                        <span class="settings-online-dot"></span>
+
+                    </div>
+
+                    <h2>
+                        {{ profile_user.first_name|default:profile_user.username }}
+                        {% if profile_user.last_name %}
+                            {{ profile_user.last_name }}
+                        {% endif %}
+                    </h2>
+
+                    <div class="settings-username">
+                        @{{ profile_user.username }}
+                    </div>
+
+                    <div class="settings-level">
+                        <i class="bi bi-award-fill"></i>
+                        {{ profile_user.level }}
+                    </div>
+
+                </div>
+
+
+                <div class="settings-stats">
+
+                    <div class="settings-stat">
+                        <strong>{{ profile_user.points }}</strong>
+                        <span>Points</span>
+                    </div>
+
+                    <div class="settings-stat">
+                        <strong>{{ profile_user.project_set.count }}</strong>
+                        <span>Projects</span>
+                    </div>
+
+                    <div class="settings-stat">
+                        <strong>{{ profile_user.solution_set.count }}</strong>
+                        <span>Solutions</span>
+                    </div>
+
+                </div>
+
+
+                <nav class="settings-side-nav">
+
+                    <a
+                        href="{% url 'accounts:profile' %}"
+                        class="settings-side-link"
+                    >
+                        <i class="bi bi-person"></i>
+                        <span>Profile</span>
+                    </a>
+
+                    <a
+                        href="{% url 'accounts:edit_profile' %}"
+                        class="settings-side-link"
+                    >
+                        <i class="bi bi-pencil-square"></i>
+                        <span>Edit Profile</span>
+                    </a>
+
+                    <a
+                        href="{% url 'accounts:account_settings' %}"
+                        class="settings-side-link active"
+                    >
+                        <i class="bi bi-gear"></i>
+                        <span>Account Settings</span>
+                    </a>
+
+                    <a
+                        href="{% url 'notifications:list' %}"
+                        class="settings-side-link"
+                    >
+                        <i class="bi bi-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+
+                    <a
+                        href="#privacy-security"
+                        class="settings-side-link"
+                    >
+                        <i class="bi bi-shield-check"></i>
+                        <span>Privacy &amp; Security</span>
+                    </a>
+
+                </nav>
+
+
+                <div class="settings-quote">
+
+                    <p>
+                        “Better ideas, Brighter<br>
+                        tomorrows.”
+                    </p>
+
+                    <span>
+                        — ProblemPool
+                    </span>
+
+                </div>
+
+            </aside>
+
+
+            <!-- =================================================
+                 MAIN
+            ================================================== -->
+
+            <main class="settings-main">
+
+
+                <!-- HEADER -->
+
+                <div class="settings-title-row">
+
+                    <div class="settings-title">
+
+                        <h1>
+                            Account Settings
+                        </h1>
+
+                        <p>
+                            Manage your account, password, language,
+                            and security preferences.
+                        </p>
+
+                    </div>
+
+
+                    <div class="settings-control-card">
+
+                        <div class="settings-control-icon">
+                            <i class="bi bi-gear-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Your account, your control
+                            </strong>
+
+                            <span>
+                                Keep your information up to date<br>
+                                and your account secure.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGES -->
+
+                {% if messages %}
+
+                    <div class="settings-messages">
+
+                        {% for message in messages %}
+
+                            <div class="settings-message
+                                {% if message.tags == 'success' %}
+                                    success
+                                {% else %}
+                                    error
+                                {% endif %}
+                            ">
+
+                                {% if message.tags == "success" %}
+                                    <i class="bi bi-check-circle-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+                                {% endif %}
+
+                                <span>
+                                    {{ message }}
+                                </span>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     EMAIL
+                ================================================== -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-heading">
+
+                        <div class="settings-heading-left">
+
+                            <div class="settings-card-icon">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Email Address
+                                </h2>
+
+                                <p>
+                                    Update the email address associated
+                                    with your ProblemPool account.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="settings-badge">
+
+                            <i class="bi bi-check2"></i>
+
+                            Verified
+
+                        </div>
+
+                    </div>
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="action"
+                            value="update_email"
+                        >
+
+
+                        {% if email_form.non_field_errors %}
+
+                            <div class="settings-nonfield-error">
+
+                                {% for error in email_form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="email-form">
+
+                            <div class="settings-field">
+
+                                <label
+                                    for="{{ email_form.email.id_for_label }}"
+                                >
+                                    Email Address
+                                </label>
+
+                                <div class="settings-input-wrap">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                    {{ email_form.email }}
+
+                                </div>
+
+
+                                {% for error in email_form.email.errors %}
+
+                                    <div class="settings-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                class="settings-btn"
+                            >
+
+                                <i class="bi bi-send"></i>
+
+                                Update Email
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =================================================
+                     PASSWORD
+                ================================================== -->
+
+                <section
+                    class="settings-card"
+                    id="privacy-security"
+                >
+
+                    <div class="settings-card-heading">
+
+                        <div class="settings-heading-left">
+
+                            <div class="settings-card-icon blue">
+                                <i class="bi bi-lock"></i>
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Password
+                                </h2>
+
+                                <p>
+                                    Change your password securely.
+                                    Your existing session will remain active.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-badge blue">
+
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            Use a strong password
+
+                        </div>
+
+                    </div>
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="action"
+                            value="update_password"
+                        >
+
+
+                        {% if password_form.non_field_errors %}
+
+                            <div class="settings-nonfield-error">
+
+                                {% for error in password_form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="password-grid">
+
+
+                            <div class="settings-field">
+
+                                <label
+                                    for="{{ password_form.old_password.id_for_label }}"
+                                >
+                                    Current Password
+                                </label>
+
+                                <div class="settings-input-wrap">
+
+                                    <i class="bi bi-lock"></i>
+
+                                    {{ password_form.old_password }}
+
+                                </div>
+
+                                {% for error in password_form.old_password.errors %}
+
+                                    <div class="settings-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <div class="settings-field">
+
+                                <label
+                                    for="{{ password_form.new_password1.id_for_label }}"
+                                >
+                                    New Password
+                                </label>
+
+                                <div class="settings-input-wrap">
+
+                                    <i class="bi bi-lock"></i>
+
+                                    {{ password_form.new_password1 }}
+
+                                </div>
+
+                                {% for error in password_form.new_password1.errors %}
+
+                                    <div class="settings-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                                <div class="settings-help">
+                                    Use at least 8 characters with a mix of letters and numbers.
+                                </div>
+
+                            </div>
+
+
+                            <div class="settings-field">
+
+                                <label
+                                    for="{{ password_form.new_password2.id_for_label }}"
+                                >
+                                    Confirm New Password
+                                </label>
+
+                                <div class="settings-input-wrap">
+
+                                    <i class="bi bi-lock"></i>
+
+                                    {{ password_form.new_password2 }}
+
+                                </div>
+
+                                {% for error in password_form.new_password2.errors %}
+
+                                    <div class="settings-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="password-footer">
+
+                            <button
+                                type="submit"
+                                class="settings-btn settings-btn-purple"
+                            >
+
+                                <i class="bi bi-key"></i>
+
+                                Update Password
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =================================================
+                     LANGUAGE + DEACTIVATE
+                ================================================== -->
+
+                <div class="settings-bottom-grid">
+
+
+                    <!-- LANGUAGE -->
+
+                    <section class="settings-card">
+
+                        <div class="settings-card-heading">
+
+                            <div class="settings-heading-left">
+
+                                <div class="settings-card-icon green">
+                                    <i class="bi bi-globe2"></i>
+                                </div>
+
+                                <div>
+
+                                    <h2>
+                                        Language &amp; Region
+                                    </h2>
+
+                                    <p>
+                                        Choose your preferred language and timezone.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <form method="post">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="update_preferences"
+                            >
+
+
+                            <div class="region-fields">
+
+                                <div class="settings-field">
+
+                                    <label for="language">
+                                        Language
+                                    </label>
+
+                                    <select
+                                        id="language"
+                                        name="language"
+                                        class="settings-select"
+                                    >
+
+                                        <option
+                                            value="en"
+                                            {% if current_language == "en" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            🇺🇸 English
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="settings-field">
+
+                                    <label for="timezone">
+                                        Timezone
+                                    </label>
+
+                                    <select
+                                        id="timezone"
+                                        name="timezone"
+                                        class="settings-select"
+                                    >
+
+                                        <option
+                                            value="Asia/Kolkata"
+                                            {% if current_timezone == "Asia/Kolkata" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Asia/Kolkata (GMT+5:30)
+                                        </option>
+
+                                        <option
+                                            value="UTC"
+                                            {% if current_timezone == "UTC" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            UTC
+                                        </option>
+
+                                        <option
+                                            value="America/New_York"
+                                            {% if current_timezone == "America/New_York" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            America/New_York
+                                        </option>
+
+                                        <option
+                                            value="America/Los_Angeles"
+                                            {% if current_timezone == "America/Los_Angeles" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            America/Los_Angeles
+                                        </option>
+
+                                        <option
+                                            value="Europe/London"
+                                            {% if current_timezone == "Europe/London" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Europe/London
+                                        </option>
+
+                                        <option
+                                            value="Asia/Dubai"
+                                            {% if current_timezone == "Asia/Dubai" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Asia/Dubai
+                                        </option>
+
+                                        <option
+                                            value="Asia/Singapore"
+                                            {% if current_timezone == "Asia/Singapore" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Asia/Singapore
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="region-actions">
+
+                                <button
+                                    type="submit"
+                                    class="settings-btn settings-btn-blue"
+                                >
+
+                                    <i class="bi bi-save"></i>
+
+                                    Save Preferences
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </section>
+
+
+                    <!-- DEACTIVATE -->
+
+                    <section class="settings-card danger-card">
+
+                        <div class="settings-card-heading">
+
+                            <div class="settings-heading-left">
+
+                                <div class="settings-card-icon red">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+
+                                <div>
+
+                                    <h2>
+                                        Deactivate Account
+                                    </h2>
+
+                                    <p>
+                                        Temporarily disable your ProblemPool account.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <p class="danger-text">
+
+                            Deactivating your account will sign you out and
+                            prevent you from logging in until the account is
+                            reactivated by an administrator.
+
+                        </p>
+
+
+                        <form
+                            method="post"
+                            onsubmit="
+                                return confirm(
+                                    'Are you sure you want to deactivate your ProblemPool account?'
+                                );
+                            "
+                        >
+
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="deactivate_account"
+                            >
+
+
+                            <div class="settings-input-wrap">
+
+                                <i class="bi bi-lock"></i>
+
+                                <input
+                                    type="password"
+                                    name="deactivate_password"
+                                    class="danger-input"
+                                    placeholder="Enter your current password"
+                                    autocomplete="current-password"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                class="danger-button"
+                            >
+
+                                <i class="bi bi-person-x"></i>
+
+                                Deactivate Account
+
+                            </button>
+
+                        </form>
+
+                    </section>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

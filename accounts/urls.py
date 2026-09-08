@@ -104,6 +104,10 @@ class ProblemPoolPasswordResetConfirmView(
 
 urlpatterns = [
 
+    # ============================================================
+    # AUTHENTICATION
+    # ============================================================
+
     path(
         "login/",
         views.login_view,
@@ -122,7 +126,11 @@ urlpatterns = [
         name="logout",
     ),
 
-    # Password reset - request
+
+    # ============================================================
+    # PASSWORD RESET
+    # ============================================================
+
     path(
         "password-reset/",
         auth_views.PasswordResetView.as_view(
@@ -136,7 +144,6 @@ urlpatterns = [
         name="password_reset",
     ),
 
-    # Password reset - email sent
     path(
         "password-reset/done/",
         auth_views.PasswordResetDoneView.as_view(
@@ -145,7 +152,6 @@ urlpatterns = [
         name="password_reset_done",
     ),
 
-    # Password reset - new password
     path(
         "reset/<uidb64>/<token>/",
         ProblemPoolPasswordResetConfirmView.as_view(
@@ -157,7 +163,6 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
 
-    # Password reset - complete
     path(
         "reset/done/",
         auth_views.PasswordResetCompleteView.as_view(
@@ -166,21 +171,40 @@ urlpatterns = [
         name="password_reset_complete",
     ),
 
-    # Logged-in user's own profile
+
+    # ============================================================
+    # PROFILE
+    # ============================================================
+
     path(
         "profile/",
         views.profile_view,
         name="profile",
     ),
 
-    # Profile editing
     path(
         "profile/edit/",
         views.edit_profile_view,
         name="edit_profile",
     ),
 
-    # Public profile for another user
+
+    # ============================================================
+    # ACCOUNT SETTINGS
+    # Dedicated separate page
+    # ============================================================
+
+    path(
+        "account-settings/",
+        views.account_settings_view,
+        name="account_settings",
+    ),
+
+
+    # ============================================================
+    # PUBLIC PROFILE
+    # ============================================================
+
     path(
         "profile/<str:username>/",
         views.profile_view,
