@@ -4,30 +4,1364 @@
     Edit Profile - ProblemPool
 {% endblock %}
 
-
 {% block content %}
 
-<section class="pp-section">
+<style>
+    /* =========================================================
+       EDIT PROFILE — CLEAN UI POLISH
+       UI ONLY — NO FUNCTIONALITY CHANGES
+       ========================================================= */
 
-    <div class="container">
+    .pp-edit-page {
+        min-height: calc(100vh - 90px);
+        padding: 48px 0 70px;
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(
+                circle at 5% 25%,
+                rgba(112, 67, 220, .10),
+                transparent 25%
+            ),
+            radial-gradient(
+                circle at 96% 80%,
+                rgba(112, 67, 220, .07),
+                transparent 24%
+            ),
+            linear-gradient(
+                135deg,
+                #faf9ff 0%,
+                #f6f3ff 48%,
+                #ffffff 100%
+            );
+    }
 
-        <div class="row justify-content-center">
+    .pp-edit-page::before {
+        content: "";
+        position: absolute;
+        width: 520px;
+        height: 520px;
+        top: -250px;
+        right: -220px;
+        border-radius: 50%;
+        border: 1px solid rgba(111, 67, 220, .07);
+        box-shadow:
+            0 0 0 42px rgba(111, 67, 220, .025),
+            0 0 0 84px rgba(111, 67, 220, .018);
+        pointer-events: none;
+    }
 
-            <div class="col-lg-8">
+    .pp-edit-page::after {
+        content: "";
+        position: absolute;
+        width: 430px;
+        height: 430px;
+        left: -320px;
+        bottom: -240px;
+        border-radius: 50%;
+        border: 1px solid rgba(111, 67, 220, .07);
+        pointer-events: none;
+    }
 
-                <div class="pp-card p-4 p-md-5">
+    .pp-edit-wrap {
+        position: relative;
+        z-index: 2;
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+    }
 
-                    <div class="mb-4">
+    /* =========================================================
+       BREADCRUMB
+       ========================================================= */
 
-                        <h1 class="pp-section-title">
-                            Edit Profile
-                        </h1>
+    .pp-edit-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #9a94aa;
+    }
 
-                        <p class="text-muted">
-                            Update your ProblemPool profile information.
-                        </p>
+    .pp-edit-breadcrumb a {
+        color: #7c70a1;
+        text-decoration: none;
+        transition: color .2s ease;
+    }
+
+    .pp-edit-breadcrumb a:hover {
+        color: #6438d3;
+    }
+
+    .pp-edit-breadcrumb .current {
+        color: #272039;
+    }
+
+    /* =========================================================
+       MAIN GRID
+       ========================================================= */
+
+    .pp-edit-grid {
+        display: grid;
+        grid-template-columns: 315px minmax(0, 1fr);
+        gap: 18px;
+        align-items: stretch;
+    }
+
+    /* =========================================================
+       LEFT COLUMN
+       ========================================================= */
+
+    .pp-edit-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-width: 0;
+        height: 100%;
+    }
+
+    /* =========================================================
+       PROFILE CARD
+       ========================================================= */
+
+    .pp-profile-side-card {
+        background: rgba(255, 255, 255, .94);
+        border: 1px solid rgba(108, 68, 214, .13);
+        border-radius: 22px;
+        padding: 23px 20px 19px;
+        box-shadow: 0 16px 45px rgba(67, 44, 125, .07);
+    }
+
+    .pp-profile-preview {
+        text-align: center;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #eeeaf7;
+    }
+
+    .pp-profile-avatar-wrap {
+        width: 105px;
+        height: 105px;
+        margin: 0 auto 15px;
+        position: relative;
+    }
+
+    .pp-profile-avatar-wrap::before {
+        content: "";
+        position: absolute;
+        inset: -8px;
+        border: 1px solid rgba(108, 68, 214, .15);
+        border-radius: 50%;
+    }
+
+    .pp-profile-avatar-wrap::after {
+        content: "";
+        position: absolute;
+        inset: -14px;
+        border: 1px dashed rgba(108, 68, 214, .10);
+        border-radius: 50%;
+        animation: pp-profile-orbit 18s linear infinite;
+    }
+
+    .pp-profile-avatar {
+        width: 105px;
+        height: 105px;
+        display: block;
+        position: relative;
+        z-index: 2;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 10px 25px rgba(65, 40, 130, .16);
+    }
+
+    .pp-profile-avatar-fallback {
+        width: 105px;
+        height: 105px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        background: linear-gradient(145deg, #7445df, #5429c9);
+        color: #fff;
+        font-size: 34px;
+        font-weight: 900;
+        box-shadow: 0 10px 25px rgba(65, 40, 130, .16);
+    }
+
+    .pp-avatar-status {
+        position: absolute;
+        z-index: 5;
+        right: 2px;
+        bottom: 4px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #45be78;
+        border: 3px solid #fff;
+    }
+
+    .pp-profile-name {
+        margin: 0;
+        color: #1c1630;
+        font-size: 21px;
+        line-height: 1.2;
+        font-weight: 900;
+        letter-spacing: -.02em;
+    }
+
+    .pp-profile-username {
+        margin-top: 5px;
+        color: #918b9e;
+        font-size: 12px;
+    }
+
+    .pp-profile-level {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 11px;
+        padding: 6px 11px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #7444dc, #5d30cf);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        box-shadow: 0 7px 17px rgba(97, 51, 208, .19);
+    }
+
+    /* =========================================================
+       SIDE NAV
+       ========================================================= */
+
+    .pp-side-nav {
+        padding-top: 15px;
+    }
+
+    .pp-side-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 41px;
+        margin-bottom: 5px;
+        padding: 7px 10px;
+        border-radius: 11px;
+        color: #78728b;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        transition:
+            background .2s ease,
+            color .2s ease,
+            transform .2s ease;
+    }
+
+    .pp-side-nav-item i {
+        width: 27px;
+        height: 27px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 8px;
+        background: #f1edff;
+        color: #7040d7;
+        font-size: 13px;
+    }
+
+    .pp-side-nav-item:hover {
+        color: #6337d1;
+        background: #f7f3ff;
+        transform: translateX(2px);
+    }
+
+    .pp-side-nav-item.active {
+        color: #6235d1;
+        background: linear-gradient(
+            90deg,
+            #eee7ff,
+            #f7f4ff
+        );
+        box-shadow: inset 3px 0 0 #7040dc;
+    }
+
+    /* =========================================================
+       CREATIVE CARD
+       ========================================================= */
+
+    .pp-creative-card {
+        position: relative;
+        flex: 1;
+        min-height: 245px;
+        overflow: hidden;
+        padding: 22px 20px;
+        border-radius: 22px;
+        border: 1px solid rgba(108, 68, 214, .13);
+        background:
+            radial-gradient(
+                circle at 82% 25%,
+                rgba(124, 78, 226, .15),
+                transparent 30%
+            ),
+            linear-gradient(
+                145deg,
+                #ffffff,
+                #f7f3ff
+            );
+        box-shadow: 0 16px 42px rgba(67, 44, 125, .06);
+    }
+
+    .pp-creative-label {
+        position: relative;
+        z-index: 4;
+        color: #8054da;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+    }
+
+    .pp-creative-title {
+        position: relative;
+        z-index: 4;
+        max-width: 175px;
+        margin: 10px 0 8px;
+        color: #211a34;
+        font-size: 19px;
+        line-height: 1.15;
+        font-weight: 900;
+        letter-spacing: -.02em;
+    }
+
+    .pp-creative-text {
+        position: relative;
+        z-index: 4;
+        max-width: 165px;
+        margin: 0;
+        color: #817a91;
+        font-size: 11px;
+        line-height: 1.65;
+    }
+
+    .pp-creative-button {
+        position: relative;
+        z-index: 5;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 15px;
+        padding: 9px 13px;
+        border-radius: 10px;
+        background: linear-gradient(
+            135deg,
+            #7444dd,
+            #5d30ce
+        );
+        color: #fff;
+        text-decoration: none;
+        font-size: 10px;
+        font-weight: 800;
+        box-shadow: 0 9px 20px rgba(96, 51, 207, .19);
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .pp-creative-button:hover {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 13px 25px rgba(96, 51, 207, .25);
+    }
+
+    /* =========================================================
+       CLEAN CSS ILLUSTRATION
+       ========================================================= */
+
+    .pp-illustration {
+        position: absolute;
+        right: -4px;
+        bottom: 2px;
+        width: 145px;
+        height: 150px;
+        pointer-events: none;
+    }
+
+    .pp-illustration-glow {
+        position: absolute;
+        width: 115px;
+        height: 115px;
+        right: 5px;
+        top: 12px;
+        border-radius: 50%;
+        background:
+            radial-gradient(
+                circle,
+                rgba(123, 72, 220, .17),
+                transparent 68%
+            );
+    }
+
+    .pp-illustration-hair {
+        position: absolute;
+        z-index: 2;
+        width: 63px;
+        height: 66px;
+        right: 36px;
+        top: 30px;
+        border-radius: 50% 50% 44% 48%;
+        background: #5a3b49;
+    }
+
+    .pp-illustration-hair::after {
+        content: "";
+        position: absolute;
+        width: 17px;
+        height: 43px;
+        right: -4px;
+        top: 25px;
+        border-radius: 50%;
+        background: #5a3b49;
+    }
+
+    .pp-illustration-head {
+        position: absolute;
+        z-index: 3;
+        width: 53px;
+        height: 58px;
+        right: 41px;
+        top: 38px;
+        border-radius: 46%;
+        background: #ffd9c5;
+    }
+
+    .pp-illustration-face {
+        position: absolute;
+        z-index: 5;
+        right: 50px;
+        top: 60px;
+        display: flex;
+        gap: 11px;
+    }
+
+    .pp-eye {
+        width: 5px;
+        height: 6px;
+        border-radius: 50%;
+        background: #34263f;
+    }
+
+    .pp-illustration-body {
+        position: absolute;
+        z-index: 1;
+        right: 25px;
+        bottom: 10px;
+        width: 89px;
+        height: 67px;
+        border-radius: 45px 45px 15px 15px;
+        background: linear-gradient(
+            145deg,
+            #8655e4,
+            #6133cf
+        );
+    }
+
+    .pp-illustration-laptop {
+        position: absolute;
+        z-index: 7;
+        right: 23px;
+        bottom: 29px;
+        width: 88px;
+        height: 48px;
+        border: 4px solid #7650d6;
+        border-radius: 7px;
+        background: #f4f0ff;
+        box-shadow: 0 7px 15px rgba(73, 43, 145, .14);
+    }
+
+    .pp-illustration-laptop::after {
+        content: "";
+        position: absolute;
+        width: 106px;
+        height: 6px;
+        left: -13px;
+        bottom: -10px;
+        border-radius: 999px;
+        background: #6840c9;
+    }
+
+    .pp-illustration-plant {
+        position: absolute;
+        z-index: 5;
+        left: 4px;
+        bottom: 11px;
+        width: 40px;
+        height: 44px;
+    }
+
+    .pp-plant-pot {
+        position: absolute;
+        left: 9px;
+        bottom: 0;
+        width: 25px;
+        height: 22px;
+        border-radius: 4px 4px 10px 10px;
+        background: #d7c7ef;
+    }
+
+    .pp-leaf {
+        position: absolute;
+        width: 17px;
+        height: 28px;
+        border-radius: 100% 0 100% 0;
+        background: #7db992;
+        transform-origin: bottom center;
+    }
+
+    .pp-leaf.one {
+        left: 4px;
+        top: 6px;
+        transform: rotate(-28deg);
+    }
+
+    .pp-leaf.two {
+        left: 19px;
+        top: 1px;
+        transform: rotate(25deg);
+    }
+
+    .pp-leaf.three {
+        left: 11px;
+        top: 13px;
+        transform: rotate(-4deg);
+    }
+
+    .pp-spark {
+        position: absolute;
+        z-index: 6;
+        color: #a177e6;
+        font-size: 14px;
+        animation: pp-spark-float 3s ease-in-out infinite;
+    }
+
+    .pp-spark.one {
+        right: 13px;
+        top: 12px;
+    }
+
+    .pp-spark.two {
+        right: 102px;
+        top: 14px;
+        animation-delay: .8s;
+    }
+
+    .pp-speech {
+        position: absolute;
+        z-index: 8;
+        right: 1px;
+        top: 2px;
+        padding: 6px 8px;
+        border-radius: 11px 11px 11px 3px;
+        background: #fff;
+        color: #7144d5;
+        font-size: 9px;
+        line-height: 1.25;
+        font-weight: 900;
+        box-shadow: 0 6px 16px rgba(65, 40, 126, .10);
+        transform: rotate(4deg);
+    }
+
+    /* =========================================================
+       RIGHT FORM CARD
+       ========================================================= */
+
+    .pp-edit-card {
+        position: relative;
+        overflow: hidden;
+        min-width: 0;
+        background: rgba(255, 255, 255, .96);
+        border: 1px solid rgba(108, 68, 214, .12);
+        border-radius: 22px;
+        padding: 31px 31px 28px;
+        box-shadow: 0 20px 55px rgba(61, 41, 121, .075);
+    }
+
+    .pp-edit-card::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        right: -150px;
+        bottom: -145px;
+        border-radius: 50%;
+        border: 1px solid rgba(108, 67, 220, .06);
+        box-shadow:
+            0 0 0 32px rgba(108, 67, 220, .022),
+            0 0 0 64px rgba(108, 67, 220, .015);
+        pointer-events: none;
+    }
+
+    /* =========================================================
+       FORM HEADER
+       ========================================================= */
+
+    .pp-form-header {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .pp-form-kicker {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 7px;
+        color: #7444d6;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+    }
+
+    .pp-form-title {
+        margin: 0;
+        color: #1c1630;
+        font-size: 26px;
+        line-height: 1.15;
+        font-weight: 900;
+        letter-spacing: -.025em;
+    }
+
+    .pp-form-subtitle {
+        margin: 6px 0 0;
+        color: #8d879c;
+        font-size: 12px;
+    }
+
+    .pp-form-line {
+        width: 29px;
+        height: 3px;
+        margin-top: 12px;
+        border-radius: 999px;
+        background: linear-gradient(
+            90deg,
+            #7040dc,
+            #986cf0
+        );
+    }
+
+    .pp-form-motivation {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 12px;
+        border-radius: 999px;
+        background: #f5f0ff;
+        color: #7040d3;
+        font-size: 9px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .pp-form-motivation span {
+        color: #efa24c;
+    }
+
+    .pp-form-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* =========================================================
+       FIELDS
+       ========================================================= */
+
+    .pp-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .pp-field {
+        margin-bottom: 16px;
+    }
+
+    .pp-field-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        color: #302845;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .pp-field-hint {
+        color: #a49dac;
+        font-size: 9px;
+        font-weight: 600;
+    }
+
+    .pp-edit-card input[type="text"],
+    .pp-edit-card input[type="file"],
+    .pp-edit-card textarea {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ded8ed;
+        border-radius: 10px;
+        outline: none;
+        background: #fff;
+        color: #302942;
+        font-size: 12px;
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease,
+            background .2s ease;
+    }
+
+    .pp-edit-card input[type="text"] {
+        min-height: 43px;
+        padding: 0 12px;
+    }
+
+    .pp-edit-card textarea {
+        min-height: 108px;
+        padding: 12px;
+        resize: vertical;
+        line-height: 1.55;
+    }
+
+    .pp-edit-card input[type="file"] {
+        min-height: 42px;
+        padding: 6px;
+        cursor: pointer;
+    }
+
+    .pp-edit-card input[type="text"]:focus,
+    .pp-edit-card input[type="file"]:focus,
+    .pp-edit-card textarea:focus {
+        border-color: #8052df;
+        background: #fefcff;
+        box-shadow: 0 0 0 4px rgba(111, 67, 220, .07);
+    }
+
+    .pp-edit-card input[type="file"]::file-selector-button {
+        margin-right: 9px;
+        padding: 7px 10px;
+        border: 0;
+        border-radius: 7px;
+        background: #eee8ff;
+        color: #6336ce;
+        font-size: 10px;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    /* =========================================================
+       IMAGE UPLOAD
+       ========================================================= */
+
+    .pp-image-upload {
+        display: grid;
+        grid-template-columns: 88px minmax(0, 1fr);
+        align-items: center;
+        gap: 15px;
+        padding: 13px;
+        border: 1px dashed #d8cef0;
+        border-radius: 14px;
+        background: linear-gradient(
+            135deg,
+            #fcfaff,
+            #f8f4ff
+        );
+    }
+
+    .pp-current-image {
+        width: 78px;
+        height: 78px;
+        display: block;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 8px 18px rgba(68, 40, 132, .15);
+    }
+
+    .pp-image-info {
+        min-width: 0;
+    }
+
+    .pp-image-caption {
+        margin-bottom: 4px;
+        color: #9992aa;
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+    }
+
+    .pp-current-file {
+        margin-bottom: 5px;
+        color: #6840d2;
+        font-size: 10px;
+        font-weight: 800;
+        word-break: break-all;
+    }
+
+    .pp-current-label {
+        color: #756e82;
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .pp-current-label a {
+        color: #663bd3;
+        text-decoration: none;
+    }
+
+    .pp-clear-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 5px;
+        color: #756e82;
+        font-size: 10px;
+    }
+
+    .pp-clear-row input {
+        width: 14px;
+        height: 14px;
+        accent-color: #6d3ed5;
+    }
+
+    /* =========================================================
+       ERRORS / HELP TEXT
+       ========================================================= */
+
+    .pp-edit-card .alert {
+        border-radius: 11px;
+        font-size: 11px;
+    }
+
+    .form-error {
+        margin-top: 5px;
+        color: #d94c64;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .pp-edit-card .form-text {
+        margin-top: 6px;
+        color: #9b94a9;
+        font-size: 9px;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .pp-form-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 22px;
+        padding-top: 19px;
+        border-top: 1px solid #eeeaf5;
+    }
+
+    .pp-save-btn,
+    .pp-cancel-btn {
+        min-height: 42px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .pp-save-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 0 20px;
+        border: 0;
+        background: linear-gradient(
+            135deg,
+            #7444dd,
+            #5d30ce
+        );
+        color: #fff;
+        box-shadow: 0 10px 23px rgba(96, 51, 207, .20);
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .pp-save-btn:hover {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(96, 51, 207, .27);
+    }
+
+    .pp-cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 19px;
+        border: 1px solid #ded7ee;
+        background: #fff;
+        color: #6840cf;
+        text-decoration: none;
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            transform .2s ease;
+    }
+
+    .pp-cancel-btn:hover {
+        color: #6840cf;
+        background: #f7f3ff;
+        border-color: #cfc2ea;
+        transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       ANIMATION
+       ========================================================= */
+
+    @keyframes pp-profile-orbit {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes pp-spark-float {
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-6px) rotate(7deg);
+        }
+    }
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (max-width: 991px) {
+
+        .pp-edit-wrap {
+            width: min(760px, calc(100% - 30px));
+        }
+
+        .pp-edit-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .pp-edit-sidebar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: auto;
+        }
+
+        .pp-profile-side-card {
+            grid-row: span 2;
+        }
+
+        .pp-creative-card {
+            min-height: 220px;
+        }
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 767px) {
+
+        .pp-edit-page {
+            padding: 30px 0 50px;
+        }
+
+        .pp-edit-wrap {
+            width: calc(100% - 24px);
+        }
+
+        .pp-edit-grid {
+            display: block;
+        }
+
+        .pp-edit-sidebar {
+            display: block;
+            margin-bottom: 18px;
+        }
+
+        .pp-profile-side-card {
+            margin-bottom: 18px;
+        }
+
+        .pp-creative-card {
+            min-height: 220px;
+        }
+
+        .pp-form-header {
+            display: block;
+        }
+
+        .pp-form-motivation {
+            margin-top: 13px;
+        }
+
+        .pp-form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .pp-edit-card {
+            padding: 24px 18px;
+        }
+
+        .pp-image-upload {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .pp-current-image {
+            margin: 0 auto;
+        }
+
+        .pp-image-info {
+            text-align: left;
+        }
+
+        .pp-form-actions {
+            flex-wrap: wrap;
+        }
+
+        .pp-save-btn,
+        .pp-cancel-btn {
+            flex: 1;
+        }
+    }
+
+    @media (max-width: 430px) {
+
+        .pp-edit-card,
+        .pp-profile-side-card,
+        .pp-creative-card {
+            border-radius: 18px;
+        }
+
+        .pp-form-title {
+            font-size: 23px;
+        }
+
+        .pp-creative-title {
+            font-size: 18px;
+        }
+
+        .pp-illustration {
+            transform: scale(.82);
+            transform-origin: bottom right;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .pp-profile-avatar-wrap::after,
+        .pp-spark {
+            animation: none;
+        }
+
+        .pp-side-nav-item,
+        .pp-save-btn,
+        .pp-cancel-btn,
+        .pp-creative-button {
+            transition: none;
+        }
+    }
+</style>
+
+
+<section class="pp-edit-page">
+
+    <div class="pp-edit-wrap">
+
+        <!-- BREADCRUMB -->
+
+        <div class="pp-edit-breadcrumb">
+
+            <a href="{% url 'accounts:profile' %}">
+                <i class="bi bi-house"></i>
+                Home
+            </a>
+
+            <span>›</span>
+
+            <a href="{% url 'accounts:profile' %}">
+                Profile
+            </a>
+
+            <span>›</span>
+
+            <span class="current">
+                Edit Profile
+            </span>
+
+        </div>
+
+
+        <div class="pp-edit-grid">
+
+
+            <!-- =================================================
+                 LEFT SIDEBAR
+                 ================================================= -->
+
+            <aside class="pp-edit-sidebar">
+
+
+                <div class="pp-profile-side-card">
+
+                    <div class="pp-profile-preview">
+
+                        <div class="pp-profile-avatar-wrap">
+
+                            {% if request.user.profile_image %}
+
+                                <img
+                                    src="{{ request.user.profile_image.url }}"
+                                    alt="{{ request.user.username }}"
+                                    class="pp-profile-avatar"
+                                >
+
+                            {% else %}
+
+                                <div class="pp-profile-avatar-fallback">
+                                    {{ request.user.username|first|upper }}
+                                </div>
+
+                            {% endif %}
+
+                            <span class="pp-avatar-status"></span>
+
+                        </div>
+
+
+                        <h2 class="pp-profile-name">
+                            {{ request.user.get_full_name|default:request.user.username }}
+                        </h2>
+
+
+                        <div class="pp-profile-username">
+                            @{{ request.user.username }}
+                        </div>
+
+
+                        <span class="pp-profile-level">
+                            <i class="bi bi-person-fill"></i>
+                            {{ request.user.level }}
+                        </span>
 
                     </div>
+
+
+                    <!-- SIDE NAV -->
+
+                    <nav class="pp-side-nav">
+
+                        <a
+                            href="{% url 'accounts:profile' %}"
+                            class="pp-side-nav-item"
+                        >
+                            <i class="bi bi-person"></i>
+                            <span>Profile</span>
+                        </a>
+
+
+                        <a
+                            href="{% url 'accounts:edit_profile' %}"
+                            class="pp-side-nav-item active"
+                        >
+                            <i class="bi bi-person-gear"></i>
+                            <span>Edit Profile</span>
+                        </a>
+
+
+                        <a
+                            href="{% url 'accounts:edit_profile' %}#account-settings"
+                            class="pp-side-nav-item"
+                        >
+                            <i class="bi bi-gear"></i>
+                            <span>Account Settings</span>
+                        </a>
+
+
+                        <a
+                            href="{% url 'notifications:list' %}"
+                            class="pp-side-nav-item"
+                        >
+                            <i class="bi bi-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+
+
+                        <a
+                            href="{% url 'accounts:edit_profile' %}#privacy-security"
+                            class="pp-side-nav-item"
+                        >
+                            <i class="bi bi-shield-check"></i>
+                            <span>Privacy &amp; Security</span>
+                        </a>
+
+                    </nav>
+
+                </div>
+
+
+                <!-- =================================================
+                     CREATIVE CARD
+                     ================================================= -->
+
+                <div class="pp-creative-card">
+
+                    <div class="pp-creative-label">
+                        Your Journey
+                    </div>
+
+
+                    <h3 class="pp-creative-title">
+                        Better Solutions
+                        Start With You ✨
+                    </h3>
+
+
+                    <p class="pp-creative-text">
+                        Keep your profile updated and let the community know what you're working on.
+                    </p>
+
+
+                    <a
+                        href="{% url 'accounts:profile' %}"
+                        class="pp-creative-button"
+                    >
+                        Stay Amazing
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+
+                    <!-- CSS ILLUSTRATION -->
+
+                    <div class="pp-illustration">
+
+                        <div class="pp-illustration-glow"></div>
+
+
+                        <div class="pp-speech">
+                            Keep<br>
+                            Growing 💜
+                        </div>
+
+
+                        <span class="pp-spark one">
+                            ✦
+                        </span>
+
+
+                        <span class="pp-spark two">
+                            ✧
+                        </span>
+
+
+                        <div class="pp-illustration-hair"></div>
+
+
+                        <div class="pp-illustration-head"></div>
+
+
+                        <div class="pp-illustration-face">
+
+                            <span class="pp-eye"></span>
+                            <span class="pp-eye"></span>
+
+                        </div>
+
+
+                        <div class="pp-illustration-body"></div>
+
+
+                        <div class="pp-illustration-laptop"></div>
+
+
+                        <div class="pp-illustration-plant">
+
+                            <span class="pp-leaf one"></span>
+                            <span class="pp-leaf two"></span>
+                            <span class="pp-leaf three"></span>
+
+                            <span class="pp-plant-pot"></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+            <!-- =================================================
+                 RIGHT FORM
+                 ================================================= -->
+
+            <main class="pp-edit-card">
+
+                <div class="pp-form-header">
+
+                    <div>
+
+                        <div class="pp-form-kicker">
+                            <i class="bi bi-stars"></i>
+                            Profile Settings
+                        </div>
+
+
+                        <h1 class="pp-form-title">
+                            Profile Information
+                        </h1>
+
+
+                        <p class="pp-form-subtitle">
+                            Update your details and let your personality shine.
+                        </p>
+
+
+                        <div class="pp-form-line"></div>
+
+                    </div>
+
+
+                    <div class="pp-form-motivation">
+                        <i class="bi bi-people"></i>
+                        You're awesome, keep going!
+                        <span>✦</span>
+                    </div>
+
+                </div>
+
+
+                <div class="pp-form-content">
 
 
                     <form
@@ -47,37 +1381,43 @@
                         {% endif %}
 
 
-                        <div class="row">
+                        <!-- FIRST / LAST NAME -->
 
-                            <div class="col-md-6 mb-3">
+                        <div class="pp-form-row">
 
-                                <label class="form-label">
+                            <div class="pp-field">
+
+                                <label class="pp-field-label">
                                     First Name
                                 </label>
 
                                 {{ form.first_name }}
 
                                 {% for error in form.first_name.errors %}
+
                                     <div class="form-error">
                                         {{ error }}
                                     </div>
+
                                 {% endfor %}
 
                             </div>
 
 
-                            <div class="col-md-6 mb-3">
+                            <div class="pp-field">
 
-                                <label class="form-label">
+                                <label class="pp-field-label">
                                     Last Name
                                 </label>
 
                                 {{ form.last_name }}
 
                                 {% for error in form.last_name.errors %}
+
                                     <div class="form-error">
                                         {{ error }}
                                     </div>
+
                                 {% endfor %}
 
                             </div>
@@ -85,49 +1425,147 @@
                         </div>
 
 
-                        <div class="mb-3">
+                        <!-- USERNAME -->
 
-                            <label class="form-label">
+                        <div class="pp-field">
+
+                            <label class="pp-field-label">
                                 Username
                             </label>
 
                             {{ form.username }}
 
                             {% for error in form.username.errors %}
+
                                 <div class="form-error">
                                     {{ error }}
                                 </div>
+
                             {% endfor %}
 
                         </div>
 
 
-                        <div class="mb-3">
+                        <!-- PROFILE IMAGE -->
 
-                            <label class="form-label">
+                        <div class="pp-field">
+
+                            <label class="pp-field-label">
+
                                 Profile Image
+
+                                <span class="pp-field-hint">
+                                    Your community identity
+                                </span>
+
                             </label>
 
-                            {{ form.profile_image }}
+
+                            <div class="pp-image-upload">
+
+                                <div>
+
+                                    {% if request.user.profile_image %}
+
+                                        <img
+                                            src="{{ request.user.profile_image.url }}"
+                                            alt="{{ request.user.username }}"
+                                            class="pp-current-image"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="pp-profile-avatar-fallback">
+                                            {{ request.user.username|first|upper }}
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="pp-image-info">
+
+                                    <div class="pp-image-caption">
+                                        Current Image
+                                    </div>
+
+
+                                    {% if request.user.profile_image %}
+
+                                        <div class="pp-current-file">
+                                            {{ request.user.profile_image.name }}
+                                        </div>
+
+
+                                        <div class="pp-current-label">
+
+                                            Currently:
+
+                                            <a
+                                                href="{{ request.user.profile_image.url }}"
+                                                target="_blank"
+                                            >
+                                                {{ request.user.profile_image.name }}
+                                            </a>
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <div class="pp-current-label">
+                                            No profile image uploaded yet.
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <div class="pp-clear-row">
+
+                                        {{ form.profile_image }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
 
-                        <div class="mb-3">
+                        <!-- LOCATION -->
 
-                            <label class="form-label">
+                        <div class="pp-field">
+
+                            <label class="pp-field-label">
                                 Location
                             </label>
 
                             {{ form.location }}
 
+                            {% for error in form.location.errors %}
+
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
                         </div>
 
 
-                        <div class="mb-3">
+                        <!-- SKILLS -->
 
-                            <label class="form-label">
+                        <div class="pp-field">
+
+                            <label class="pp-field-label">
+
                                 Skills
+
+                                <span class="pp-field-hint">
+                                    Profile
+                                </span>
+
                             </label>
 
                             {{ form.skills }}
@@ -136,32 +1574,60 @@
                                 Separate multiple skills with commas.
                             </div>
 
+                            {% for error in form.skills.errors %}
+
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
                         </div>
 
 
-                        <div class="mb-4">
+                        <!-- BIO -->
 
-                            <label class="form-label">
+                        <div class="pp-field">
+
+                            <label class="pp-field-label">
+
                                 Bio
+
+                                <span class="pp-field-hint">
+                                    About you
+                                </span>
+
                             </label>
 
                             {{ form.bio }}
 
+                            {% for error in form.bio.errors %}
+
+                                <div class="form-error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
                         </div>
 
 
-                        <div class="d-flex gap-2">
+                        <!-- ACTIONS -->
+
+                        <div class="pp-form-actions">
 
                             <button
                                 type="submit"
-                                class="btn pp-btn-primary"
+                                class="pp-save-btn"
                             >
+                                <i class="bi bi-check2-circle"></i>
                                 Save Changes
                             </button>
 
+
                             <a
                                 href="{% url 'accounts:profile' %}"
-                                class="btn pp-btn-outline"
+                                class="pp-cancel-btn"
                             >
                                 Cancel
                             </a>
@@ -172,7 +1638,7 @@
 
                 </div>
 
-            </div>
+            </main>
 
         </div>
 
