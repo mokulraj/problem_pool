@@ -1,18 +1,28 @@
 from pathlib import Path
 import os
+
 from dotenv import load_dotenv
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 load_dotenv(BASE_DIR / ".env")
 
+
+# ============================================================
+# CORE SETTINGS
+# ============================================================
 
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-development-key-change-me",
 )
 
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+DEBUG = os.getenv(
+    "DEBUG",
+    "True",
+).lower() == "true"
 
 ALLOWED_HOSTS = [
     host.strip()
@@ -29,20 +39,61 @@ ALLOWED_HOSTS = [
 # ============================================================
 
 SECURE_SSL_REDIRECT = (
-    os.getenv("SECURE_SSL_REDIRECT", "False").lower() == "true"
+    os.getenv(
+        "SECURE_SSL_REDIRECT",
+        "False",
+    ).lower() == "true"
 )
 
+
+# ============================================================
+# SESSION / COOKIE SECURITY
+# ============================================================
+
+# Use a ProblemPool-specific session cookie name.
+# This prevents collisions with other Django projects running
+# on the same local hostname.
+SESSION_COOKIE_NAME = "problempool_sessionid"
+
+# Keep the cookie available to the entire ProblemPool site.
+SESSION_COOKIE_PATH = "/"
+
+# Explicitly use the safe/default SameSite policy.
+# This allows normal password-reset navigation from an email.
+SESSION_COOKIE_SAMESITE = "Lax"
+
+# Local development uses HTTP.
 SESSION_COOKIE_SECURE = (
-    os.getenv("SESSION_COOKIE_SECURE", "False").lower() == "true"
+    os.getenv(
+        "SESSION_COOKIE_SECURE",
+        "False",
+    ).lower() == "true"
 )
 
-CSRF_COOKIE_SECURE = (
-    os.getenv("CSRF_COOKIE_SECURE", "False").lower() == "true"
-)
-
+# Keep session cookies inaccessible to JavaScript.
 SESSION_COOKIE_HTTPONLY = True
 
+
+# Use a ProblemPool-specific CSRF cookie as well.
+CSRF_COOKIE_NAME = "problempool_csrftoken"
+
+CSRF_COOKIE_PATH = "/"
+
+CSRF_COOKIE_SAMESITE = "Lax"
+
+CSRF_COOKIE_SECURE = (
+    os.getenv(
+        "CSRF_COOKIE_SECURE",
+        "False",
+    ).lower() == "true"
+)
+
 CSRF_COOKIE_HTTPONLY = False
+
+
+# ============================================================
+# OTHER SECURITY HEADERS
+# ============================================================
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
@@ -50,6 +101,10 @@ SECURE_REFERRER_POLICY = "same-origin"
 
 X_FRAME_OPTIONS = "DENY"
 
+
+# ============================================================
+# INSTALLED APPS
+# ============================================================
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -75,6 +130,10 @@ INSTALLED_APPS = [
 ]
 
 
+# ============================================================
+# MIDDLEWARE
+# ============================================================
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -86,13 +145,23 @@ MIDDLEWARE = [
 ]
 
 
+# ============================================================
+# URL CONFIGURATION
+# ============================================================
+
 ROOT_URLCONF = "problem_pool.urls"
 
+
+# ============================================================
+# TEMPLATES
+# ============================================================
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -106,6 +175,10 @@ TEMPLATES = [
 ]
 
 
+# ============================================================
+# WSGI
+# ============================================================
+
 WSGI_APPLICATION = "problem_pool.wsgi.application"
 
 
@@ -116,11 +189,26 @@ WSGI_APPLICATION = "problem_pool.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME", "problem_pool_db"),
-        "USER": os.getenv("DB_USER", "root"),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", "localhost"),
-        "PORT": os.getenv("DB_PORT", "3306"),
+        "NAME": os.getenv(
+            "DB_NAME",
+            "problem_pool_db",
+        ),
+        "USER": os.getenv(
+            "DB_USER",
+            "root",
+        ),
+        "PASSWORD": os.getenv(
+            "DB_PASSWORD",
+            "",
+        ),
+        "HOST": os.getenv(
+            "DB_HOST",
+            "localhost",
+        ),
+        "PORT": os.getenv(
+            "DB_PORT",
+            "3306",
+        ),
         "OPTIONS": {
             "charset": "utf8mb4",
         },
@@ -169,6 +257,7 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
+
 USE_TZ = True
 
 
@@ -190,6 +279,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # ============================================================
 
 MEDIA_URL = "/media/"
+
 MEDIA_ROOT = BASE_DIR / "media"
 
 
@@ -211,5 +301,22 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_URL = "/login/"
+
 LOGIN_REDIRECT_URL = "/"
+
 LOGOUT_REDIRECT_URL = "/"
+
+
+# ============================================================
+# EMAIL
+# ============================================================
+
+# Development email backend.
+# Password-reset emails are printed in the terminal instead
+# of being sent through an external email service.
+
+EMAIL_BACKEND = (
+    "django.core.mail.backends.console.EmailBackend"
+)
+
+DEFAULT_FROM_EMAIL = "noreply@problempool.local"

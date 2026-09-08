@@ -1,9 +1,11 @@
+import re
 from io import BytesIO
 
 from PIL import Image
 
+from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .models import User
@@ -189,6 +191,405 @@ class LogoutTests(AccountTestMixin, TestCase):
         self.assertNotIn(
             "_auth_user_id",
             self.client.session,
+        )
+
+
+@override_settings(
+    EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend"
+)
+class PasswordResetTests(AccountTestMixin, TestCase):
+
+    def setUp(self):
+        self.user = self.create_user(
+            username="resetuser",
+            email="reset@example.com",
+            password="OldPassword123!",
+        )
+
+    def get_reset_url(self):
+        self.client.post(
+            reverse("accounts:password_reset"),
+            {
+                "email": self.user.email,
+            },
+        )
+
+        self.assertEqual(
+            len(mail.outbox),
+            1,
+        )
+
+        email_body = mail.outbox[0].body
+
+        reset_match = re.search(
+            r"http://testserver/reset/[^\s]+/",
+            email_body,
+        )
+
+        self.assertIsNotNone(
+            reset_match,
+        )
+
+        return reset_match.group(0).replace(
+            "http://testserver",
+            "",
+        )
+
+    def test_password_reset_request_with_registered_email(self):
+        response = self.client.post(
+            reverse("accounts:password_reset"),
+            {
+                "email": self.user.email,
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:password_reset_done"),
+        )
+
+        self.assertEqual(
+            len(mail.outbox),
+            1,
+        )
+
+        self.assertEqual(
+            mail.outbox[0].to[0],
+            self.user.email,
+        )
+
+        self.assertIn(
+            "ProblemPool",
+            mail.outbox[0].subject,
+        )
+
+    def test_password_reset_request_with_unknown_email_does_not_reveal_account(self):
+        response = self.client.post(
+            reverse("accounts:password_reset"),
+            {
+                "email": "doesnotexist@example.com",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:password_reset_done"),
+        )
+
+        self.assertEqual(
+            len(mail.outbox),
+            0,
+        )
+
+    def test_password_reset_email_contains_valid_reset_link(self):
+        reset_url = self.get_reset_url()
+
+        self.assertIn(
+            "/reset/",
+            reset_url,
+        )
+
+        self.assertRegex(
+            reset_url,
+            r"^/reset/[^/]+/[^/]+/$",
+        )
+
+    def test_valid_reset_link_renders_password_form_directly(self):
+        reset_url = self.get_reset_url()
+
+        response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            response.context["validlink"],
+        )
+
+        self.assertTemplateUsed(
+            response,
+            "accounts/password_reset_confirm.html",
+        )
+
+    def test_valid_reset_link_remains_valid_across_multiple_get_requests(self):
+        reset_url = self.get_reset_url()
+
+        first_response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            first_response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            first_response.context["validlink"],
+        )
+
+        second_response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            second_response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            second_response.context["validlink"],
+        )
+
+    def test_valid_reset_link_allows_new_password(self):
+        reset_url = self.get_reset_url()
+
+        response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            response.context["validlink"],
+        )
+
+        response = self.client.post(
+            reset_url,
+            {
+                "new_password1": "NewPassword123!",
+                "new_password2": "NewPassword123!",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:password_reset_complete"),
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertTrue(
+            self.user.check_password("NewPassword123!"),
+        )
+
+        self.assertFalse(
+            self.user.check_password("OldPassword123!"),
+        )
+
+    def test_new_password_can_be_used_to_login(self):
+        reset_url = self.get_reset_url()
+
+        response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            response.context["validlink"],
+        )
+
+        response = self.client.post(
+            reset_url,
+            {
+                "new_password1": "NewPassword123!",
+                "new_password2": "NewPassword123!",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:password_reset_complete"),
+        )
+
+        self.client.logout()
+
+        response = self.client.post(
+            reverse("accounts:login"),
+            {
+                "email": self.user.email,
+                "password": "NewPassword123!",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            "/",
+        )
+
+        self.assertEqual(
+            int(self.client.session["_auth_user_id"]),
+            self.user.pk,
+        )
+
+    def test_old_password_no_longer_works_after_reset(self):
+        reset_url = self.get_reset_url()
+
+        response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            response.context["validlink"],
+        )
+
+        response = self.client.post(
+            reset_url,
+            {
+                "new_password1": "NewPassword123!",
+                "new_password2": "NewPassword123!",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:password_reset_complete"),
+        )
+
+        self.client.logout()
+
+        response = self.client.post(
+            reverse("accounts:login"),
+            {
+                "email": self.user.email,
+                "password": "OldPassword123!",
+            },
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertFalse(
+            self.client.session.get("_auth_user_id"),
+        )
+
+    def test_invalid_password_reset_token_is_rejected(self):
+        response = self.client.get(
+            "/reset/Mg/invalid-token/",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertFalse(
+            response.context["validlink"],
+        )
+
+    def test_password_reset_confirm_requires_matching_passwords(self):
+        reset_url = self.get_reset_url()
+
+        response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            response.context["validlink"],
+        )
+
+        response = self.client.post(
+            reset_url,
+            {
+                "new_password1": "NewPassword123!",
+                "new_password2": "DifferentPassword123!",
+            },
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTrue(
+            response.context["validlink"],
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertTrue(
+            self.user.check_password("OldPassword123!"),
+        )
+
+    def test_reset_link_becomes_invalid_after_successful_password_change(self):
+        reset_url = self.get_reset_url()
+
+        response = self.client.post(
+            reset_url,
+            {
+                "new_password1": "NewPassword123!",
+                "new_password2": "NewPassword123!",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:password_reset_complete"),
+        )
+
+        response = self.client.get(
+            reset_url,
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertFalse(
+            response.context["validlink"],
+        )
+
+    def test_password_reset_done_page_is_accessible(self):
+        response = self.client.get(
+            reverse("accounts:password_reset_done"),
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTemplateUsed(
+            response,
+            "accounts/password_reset_done.html",
+        )
+
+    def test_password_reset_complete_page_is_accessible(self):
+        response = self.client.get(
+            reverse("accounts:password_reset_complete"),
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertTemplateUsed(
+            response,
+            "accounts/password_reset_complete.html",
         )
 
 
