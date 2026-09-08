@@ -45,49 +45,75 @@
     {% endblock %}
 
 
-    <!-- =========================================================
-         PROBLEMPOOL NAVBAR
-    ========================================================== -->
-
     <style>
 
-        /* =====================================================
-           NAVBAR FOUNDATION
-        ===================================================== */
+        /* =========================================================
+           NAVBAR
+        ========================================================== */
 
         .pp-navbar {
             position: relative;
             z-index: 1000;
+
+            width: 100%;
             min-height: 82px;
+
             padding: 0;
-            background: rgba(255,255,255,.97);
+
+            background: rgba(255, 255, 255, .98);
+
             border-bottom: 1px solid #ece8f3;
+
             box-shadow:
-                0 4px 24px rgba(40,25,75,.035);
+                0 4px 24px rgba(40, 25, 75, .035);
+
             backdrop-filter: blur(18px);
         }
 
 
+        /*
+         * IMPORTANT:
+         * The old Bootstrap .container has a fixed max-width.
+         * With all navigation items + profile + logout,
+         * that caused the logout button to leave the viewport.
+         *
+         * This makes the navbar use the complete browser width.
+         */
+
         .pp-navbar > .container {
+            width: 100%;
+            max-width: none !important;
+
             min-height: 82px;
+
+            padding-left: 28px;
+            padding-right: 28px;
         }
 
 
-        /* =====================================================
+        /* =========================================================
            BRAND
-        ===================================================== */
+        ========================================================== */
 
         .pp-brand {
             display: inline-flex !important;
             align-items: center;
+
             gap: 11px;
-            margin-right: 30px !important;
+
+            margin-right: 20px !important;
             padding: 0 !important;
+
             color: #171326 !important;
+
             font-size: 1.28rem;
             font-weight: 850;
+
             letter-spacing: -.025em;
+
             white-space: nowrap;
+
+            flex: 0 0 auto;
         }
 
 
@@ -98,36 +124,51 @@
 
         .pp-brand-icon {
             position: relative;
+
             display: inline-flex;
             align-items: center;
             justify-content: center;
+
             width: 42px;
             height: 42px;
+
             flex: 0 0 42px;
+
             overflow: hidden;
+
             border-radius: 13px;
+
             background:
                 linear-gradient(
                     145deg,
                     #7956df,
                     #5d38c6
                 );
+
             color: #fff;
+
             font-size: 1.15rem;
+
             box-shadow:
-                0 9px 22px rgba(104,68,212,.20);
+                0 9px 22px rgba(104, 68, 212, .20);
         }
 
 
         .pp-brand-icon::before {
             content: "";
+
             position: absolute;
+
             top: -70%;
             left: -80%;
+
             width: 60%;
             height: 220%;
-            background: rgba(255,255,255,.32);
+
+            background: rgba(255, 255, 255, .32);
+
             transform: rotate(25deg);
+
             transition: left .65s ease;
         }
 
@@ -137,56 +178,88 @@
         }
 
 
-        /* =====================================================
-           NAVBAR COLLAPSE
-        ===================================================== */
+        /* =========================================================
+           NAV COLLAPSE
+        ========================================================== */
 
         #mainNavbar {
+            display: flex;
+
             align-items: center;
+
             min-height: 82px;
+
+            min-width: 0;
+
+            flex: 1 1 auto;
         }
 
 
+        /*
+         * Main navigation gets the flexible middle area.
+         * This is the key fix for the logout overflow.
+         */
+
         #mainNavbar > .navbar-nav {
             display: flex;
+
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            margin-left: auto !important;
-            margin-right: auto !important;
+
+            gap: 2px;
+
+            min-width: 0;
+
+            flex: 1 1 auto;
+
+            margin-left: 0 !important;
+            margin-right: 10px !important;
+
+            overflow: hidden;
         }
 
 
         #mainNavbar .nav-item {
             display: flex;
             align-items: center;
+
+            min-width: 0;
+
+            flex: 0 1 auto;
         }
 
 
-        /* =====================================================
-           UNIQUE NAV LINK
-        ===================================================== */
+        /* =========================================================
+           NAV LINKS
+        ========================================================== */
 
         #mainNavbar .nav-link {
             position: relative;
+
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
-            gap: 7px;
 
-            min-height: 45px;
+            gap: 6px;
 
-            padding: 10px 13px !important;
+            min-height: 44px;
+
+            padding:
+                9px 9px !important;
 
             overflow: hidden;
 
-            border: 1px solid transparent;
-            border-radius: 13px;
+            border:
+                1px solid transparent;
+
+            border-radius: 12px;
 
             color: #514b5e;
 
-            font-size: .86rem;
+            font-size: .82rem;
             font-weight: 680;
+
             line-height: 1;
 
             white-space: nowrap;
@@ -195,9 +268,10 @@
 
             transition:
                 color .25s ease,
-                transform .28s cubic-bezier(.16,1,.3,1),
+                transform .28s cubic-bezier(.16, 1, .3, 1),
                 border-color .25s ease,
-                box-shadow .28s ease;
+                box-shadow .28s ease,
+                background .25s ease;
         }
 
 
@@ -205,6 +279,7 @@
             content: "";
 
             position: absolute;
+
             z-index: -2;
 
             width: 75px;
@@ -214,7 +289,7 @@
             top: 50%;
 
             transform:
-                translate(-50%,-50%)
+                translate(-50%, -50%)
                 scale(.2);
 
             border-radius: 50%;
@@ -222,15 +297,15 @@
             background:
                 radial-gradient(
                     circle,
-                    rgba(104,68,212,.17),
-                    rgba(104,68,212,.05) 45%,
+                    rgba(104, 68, 212, .17),
+                    rgba(104, 68, 212, .05) 45%,
                     transparent 72%
                 );
 
             opacity: 0;
 
             transition:
-                transform .45s cubic-bezier(.16,1,.3,1),
+                transform .45s cubic-bezier(.16, 1, .3, 1),
                 opacity .35s ease;
         }
 
@@ -239,6 +314,7 @@
             content: "";
 
             position: absolute;
+
             z-index: -1;
 
             top: 0;
@@ -251,7 +327,7 @@
                 linear-gradient(
                     105deg,
                     transparent,
-                    rgba(255,255,255,.55),
+                    rgba(255, 255, 255, .55),
                     transparent
                 );
 
@@ -261,9 +337,9 @@
         }
 
 
-        /* =====================================================
+        /* =========================================================
            NAV ICON
-        ===================================================== */
+        ========================================================== */
 
         #mainNavbar .nav-link i {
             position: relative;
@@ -272,7 +348,9 @@
 
             color: #756e80;
 
-            font-size: .98rem;
+            font-size: .94rem;
+
+            flex: 0 0 auto;
 
             transform:
                 translateY(0)
@@ -281,32 +359,33 @@
 
             transition:
                 color .25s ease,
-                transform .35s cubic-bezier(.16,1,.3,1);
+                transform .35s cubic-bezier(.16, 1, .3, 1);
         }
 
 
-        /* =====================================================
+        /* =========================================================
            HOVER
-        ===================================================== */
+        ========================================================== */
 
         #mainNavbar .nav-link:hover {
             color: #6844d4;
 
-            border-color: rgba(104,68,212,.10);
+            border-color:
+                rgba(104, 68, 212, .10);
 
             background:
                 linear-gradient(
                     135deg,
-                    rgba(246,242,255,.98),
-                    rgba(250,248,255,.88)
+                    rgba(246, 242, 255, .98),
+                    rgba(250, 248, 255, .88)
                 );
 
             transform:
                 translateY(-2px)
-                scale(1.025);
+                scale(1.015);
 
             box-shadow:
-                0 10px 25px rgba(83,56,140,.075);
+                0 10px 25px rgba(83, 56, 140, .075);
         }
 
 
@@ -314,7 +393,7 @@
             opacity: 1;
 
             transform:
-                translate(-50%,-50%)
+                translate(-50%, -50%)
                 scale(1.25);
         }
 
@@ -334,14 +413,15 @@
         }
 
 
-        /* =====================================================
-           ACTIVE NAV
-        ===================================================== */
+        /* =========================================================
+           ACTIVE
+        ========================================================== */
 
         #mainNavbar .nav-link.active {
             color: #6844d4;
 
-            border-color: rgba(104,68,212,.10);
+            border-color:
+                rgba(104, 68, 212, .10);
 
             background:
                 linear-gradient(
@@ -353,7 +433,7 @@
             font-weight: 760;
 
             box-shadow:
-                0 7px 18px rgba(104,68,212,.07);
+                0 7px 18px rgba(104, 68, 212, .07);
         }
 
 
@@ -389,13 +469,12 @@
                     transparent
                 );
 
-            transform:
-                scaleX(.35);
+            transform: scaleX(.35);
 
             transform-origin: center;
 
             animation:
-                pp-nav-line .65s cubic-bezier(.16,1,.3,1)
+                pp-nav-line .65s cubic-bezier(.16, 1, .3, 1)
                 forwards;
         }
 
@@ -415,34 +494,47 @@
         }
 
 
-        /* =====================================================
+        /* =========================================================
            RIGHT SIDE
-        ===================================================== */
+        ========================================================== */
 
         #mainNavbar > .d-flex {
-            display: flex;
+            display: flex !important;
+
             align-items: center;
-            gap: 8px !important;
-            margin-left: 16px;
+
+            justify-content: flex-end;
+
+            gap: 7px !important;
+
+            margin-left: auto;
+
+            flex: 0 0 auto;
+
+            min-width: max-content;
         }
 
 
-        /* =====================================================
+        /* =========================================================
            NOTIFICATION
-        ===================================================== */
+        ========================================================== */
 
         .pp-notification-link {
             position: relative;
 
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
             width: 42px;
             height: 42px;
+
             flex: 0 0 42px;
 
-            border: 1px solid #e7e1f0;
+            border:
+                1px solid #e7e1f0;
+
             border-radius: 12px;
 
             background: #fff;
@@ -457,7 +549,7 @@
                 color .25s ease,
                 background .25s ease,
                 border-color .25s ease,
-                transform .3s cubic-bezier(.16,1,.3,1),
+                transform .3s cubic-bezier(.16, 1, .3, 1),
                 box-shadow .3s ease;
         }
 
@@ -474,13 +566,13 @@
                 rotate(-2deg);
 
             box-shadow:
-                0 10px 23px rgba(83,56,140,.10);
+                0 10px 23px rgba(83, 56, 140, .10);
         }
 
 
         .pp-notification-link i {
             transition:
-                transform .35s cubic-bezier(.16,1,.3,1);
+                transform .35s cubic-bezier(.16, 1, .3, 1);
         }
 
 
@@ -498,6 +590,7 @@
             right: -6px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -507,6 +600,7 @@
             padding: 0 5px;
 
             border: 2px solid #fff;
+
             border-radius: 999px;
 
             background: #ef4c61;
@@ -514,11 +608,12 @@
             color: #fff;
 
             font-size: .58rem;
+
             line-height: 1;
             font-weight: 850;
 
             box-shadow:
-                0 4px 10px rgba(239,76,97,.24);
+                0 4px 10px rgba(239, 76, 97, .24);
 
             animation:
                 pp-badge-pulse 2.5s ease-in-out infinite;
@@ -527,7 +622,8 @@
 
         @keyframes pp-badge-pulse {
 
-            0%,100% {
+            0%,
+            100% {
                 transform: scale(1);
             }
 
@@ -538,29 +634,35 @@
         }
 
 
-        /* =====================================================
-           USER PROFILE
-        ===================================================== */
+        /* =========================================================
+           USER
+        ========================================================== */
 
         .nav-user-link {
             display: inline-flex !important;
+
             align-items: center;
 
-            gap: 8px;
+            gap: 7px;
 
             min-height: 42px;
 
-            padding: 4px 9px 4px 5px !important;
+            padding:
+                4px 7px 4px 4px !important;
 
-            border: 1px solid transparent;
+            border:
+                1px solid transparent;
+
             border-radius: 12px;
 
             color: #332d40 !important;
 
-            font-size: .86rem;
+            font-size: .84rem;
             font-weight: 700;
 
             white-space: nowrap;
+
+            flex: 0 0 auto;
 
             transition:
                 background .25s ease,
@@ -572,6 +674,7 @@
 
         .nav-user-link:hover {
             background: #f7f4ff;
+
             border-color: #e7e0f1;
 
             color: #6844d4 !important;
@@ -596,14 +699,14 @@
         .nav-user-link:hover .bi-chevron-down {
             color: #6844d4;
 
-            transform:
-                rotate(180deg);
+            transform: rotate(180deg);
         }
 
 
         .nav-avatar,
         .nav-avatar-placeholder {
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
@@ -619,12 +722,13 @@
         .nav-avatar {
             object-fit: cover;
 
-            border: 2px solid #eee9f7;
+            border:
+                2px solid #eee9f7;
 
             background: #f1edfa;
 
             transition:
-                transform .3s cubic-bezier(.16,1,.3,1),
+                transform .3s cubic-bezier(.16, 1, .3, 1),
                 border-color .25s ease;
         }
 
@@ -650,13 +754,13 @@
             font-weight: 850;
 
             box-shadow:
-                0 5px 14px rgba(104,68,212,.18);
+                0 5px 14px rgba(104, 68, 212, .18);
         }
 
 
-        /* =====================================================
+        /* =========================================================
            BUTTONS
-        ===================================================== */
+        ========================================================== */
 
         .pp-navbar .pp-btn-outline,
         .pp-navbar .pp-btn-primary {
@@ -664,22 +768,26 @@
             min-height: 42px;
 
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
             gap: 6px;
 
-            padding: 9px 15px !important;
+            padding:
+                9px 13px !important;
 
             border-radius: 11px;
 
-            font-size: .82rem;
+            font-size: .80rem;
             font-weight: 750;
 
             white-space: nowrap;
 
+            flex: 0 0 auto;
+
             transition:
-                transform .28s cubic-bezier(.16,1,.3,1),
+                transform .28s cubic-bezier(.16, 1, .3, 1),
                 box-shadow .28s ease,
                 background .25s ease,
                 color .25s ease,
@@ -689,7 +797,8 @@
 
         .pp-navbar .pp-btn-outline {
 
-            border: 1px solid #ded7eb !important;
+            border:
+                1px solid #ded7eb !important;
 
             background: #fff !important;
 
@@ -708,13 +817,14 @@
             transform: translateY(-2px);
 
             box-shadow:
-                0 9px 21px rgba(83,56,140,.09);
+                0 9px 21px rgba(83, 56, 140, .09);
         }
 
 
         .pp-navbar .pp-btn-primary {
 
-            border: 1px solid #6844d4 !important;
+            border:
+                1px solid #6844d4 !important;
 
             background:
                 linear-gradient(
@@ -726,7 +836,7 @@
             color: #fff !important;
 
             box-shadow:
-                0 8px 19px rgba(104,68,212,.19);
+                0 8px 19px rgba(104, 68, 212, .19);
         }
 
 
@@ -748,13 +858,13 @@
                 scale(1.02);
 
             box-shadow:
-                0 13px 27px rgba(104,68,212,.27);
+                0 13px 27px rgba(104, 68, 212, .27);
         }
 
 
-        /* =====================================================
+        /* =========================================================
            MOBILE TOGGLER
-        ===================================================== */
+        ========================================================== */
 
         .pp-navbar .navbar-toggler {
 
@@ -763,7 +873,8 @@
 
             padding: 0;
 
-            border: 1px solid #e0d9eb;
+            border:
+                1px solid #e0d9eb;
 
             border-radius: 11px;
 
@@ -778,7 +889,7 @@
             border-color: #b9a7df;
 
             box-shadow:
-                0 0 0 3px rgba(104,68,212,.10) !important;
+                0 0 0 3px rgba(104, 68, 212, .10) !important;
         }
 
 
@@ -789,36 +900,91 @@
         }
 
 
-        /* =====================================================
-           TABLET
-        ===================================================== */
+        /* =========================================================
+           LARGE DESKTOP
+        ========================================================== */
 
-        @media (max-width: 1199.98px) {
+        @media (min-width: 1400px) {
 
-            .pp-brand {
-                margin-right: 16px !important;
+            .pp-navbar > .container {
+                padding-left: 34px;
+                padding-right: 34px;
             }
 
 
             #mainNavbar .nav-link {
+                padding-left: 11px !important;
+                padding-right: 11px !important;
 
-                padding-left: 9px !important;
-                padding-right: 9px !important;
-
-                font-size: .81rem;
-            }
-
-
-            #mainNavbar > .d-flex {
-                margin-left: 8px;
+                font-size: .84rem;
             }
 
         }
 
 
-        /* =====================================================
-           MOBILE NAV
-        ===================================================== */
+        /* =========================================================
+           DESKTOP / SMALL LAPTOP
+        ========================================================== */
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+
+            .pp-navbar > .container {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+
+            .pp-brand {
+                margin-right: 12px !important;
+            }
+
+
+            #mainNavbar .nav-link {
+
+                gap: 5px;
+
+                padding-left: 7px !important;
+                padding-right: 7px !important;
+
+                font-size: .77rem;
+            }
+
+
+            #mainNavbar .nav-link i {
+                font-size: .88rem;
+            }
+
+
+            #mainNavbar > .navbar-nav {
+                gap: 1px;
+
+                margin-right: 5px !important;
+            }
+
+
+            #mainNavbar > .d-flex {
+                gap: 4px !important;
+            }
+
+
+            .nav-user-link {
+                padding-left: 3px !important;
+                padding-right: 4px !important;
+            }
+
+
+            .pp-navbar .pp-btn-outline,
+            .pp-navbar .pp-btn-primary {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+
+        }
+
+
+        /* =========================================================
+           TABLET / MOBILE
+        ========================================================== */
 
         @media (max-width: 991.98px) {
 
@@ -829,6 +995,9 @@
 
             .pp-navbar > .container {
                 min-height: 72px;
+
+                padding-left: 18px;
+                padding-right: 18px;
             }
 
 
@@ -839,27 +1008,40 @@
 
             #mainNavbar {
 
+                display: block;
+
                 min-height: auto;
 
                 padding:
                     15px 0 18px;
+
+                width: 100%;
             }
 
 
             #mainNavbar > .navbar-nav {
 
+                display: flex;
+
                 align-items: stretch;
+
+                flex-direction: column;
 
                 gap: 4px;
 
                 width: 100%;
 
                 margin: 0 !important;
+
+                overflow: visible;
             }
 
 
             #mainNavbar .nav-item {
+
                 width: 100%;
+
+                flex: none;
             }
 
 
@@ -875,6 +1057,8 @@
                     11px 14px !important;
 
                 border-radius: 12px;
+
+                font-size: .86rem;
             }
 
 
@@ -891,18 +1075,22 @@
                 opacity: 1;
 
                 transform:
-                    translate(-50%,-50%)
+                    translate(-50%, -50%)
                     scale(1);
             }
 
 
             #mainNavbar > .d-flex {
 
+                display: flex !important;
+
                 flex-wrap: wrap;
 
                 justify-content: flex-start;
 
                 width: 100%;
+
+                min-width: 0;
 
                 margin: 12px 0 0;
 
@@ -915,11 +1103,17 @@
         }
 
 
-        /* =====================================================
+        /* =========================================================
            SMALL MOBILE
-        ===================================================== */
+        ========================================================== */
 
         @media (max-width: 575.98px) {
+
+            .pp-navbar > .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
 
             .pp-brand {
                 font-size: 1.1rem;
@@ -990,24 +1184,45 @@
         }
 
 
-        /* =====================================================
+        /* =========================================================
+           VERY SMALL WIDTH
+        ========================================================== */
+
+        @media (max-width: 380px) {
+
+            .pp-brand {
+                gap: 7px;
+                font-size: 1rem;
+            }
+
+
+            .pp-brand-icon {
+                width: 35px;
+                height: 35px;
+                flex-basis: 35px;
+            }
+
+        }
+
+
+        /* =========================================================
            ACCESSIBILITY
-        ===================================================== */
+        ========================================================== */
 
         .pp-navbar a:focus-visible,
         .pp-navbar button:focus-visible {
 
             outline:
                 3px solid
-                rgba(104,68,212,.25);
+                rgba(104, 68, 212, .25);
 
             outline-offset: 2px;
         }
 
 
-        /* =====================================================
+        /* =========================================================
            REDUCED MOTION
-        ===================================================== */
+        ========================================================== */
 
         @media (prefers-reduced-motion: reduce) {
 
@@ -1556,6 +1771,7 @@
 
                 {% endif %}
 
+
             </div>
 
         </div>
@@ -1563,7 +1779,6 @@
     </div>
 
 </nav>
-
 
 
 <!-- ========================================================= -->
@@ -1614,7 +1829,6 @@
 {% endif %}
 
 
-
 <!-- ========================================================= -->
 <!-- MAIN CONTENT -->
 <!-- ========================================================= -->
@@ -1625,7 +1839,6 @@
     {% endblock %}
 
 </main>
-
 
 
 <!-- =========================================================
@@ -1679,7 +1892,6 @@
 </footer>
 
 {% endif %}
-
 
 
 <!-- Bootstrap JS -->
