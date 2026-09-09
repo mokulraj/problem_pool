@@ -44,7 +44,6 @@
         pointer-events: none;
     }
 
-
     /* =========================================================
        LAYOUT
     ========================================================= */
@@ -67,7 +66,6 @@
         width: 100%;
     }
 
-
     /* =========================================================
        LEFT SIDE
     ========================================================= */
@@ -78,11 +76,6 @@
         min-height: 700px;
         padding-top: 35px;
     }
-
-
-    /* =========================================================
-       LEFT TEXT
-    ========================================================= */
 
     .pp-register-copy {
         position: relative;
@@ -140,7 +133,6 @@
         line-height: 1.7;
     }
 
-
     /* =========================================================
        SMALL PILLS
     ========================================================= */
@@ -173,10 +165,8 @@
         color: #7048d9;
     }
 
-
     /* =========================================================
        ORBIT
-       Positioned beside the heading
     ========================================================= */
 
     .pp-register-orbit {
@@ -231,7 +221,6 @@
         animation: registerRotate 30s linear infinite;
     }
 
-
     /* =========================================================
        CORE
     ========================================================= */
@@ -278,7 +267,6 @@
         border-radius: 50%;
     }
 
-
     /* =========================================================
        NODES
     ========================================================= */
@@ -318,7 +306,6 @@
         animation: registerNodeThree 6.5s ease-in-out infinite;
     }
 
-
     /* =========================================================
        PARTICLES
     ========================================================= */
@@ -352,7 +339,6 @@
         animation: registerParticleThree 5s ease-in-out infinite;
     }
 
-
     /* =========================================================
        REGISTER CARD
     ========================================================= */
@@ -364,6 +350,8 @@
     }
 
     .pp-register-card {
+        position: relative;
+        z-index: 21;
         width: 100%;
         padding: 38px 40px 30px;
         border: 1px solid #e4dfee;
@@ -373,6 +361,11 @@
             0 28px 70px rgba(47, 34, 79, 0.09),
             0 5px 20px rgba(47, 34, 79, 0.035);
         backdrop-filter: blur(15px);
+    }
+
+    .pp-register-card form {
+        position: relative;
+        z-index: 22;
     }
 
     .pp-register-lock {
@@ -411,7 +404,6 @@
         line-height: 1.5;
     }
 
-
     /* =========================================================
        ALERTS
     ========================================================= */
@@ -421,7 +413,6 @@
         border-radius: 11px;
         font-size: 0.76rem;
     }
-
 
     /* =========================================================
        LABELS
@@ -434,7 +425,6 @@
         font-size: 0.71rem;
         font-weight: 850;
     }
-
 
     /* =========================================================
        INPUTS
@@ -475,7 +465,6 @@
             0 0 0 4px rgba(112, 72, 217, 0.09);
     }
 
-
     /* =========================================================
        ERRORS
     ========================================================= */
@@ -487,34 +476,60 @@
         line-height: 1.4;
     }
 
-
     /* =========================================================
-       TERMS
+       TERMS — FIXED CLICKABLE CHECKBOX
     ========================================================= */
 
     .pp-register-terms {
+        position: relative;
+        z-index: 30;
         display: flex;
         align-items: flex-start;
-        gap: 8px;
+        gap: 9px;
+        width: 100%;
         margin: 15px 0 21px;
     }
 
-    .pp-register-terms input {
-        width: 16px;
-        height: 16px;
-        flex: 0 0 16px;
+    .pp-register-terms input[type="checkbox"] {
+        position: relative;
+        z-index: 31;
+        display: block;
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
         margin: 1px 0 0;
-        accent-color: #6844d4;
+        padding: 0;
+        appearance: auto;
+        -webkit-appearance: auto;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
         cursor: pointer;
+        accent-color: #6844d4;
     }
 
     .pp-register-terms label {
+        position: relative;
+        z-index: 31;
+        display: block;
+        margin: 0;
         color: #716a79;
         font-size: 0.69rem;
         line-height: 1.45;
         cursor: pointer;
+        user-select: none;
+        pointer-events: auto;
     }
 
+    .pp-register-terms input[type="checkbox"]:focus-visible {
+        outline: 3px solid rgba(104, 68, 212, 0.22);
+        outline-offset: 3px;
+        border-radius: 3px;
+    }
+
+    .pp-register-terms input[type="checkbox"]:checked {
+        accent-color: #6844d4;
+    }
 
     /* =========================================================
        BUTTON
@@ -522,6 +537,7 @@
 
     .pp-register-button {
         position: relative;
+        z-index: 30;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -563,6 +579,7 @@
             );
         transform: skewX(-20deg);
         transition: left 0.55s ease;
+        pointer-events: none;
     }
 
     .pp-register-button:hover {
@@ -581,12 +598,13 @@
         outline-offset: 3px;
     }
 
-
     /* =========================================================
        FOOTER
     ========================================================= */
 
     .pp-register-footer {
+        position: relative;
+        z-index: 25;
         margin-top: 20px;
         padding-top: 18px;
         border-top: 1px solid #eeeaf3;
@@ -606,7 +624,6 @@
         text-decoration: underline;
         text-underline-offset: 3px;
     }
-
 
     /* =========================================================
        ANIMATIONS
@@ -759,7 +776,6 @@
         }
     }
 
-
     /* =========================================================
        ACCESSIBILITY
     ========================================================= */
@@ -774,7 +790,6 @@
         }
 
     }
-
 
     /* =========================================================
        TABLET
@@ -799,7 +814,6 @@
         }
 
     }
-
 
     /* =========================================================
        MOBILE
@@ -856,7 +870,6 @@
 
     }
 
-
     /* =========================================================
        SMALL MOBILE
     ========================================================= */
@@ -911,23 +924,17 @@
 
 </style>
 
-
 <section class="pp-register-page">
 
     <div class="pp-register-container">
 
         <div class="pp-register-layout">
 
-
-            <!-- =================================================
-                 LEFT CONTENT
-            ================================================== -->
+            <!-- LEFT CONTENT -->
 
             <div class="pp-register-intro">
 
-
                 <div class="pp-register-copy">
-
 
                     <div class="pp-register-eyebrow">
 
@@ -936,7 +943,6 @@
                         Join the network
 
                     </div>
-
 
                     <h1>
 
@@ -954,14 +960,12 @@
 
                     </h1>
 
-
                     <p>
                         Create your ProblemPool account and start
                         discovering meaningful problems, sharing
                         solutions, finding collaborators, and
                         building projects together.
                     </p>
-
 
                     <div class="pp-register-points">
 
@@ -976,7 +980,6 @@
 
                         </div>
 
-
                         <div class="pp-register-point">
 
                             <i
@@ -987,7 +990,6 @@
                             Find collaborators
 
                         </div>
-
 
                         <div class="pp-register-point">
 
@@ -1004,10 +1006,7 @@
 
                 </div>
 
-
-                <!-- =================================================
-                     ANIMATED ORBIT
-                ================================================== -->
+                <!-- ANIMATED ORBIT -->
 
                 <div
                     class="pp-register-orbit"
@@ -1022,13 +1021,11 @@
 
                     <div class="pp-register-ring three"></div>
 
-
                     <div class="pp-register-core">
 
                         <i class="bi bi-stars"></i>
 
                     </div>
-
 
                     <div class="pp-register-node one">
 
@@ -1036,20 +1033,17 @@
 
                     </div>
 
-
                     <div class="pp-register-node two">
 
                         <i class="bi bi-people"></i>
 
                     </div>
 
-
                     <div class="pp-register-node three">
 
                         <i class="bi bi-rocket-takeoff"></i>
 
                     </div>
-
 
                     <span class="pp-register-particle one"></span>
 
@@ -1061,15 +1055,11 @@
 
             </div>
 
-
-            <!-- =================================================
-                 REGISTER FORM
-            ================================================== -->
+            <!-- REGISTER FORM -->
 
             <div class="pp-register-form-area">
 
                 <div class="pp-register-card">
-
 
                     <div
                         class="pp-register-lock"
@@ -1080,21 +1070,17 @@
 
                     </div>
 
-
                     <h2>
                         Create your account
                     </h2>
-
 
                     <p class="pp-register-subtitle">
                         Join ProblemPool and turn ideas into impact.
                     </p>
 
-
                     <form method="post">
 
                         {% csrf_token %}
-
 
                         {% if form.non_field_errors %}
 
@@ -1106,7 +1092,6 @@
                             </div>
 
                         {% endif %}
-
 
                         <!-- FIRST + LAST NAME -->
 
@@ -1133,7 +1118,6 @@
 
                             </div>
 
-
                             <div class="col-md-6 mb-3">
 
                                 <label
@@ -1156,7 +1140,6 @@
                             </div>
 
                         </div>
-
 
                         <!-- EMAIL -->
 
@@ -1181,7 +1164,6 @@
 
                         </div>
 
-
                         <!-- USERNAME -->
 
                         <div class="mb-3">
@@ -1204,7 +1186,6 @@
                             {% endfor %}
 
                         </div>
-
 
                         <!-- PASSWORD -->
 
@@ -1229,7 +1210,6 @@
 
                         </div>
 
-
                         <!-- CONFIRM PASSWORD -->
 
                         <div class="mb-3">
@@ -1253,27 +1233,26 @@
 
                         </div>
 
-
                         <!-- TERMS -->
 
                         <div class="pp-register-terms">
 
                             <input
-                                class="form-check-input"
                                 type="checkbox"
                                 id="terms"
+                                name="terms"
                                 required
+                                aria-describedby="terms-label"
                             >
 
                             <label
-                                class="form-check-label"
+                                id="terms-label"
                                 for="terms"
                             >
-                                I agree to the Terms & Conditions
+                                I agree to the Terms &amp; Conditions
                             </label>
 
                         </div>
-
 
                         <!-- CREATE ACCOUNT -->
 
@@ -1293,7 +1272,6 @@
 
                     </form>
 
-
                     <!-- LOGIN -->
 
                     <div class="pp-register-footer">
@@ -1306,11 +1284,9 @@
 
                     </div>
 
-
                 </div>
 
             </div>
-
 
         </div>
 

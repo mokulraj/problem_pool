@@ -77,31 +77,55 @@
                     </h1>
 
 
-                    <!-- AUTHOR -->
+                    <!-- =================================================
+                         AUTHOR
+                    ================================================== -->
 
                     <div class="problem-author">
 
-                        {% if solution.proposed_by.profile_image %}
+                        <!-- PROFILE IMAGE / AVATAR -->
 
-                            <img
-                                src="{{ solution.proposed_by.profile_image.url }}"
-                                alt="{{ solution.proposed_by.username }}"
-                            >
+                        <a
+                            href="{% url 'accounts:public_profile' solution.proposed_by.username %}"
+                            class="text-decoration-none"
+                            title="View {{ solution.proposed_by.username }}'s profile"
+                            aria-label="View {{ solution.proposed_by.username }}'s profile"
+                        >
 
-                        {% else %}
+                            {% if solution.proposed_by.profile_image %}
 
-                            <div class="problem-author-placeholder">
-                                {{ solution.proposed_by.first_name|first|default:solution.proposed_by.username|first|upper }}
-                            </div>
+                                <img
+                                    src="{{ solution.proposed_by.profile_image.url }}"
+                                    alt="{{ solution.proposed_by.username }}"
+                                >
 
-                        {% endif %}
+                            {% else %}
 
+                                <div class="problem-author-placeholder">
+                                    {{ solution.proposed_by.first_name|first|default:solution.proposed_by.username|first|upper }}
+                                </div>
+
+                            {% endif %}
+
+                        </a>
+
+
+                        <!-- AUTHOR INFORMATION -->
 
                         <div>
 
-                            <strong>
-                                {{ solution.proposed_by.get_full_name|default:solution.proposed_by.username }}
-                            </strong>
+                            <a
+                                href="{% url 'accounts:public_profile' solution.proposed_by.username %}"
+                                class="text-decoration-none"
+                                title="View {{ solution.proposed_by.username }}'s profile"
+                            >
+
+                                <strong>
+                                    {{ solution.proposed_by.get_full_name|default:solution.proposed_by.username }}
+                                </strong>
+
+                            </a>
+
 
                             <span>
                                 Proposed on

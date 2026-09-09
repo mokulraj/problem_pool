@@ -141,15 +141,35 @@ def problem_detail(request, pk):
         .order_by("created_at")
     )
 
-    Problem.objects.filter(
-        pk=problem.pk
-    ).update(
-        views=F("views") + 1
+    # --------------------------------------------------------
+    # VIEW COUNT
+    # Count only the first view of this problem per session.
+    # Refreshing the page will not increase the count again.
+    # --------------------------------------------------------
+
+    viewed_problems = request.session.get(
+        "viewed_problems",
+        []
     )
 
-    problem.refresh_from_db(
-        fields=["views"]
-    )
+    problem_key = str(problem.pk)
+
+    if problem_key not in viewed_problems:
+
+        Problem.objects.filter(
+            pk=problem.pk
+        ).update(
+            views=F("views") + 1
+        )
+
+        viewed_problems.append(problem_key)
+
+        request.session["viewed_problems"] = viewed_problems
+        request.session.modified = True
+
+        problem.refresh_from_db(
+            fields=["views"]
+        )
 
     return render(
         request,

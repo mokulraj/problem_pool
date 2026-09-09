@@ -151,7 +151,7 @@ class ProblemDetailTests(ProblemTestMixin, TestCase):
             1,
         )
 
-    def test_problem_detail_increments_view_count_each_time(self):
+    def test_problem_detail_counts_only_one_view_per_session(self):
         user = self.create_user()
         problem = self.create_problem(user)
 
@@ -168,7 +168,7 @@ class ProblemDetailTests(ProblemTestMixin, TestCase):
 
         self.assertEqual(
             problem.views,
-            3,
+            1,
         )
 
 

@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+
 /* ============================================================
    SOLUTION VOTING
    ============================================================ */
@@ -45,6 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    /*
+     * Read a cookie by name.
+     */
     function getCookie(name) {
 
         let cookieValue = null;
@@ -80,6 +84,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    /*
+     * ProblemPool uses a custom CSRF cookie name:
+     *
+     * CSRF_COOKIE_NAME = "problempool_csrftoken"
+     *
+     * Therefore we must read that cookie instead of
+     * Django's default "csrftoken".
+     */
+    function getCSRFToken() {
+
+        return getCookie("problempool_csrftoken");
+
+    }
+
+
     voteButtons.forEach(function (button) {
 
         button.addEventListener(
@@ -91,6 +110,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const voteType =
                     button.dataset.voteType;
+
+
+                if (!voteUrl || !voteType) {
+
+                    console.error(
+                        "Voting error: missing vote URL or vote type."
+                    );
+
+                    alert(
+                        "Unable to record your vote."
+                    );
+
+                    return;
+
+                }
+
+
+                const csrfToken =
+                    getCSRFToken();
+
+
+                if (!csrfToken) {
+
+                    console.error(
+                        "Voting error: CSRF token cookie was not found."
+                    );
+
+                    alert(
+                        "Your session security token is missing. Please refresh the page and try again."
+                    );
+
+                    return;
+
+                }
 
 
                 try {
@@ -115,22 +168,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
                                 headers: {
                                     "X-CSRFToken":
-                                        getCookie("csrftoken"),
+                                        csrfToken,
 
                                     "X-Requested-With":
                                         "XMLHttpRequest",
+
+                                    "Accept":
+                                        "application/json",
                                 },
 
                                 body: formData,
+
+                                credentials:
+                                    "same-origin",
                             }
                         );
 
 
-                    const data =
-                        await response.json();
+                    /*
+                     * Try to read JSON safely.
+                     * This prevents a generic JavaScript
+                     * error if Django returns an HTML error page.
+                     */
+                    let data = null;
+
+                    try {
+
+                        data =
+                            await response.json();
+
+                    } catch (jsonError) {
+
+                        console.error(
+                            "Voting response was not valid JSON:",
+                            jsonError
+                        );
+
+                        console.error(
+                            "HTTP status:",
+                            response.status
+                        );
+
+                        alert(
+                            "Unable to record your vote. Please refresh the page and try again."
+                        );
+
+                        return;
+
+                    }
 
 
-                    if (!data.success) {
+                    if (!response.ok || !data.success) {
+
+                        console.error(
+                            "Voting request failed:",
+                            data
+                        );
 
                         alert(
                             data.message ||
@@ -138,12 +231,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
 
                         return;
+
                     }
 
 
-                    // ----------------------------------------
-                    // UPDATE COUNTS
-                    // ----------------------------------------
+                    /* ----------------------------------------
+                       UPDATE COUNTS
+                    ---------------------------------------- */
 
                     const upvoteCount =
                         document.getElementById(
@@ -185,9 +279,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    // ----------------------------------------
-                    // UPDATE BUTTON STATES
-                    // ----------------------------------------
+                    /* ----------------------------------------
+                       UPDATE BUTTON STATES
+                    ---------------------------------------- */
 
                     const upvoteButton =
                         document.getElementById(
@@ -200,16 +294,28 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
 
 
-                    upvoteButton.classList.remove(
-                        "active"
-                    );
+                    if (upvoteButton) {
 
-                    downvoteButton.classList.remove(
-                        "active"
-                    );
+                        upvoteButton.classList.remove(
+                            "active"
+                        );
+
+                    }
 
 
-                    if (data.user_vote === "UP") {
+                    if (downvoteButton) {
+
+                        downvoteButton.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+
+                    if (
+                        data.user_vote === "UP" &&
+                        upvoteButton
+                    ) {
 
                         upvoteButton.classList.add(
                             "active"
@@ -218,7 +324,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    if (data.user_vote === "DOWN") {
+                    if (
+                        data.user_vote === "DOWN" &&
+                        downvoteButton
+                    ) {
 
                         downvoteButton.classList.add(
                             "active"
@@ -227,9 +336,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    // ----------------------------------------
-                    // UPDATE MESSAGE
-                    // ----------------------------------------
+                    /* ----------------------------------------
+                       UPDATE MESSAGE
+                    ---------------------------------------- */
 
                     const message =
                         document.getElementById(
@@ -272,6 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
 
                     }
+
 
                 } catch (error) {
 
