@@ -24,16 +24,16 @@ DEBUG = os.getenv(
     "True",
 ).lower() == "true"
 
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv(
-        "ALLOWED_HOSTS",
-        "127.0.0.1,localhost",
-    ).split(",")
-    if host.strip()
-]
+# ALLOWED_HOSTS = [
+#     host.strip()
+#     for host in os.getenv(
+#         "ALLOWED_HOSTS",
+#         "127.0.0.1,localhost",
+#     ).split(",")
+#     if host.strip()
+# ]
 
-
+ALLOWED_HOSTS = ['*']
 # ============================================================
 # SECURITY
 # ============================================================
